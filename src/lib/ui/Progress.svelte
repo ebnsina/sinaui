@@ -4,6 +4,8 @@
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
 		label: string;
+		/** Keeps the label for screen readers only (the page already says it nearby). */
+		hideLabel?: boolean;
 		/** Leave unset while the amount of work is unknown: the bar sweeps instead of filling. */
 		value?: number;
 		max?: number;
@@ -22,6 +24,7 @@
 	const uid = $props.id();
 	let {
 		label,
+		hideLabel = false,
 		value,
 		max = 100,
 		showValue = true,
@@ -70,12 +73,12 @@
 					><RollingNumber value={text} /></span
 				>{/if}
 		</div>
-		<span id="{uid}-label" class="ring-label">{label}</span>
+		<span id="{uid}-label" class={['ring-label', hideLabel && 'sr-only']}>{label}</span>
 	</div>
 {:else}
 	<div class={['progress', className]} {...rest}>
-		<div class="head">
-			<span id="{uid}-label">{label}</span>
+		<div class={['head', hideLabel && !showValue && 'sr-only']}>
+			<span id="{uid}-label" class:sr-only={hideLabel}>{label}</span>
 			{#if showValue && text}<span class="value" aria-hidden="true"
 					><RollingNumber value={text} /></span
 				>{/if}
@@ -233,5 +236,13 @@
 		.track {
 			outline: 1px solid CanvasText;
 		}
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>
