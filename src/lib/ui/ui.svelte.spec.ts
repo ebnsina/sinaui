@@ -5,6 +5,8 @@ import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
 import Select from './Select.svelte';
 import Textarea from './Textarea.svelte';
+import Progress from './Progress.svelte';
+import Combobox from './Combobox.svelte';
 import axe from 'axe-core';
 import '#lib/ui/tokens.css';
 import '../../routes/docs.css';
@@ -519,6 +521,38 @@ describe('sinaui', () => {
 			const label = page.getByText(name, { exact: true }).element();
 			expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
 		}
+	});
+
+	it('progress: hideLabel keeps the bar named, with nothing shown above it', async () => {
+		mount(Progress, {
+			label: 'Lessons complete',
+			value: 4,
+			max: 8,
+			hideLabel: true,
+			showValue: false
+		});
+		const bar = page.getByRole('progressbar', { name: 'Lessons complete' });
+		await expect.element(bar).toHaveAttribute('aria-valuenow', '4');
+		const label = page.getByText('Lessons complete', { exact: true }).element();
+		expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+	});
+
+	it('combobox: onchange fires once per new choice', async () => {
+		const seen: string[] = [];
+		mount(Combobox, {
+			label: 'Student',
+			options: [
+				{ value: 'a', label: 'Abbas' },
+				{ value: 'b', label: 'Banu' }
+			],
+			onchange: (v: string) => seen.push(v)
+		});
+		const box = page.getByRole('combobox', { name: 'Student' });
+		await box.click();
+		await page.getByRole('option', { name: 'Banu' }).click();
+		await box.click();
+		await page.getByRole('option', { name: 'Banu' }).click();
+		expect(seen).toEqual(['b']);
 	});
 
 	it('accordion: summaries toggle; exclusive keeps one open', async () => {
