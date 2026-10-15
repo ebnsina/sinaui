@@ -1,7 +1,10 @@
 import { page, userEvent } from 'vitest/browser';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
-import type { Component } from 'svelte';
+import { createRawSnippet, type Component } from 'svelte';
+import Input from './Input.svelte';
+import Select from './Select.svelte';
+import Textarea from './Textarea.svelte';
 import axe from 'axe-core';
 import '#lib/ui/tokens.css';
 import '../../routes/docs.css';
@@ -500,6 +503,22 @@ describe('sinaui', () => {
 		const note = page.getByRole('textbox', { name: 'Marginal note' });
 		await expect.element(note).toHaveAccessibleDescription('It grows as you write.');
 		expect(parseFloat(getComputedStyle(note.element()).fontSize)).toBeGreaterThanOrEqual(16);
+	});
+
+	it('hideLabel: Input, Select and Textarea keep their name but hide the label', async () => {
+		const options = createRawSnippet(() => ({ render: () => '<option>Basra</option>' }));
+		mount(Input, { label: 'Search the catalog', hideLabel: true });
+		mount(Select, { label: 'City', hideLabel: true, children: options });
+		mount(Textarea, { label: 'Reply', hideLabel: true });
+		for (const [role, name] of [
+			['textbox', 'Search the catalog'],
+			['combobox', 'City'],
+			['textbox', 'Reply']
+		] as const) {
+			await expect.element(page.getByRole(role, { name })).toBeInTheDocument();
+			const label = page.getByText(name, { exact: true }).element();
+			expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+		}
 	});
 
 	it('accordion: summaries toggle; exclusive keeps one open', async () => {

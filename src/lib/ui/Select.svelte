@@ -5,7 +5,9 @@
 	import Icon from './Icon.svelte';
 
 	interface Props extends Omit<HTMLSelectAttributes, 'value' | 'children'> {
+		/** What the choice is about. Visible by default; hideLabel keeps it for screen readers only. */
 		label: string;
+		hideLabel?: boolean;
 		value?: string;
 		/** Shown until a choice is made; it can't be chosen back. */
 		placeholder?: string;
@@ -18,6 +20,7 @@
 	const uid = $props.id();
 	let {
 		label,
+		hideLabel = false,
 		value = $bindable(''),
 		placeholder,
 		hint,
@@ -35,7 +38,7 @@
 
 <!-- Native <select>: the platform picker (a sheet on phones), keyboard, typeahead and forms for free. -->
 <div class={['field', className]}>
-	<label for={id}>{label}</label>
+	<label for={id} class:sr-only={hideLabel}>{label}</label>
 	<div class="control">
 		<select
 			{id}
@@ -132,5 +135,13 @@
 	}
 	.error {
 		color: var(--ui-danger);
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>
