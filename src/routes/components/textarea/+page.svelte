@@ -57,6 +57,11 @@
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
 	<tbody>
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
+		<tr
+			><td><code>hideLabel</code></td><td
+				><code>boolean</code>: keeps the label for screen readers only</td
+			><td><code>false</code></td></tr
+		>
 		<tr><td><code>value</code></td><td><code>string | null</code>, bindable</td><td></td></tr>
 		<tr
 			><td><code>rows</code></td><td><code>number</code>: minimum height</td><td><code>3</code></td
