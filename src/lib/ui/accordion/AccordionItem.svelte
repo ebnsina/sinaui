@@ -52,7 +52,7 @@
 		color: var(--ui-muted);
 		transition: rotate var(--ui-dur) var(--ui-ease-out);
 	}
-	details[open] .chev {
+	.item[open] > summary .chev {
 		rotate: 180deg;
 	}
 	.content {

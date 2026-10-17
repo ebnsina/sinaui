@@ -605,6 +605,15 @@ describe('sinaui', () => {
 		await algorithm.click();
 		await expect.poll(() => algorithm.element().closest('details')!.open).toBe(true);
 		expect(algebra.element().closest('details')!.open).toBe(false);
+
+		// A closed item inside an open one keeps its own (unturned) chevron.
+		const open = algorithm.element().closest('details')!;
+		const nested = open.cloneNode(true) as HTMLDetailsElement;
+		nested.open = false;
+		open.querySelector('.content')!.append(nested);
+		const turn = (d: Element) => getComputedStyle(d.querySelector('summary .chev')!).rotate;
+		await expect.poll(() => turn(open)).toBe('180deg');
+		expect(turn(nested)).toBe('none');
 	});
 
 	it('tooltip: names icon buttons; keyboard focus shows, Escape hides, hover waits', async () => {
