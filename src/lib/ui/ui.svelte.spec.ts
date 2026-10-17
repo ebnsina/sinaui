@@ -1556,7 +1556,7 @@ describe('sinaui', () => {
 	});
 
 	it('carousel: go(i) moves it from outside (thumbnails), and the buttons carry on from there', async () => {
-		const slide = createRawSnippet((n: () => number) => ({
+		const slide = createRawSnippet((n: () => unknown) => ({
 			render: () => `<div style="block-size: 4rem">Folio ${n()}</div>`
 		}));
 		const r = mount(Carousel, { label: 'Folios', slides: [1, 2, 3, 4], slide });
