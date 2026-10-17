@@ -675,6 +675,22 @@ describe('sinaui', () => {
 		expect(parseFloat(getComputedStyle(work.element()).fontSize)).toBeGreaterThanOrEqual(16);
 	});
 
+	it('select: focus ring for the keyboard, none left behind after a mouse pick', async () => {
+		const options = createRawSnippet(() => ({ render: () => '<option>Basra</option>' }));
+		mount(Select, { label: 'City', children: options });
+		const el = page.getByRole('combobox', { name: 'City' }).element() as HTMLSelectElement;
+		const ring = () => getComputedStyle(el).outlineStyle;
+		el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+		el.focus();
+		await expect.poll(() => el.dataset.pointer).toBe('true');
+		expect(ring()).toBe('none');
+		await userEvent.keyboard('{ArrowDown}');
+		await expect.poll(ring).toBe('solid');
+		el.blur();
+		await userEvent.keyboard('{Tab}');
+		await expect.poll(() => el.dataset.pointer).toBeUndefined();
+	});
+
 	it('toast: announced in a live region; close and Undo work', async () => {
 		render(ToastPage);
 		render(Toaster);
