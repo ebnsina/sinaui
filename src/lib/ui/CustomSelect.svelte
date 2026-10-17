@@ -37,6 +37,8 @@
 		searchLabel?: string;
 		/** Shown when the search matches nothing. */
 		empty?: string;
+		/** Called after a different option is chosen, with its value (to submit a filter, say). */
+		onchange?: (value: T) => void;
 		class?: string;
 	}
 
@@ -54,6 +56,7 @@
 		searchable = false,
 		searchLabel = 'Search',
 		empty = 'No matches',
+		onchange,
 		class: className
 	}: Props = $props();
 
@@ -137,9 +140,11 @@
 	}
 	function choose(i: number) {
 		if (!options[i] || options[i].disabled) return;
+		const changed = options[i].value !== value;
 		value = options[i].value;
 		if (isApple()) announce(`${options[i].label}, selected`);
 		open = false;
+		if (changed) onchange?.(options[i].value);
 	}
 	/** Moves the highlight among enabled options, clamped at the ends (as native selects do). */
 	function step(by: number) {

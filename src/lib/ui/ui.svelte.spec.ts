@@ -4,6 +4,7 @@ import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
 import Select from './Select.svelte';
+import CustomSelect from './CustomSelect.svelte';
 import Dialog from './Dialog.svelte';
 import Textarea from './Textarea.svelte';
 import Progress from './Progress.svelte';
@@ -748,6 +749,25 @@ describe('sinaui', () => {
 		await page.getByRole('button', { name: 'Undo' }).last().click();
 		await expect.element(page.getByText('3 loans active')).toBeVisible();
 		await expect.element(region).not.toHaveTextContent('Loan withdrawn.');
+	});
+
+	it('custom select: onchange fires once per different choice', async () => {
+		const seen: string[] = [];
+		mount(CustomSelect, {
+			label: 'Sort by',
+			options: [
+				{ value: 'newest', label: 'Newest' },
+				{ value: 'name', label: 'Name' }
+			],
+			value: 'newest',
+			onchange: (v: string) => seen.push(v)
+		});
+		const box = page.getByRole('combobox', { name: 'Sort by' });
+		await box.click();
+		await page.getByRole('option', { name: 'Newest' }).click();
+		await box.click();
+		await page.getByRole('option', { name: 'Name' }).click();
+		await expect.poll(() => seen).toEqual(['name']);
 	});
 
 	it('custom select: combobox keyboard contract, typeahead, cancel, hidden input', async () => {
