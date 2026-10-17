@@ -4,6 +4,7 @@ import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
 import Select from './Select.svelte';
+import Dialog from './Dialog.svelte';
 import Textarea from './Textarea.svelte';
 import Progress from './Progress.svelte';
 import Combobox from './Combobox.svelte';
@@ -314,6 +315,34 @@ describe('sinaui', () => {
 		await expect
 			.element(page.getByRole('tab', { name: 'Al-Khwarizmi' }))
 			.toHaveAttribute('aria-selected', 'true');
+	});
+
+	it('dialog: only the content scrolls; title and footer stay in view, a sheet keeps its footer at the bottom', async () => {
+		const tall = createRawSnippet(() => ({
+			render: () => '<div style="block-size: 300vh">Folios</div>'
+		}));
+		const short = createRawSnippet(() => ({ render: () => '<p>One folio</p>' }));
+		const footer = createRawSnippet(() => ({ render: () => '<button>Borrow</button>' }));
+		for (const [side, children] of [
+			['center', tall],
+			['end', tall],
+			['end', short]
+		] as const) {
+			const r = mount(Dialog, { open: true, title: 'Catalog', side, children, footer });
+			const dialog = r.container.ownerDocument.querySelector<HTMLDialogElement>('dialog[open]')!;
+			const content = dialog.querySelector<HTMLElement>('.content')!;
+			const button = page.getByRole('button', { name: 'Borrow' }).element();
+			const box = dialog.getBoundingClientRect();
+			const foot = button.getBoundingClientRect();
+			expect(foot.bottom).toBeLessThanOrEqual(box.bottom);
+			expect(dialog.querySelector('h2')!.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+				box.top
+			);
+			if (children === tall) expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);
+			if (side === 'end') expect(box.bottom - foot.bottom).toBeLessThan(40);
+			dialog.close();
+			r.unmount();
+		}
 	});
 
 	it('dialog: Escape closes and focus returns to the trigger', async () => {
