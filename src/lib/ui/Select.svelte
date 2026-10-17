@@ -26,10 +26,16 @@
 		hint,
 		error,
 		children,
+		onpointerdown,
+		onkeydown,
+		onblur,
 		id = uid,
 		class: className,
 		...rest
 	}: Props = $props();
+
+	// Chromium keeps :focus-visible on a <select> after a mouse pick; the ring is for keyboard use only.
+	let pointer = $state(false);
 
 	const describedby = $derived(
 		[hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(' ') || undefined
@@ -45,6 +51,10 @@
 			bind:value
 			aria-invalid={error ? true : undefined}
 			aria-describedby={describedby}
+			data-pointer={pointer || undefined}
+			onpointerdown={(e) => ((pointer = true), onpointerdown?.(e))}
+			onkeydown={(e) => ((pointer = false), onkeydown?.(e))}
+			onblur={(e) => ((pointer = false), onblur?.(e))}
 			{...rest}
 		>
 			{#if placeholder}<option value="" disabled>{placeholder}</option>{/if}
@@ -101,7 +111,10 @@
 	select :global(option) {
 		color: var(--ui-fg);
 	}
-	select:focus-visible {
+	select[data-pointer] {
+		outline: none;
+	}
+	select:focus-visible:not([data-pointer]) {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);
 	}
