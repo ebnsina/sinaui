@@ -4,6 +4,7 @@ import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
 import Select from './Select.svelte';
+import Carousel from './Carousel.svelte';
 import CustomSelect from './CustomSelect.svelte';
 import Dialog from './Dialog.svelte';
 import Textarea from './Textarea.svelte';
@@ -1552,6 +1553,19 @@ describe('sinaui', () => {
 		// Pointer hover opens it too.
 		link.element().dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
 		await expect.poll(() => card.matches(':popover-open'), { timeout: 2000 }).toBe(true);
+	});
+
+	it('carousel: go(i) moves it from outside (thumbnails), and the buttons carry on from there', async () => {
+		const slide = createRawSnippet((n: () => number) => ({
+			render: () => `<div style="block-size: 4rem">Folio ${n()}</div>`
+		}));
+		const r = mount(Carousel, { label: 'Folios', slides: [1, 2, 3, 4], slide });
+		const dot = (i: number) => page.getByRole('button', { name: `Go to slide ${i}` });
+		await expect.element(dot(1)).toHaveAttribute('aria-current', 'true');
+		(r.component as unknown as { go: (i: number) => void }).go(2);
+		await expect.element(dot(3)).toHaveAttribute('aria-current', 'true');
+		await page.getByRole('button', { name: 'Next slide' }).click();
+		await expect.element(dot(4)).toHaveAttribute('aria-current', 'true');
 	});
 
 	it('carousel: buttons and indicators move it, out-of-view slides are inert, pause toggles', async () => {
