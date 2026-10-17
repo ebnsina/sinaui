@@ -537,14 +537,20 @@ describe('sinaui', () => {
 		expect(parseFloat(getComputedStyle(note.element()).fontSize)).toBeGreaterThanOrEqual(16);
 	});
 
-	it('hideLabel: Input, Select and Textarea keep their name but hide the label', async () => {
+	it('hideLabel: Input, Select, CustomSelect and Textarea keep their name but hide the label', async () => {
 		const options = createRawSnippet(() => ({ render: () => '<option>Basra</option>' }));
 		mount(Input, { label: 'Search the catalog', hideLabel: true });
+		mount(CustomSelect, {
+			label: 'Sort by',
+			hideLabel: true,
+			options: [{ value: 'a', label: 'Newest' }]
+		});
 		mount(Select, { label: 'City', hideLabel: true, children: options });
 		mount(Textarea, { label: 'Reply', hideLabel: true });
 		for (const [role, name] of [
 			['textbox', 'Search the catalog'],
 			['combobox', 'City'],
+			['combobox', 'Sort by'],
 			['textbox', 'Reply']
 		] as const) {
 			await expect.element(page.getByRole(role, { name })).toBeInTheDocument();
