@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
+import NumberField from './NumberField.svelte';
 import Select from './Select.svelte';
 import Carousel from './Carousel.svelte';
 import CustomSelect from './CustomSelect.svelte';
@@ -1158,6 +1159,23 @@ describe('sinaui', () => {
 		const inTwoWeeks = new Date(Date.now() + 14 * 86400000);
 		if (inTwoWeeks.getDay() !== 5)
 			await expect.poll(hidden).toBe(inTwoWeeks.toLocaleDateString('en-CA'));
+	});
+
+	it('number field: fill stretches to its container, without it the field fits the number', async () => {
+		mount(NumberField, { label: 'Copies', value: 3, fill: true });
+		mount(NumberField, { label: 'Pages', value: 3 });
+		// The box's width against the space it was given.
+		const share = (name: string) => {
+			const control = (page.getByRole('textbox', { name }).element() as HTMLElement).closest(
+				'.control'
+			)!;
+			return (
+				control.getBoundingClientRect().width /
+				control.closest('.field')!.parentElement!.getBoundingClientRect().width
+			);
+		};
+		await expect.poll(() => share('Copies')).toBeCloseTo(1, 2);
+		expect(share('Pages')).toBeLessThan(0.5);
 	});
 
 	it('number field: keys step and clamp, typing snaps, percent parses, holding repeats', async () => {
