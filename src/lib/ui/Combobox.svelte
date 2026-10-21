@@ -19,6 +19,8 @@
 
 	interface Props {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		options: ComboboxOption<T>[];
 		value?: T | '';
 		placeholder?: string;
@@ -41,6 +43,7 @@
 
 	let {
 		label,
+		hideLabel = false,
 		options,
 		value = $bindable(''),
 		placeholder,
@@ -210,7 +213,7 @@
 </script>
 
 <div class={['field', className]}>
-	<label id="{id}-label" for="{id}-input">{label}</label>
+	<label id="{id}-label" for="{id}-input" class:sr-only={hideLabel}>{label}</label>
 	<div class="control">
 		<input
 			bind:this={input}

@@ -54,6 +54,14 @@
 	{...ex('vertical')}
 />
 
+<Example
+	id="compact"
+	title="Compact"
+	stack
+	description="The small size: smaller text and a tighter gap, for small panels such as dashboard cards."
+	{...ex('compact')}
+/>
+
 <h2 id="props">Props</h2>
 <h3 id="props-root">Tabs.Root</h3>
 <table>
@@ -73,6 +81,7 @@
 				><code>'automatic'</code></td
 			></tr
 		>
+		<tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td></tr>
 	</tbody>
 </table>
 <h3 id="props-parts">Tabs.List, Tabs.Tab, Tabs.Panel</h3>

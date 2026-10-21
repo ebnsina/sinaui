@@ -20,6 +20,8 @@
 
 	interface Props {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		options: Option<T>[];
 		value?: T | '';
 		placeholder?: string;
@@ -42,6 +44,7 @@
 
 	let {
 		label,
+		hideLabel = false,
 		options,
 		value = $bindable(''),
 		placeholder = 'Choose…',
@@ -242,7 +245,12 @@
 <div class={['field', className]}>
 	<!-- Focus only: a label click would otherwise also click (open) the button. -->
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
-	<label id="{id}-label" for="{id}-button" onclick={(e) => (e.preventDefault(), button.focus())}>
+	<label
+		id="{id}-label"
+		for="{id}-button"
+		class:sr-only={hideLabel}
+		onclick={(e) => (e.preventDefault(), button.focus())}
+	>
 		{label}
 	</label>
 	<button

@@ -48,6 +48,13 @@
 	{...ex('basic')}
 />
 <Example id="hidden-label" title="Label for screen readers only" stack {...ex('hidden-label')} />
+<Example
+	id="fill"
+	title="Full width"
+	stack
+	description="fill spans the container, the segments sharing it equally."
+	{...ex('fill')}
+/>
 
 <h2 id="props">Props</h2>
 <table>
@@ -55,6 +62,11 @@
 	<tbody>
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr><td><code>hideLabel</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
+		<tr
+			><td><code>fill</code></td><td><code>boolean</code>: span the container's width</td><td
+				><code>false</code></td
+			></tr
+		>
 		<tr><td><code>options</code></td><td><code>{'{'} value, label }[]</code></td><td></td></tr>
 		<tr><td><code>value</code></td><td><code>string</code>, bindable</td><td></td></tr>
 		<tr><td><code>name</code></td><td><code>string</code></td><td>a unique id</td></tr>

@@ -4,6 +4,8 @@
 
 	interface Props extends Omit<HTMLInputAttributes, 'value' | 'children'> {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		value?: string | number | null;
 		/** Help text under the field, read out after the label. */
 		hint?: string;
@@ -20,6 +22,7 @@
 	const uid = $props.id();
 	let {
 		label,
+		hideLabel = false,
 		value = $bindable(),
 		hint,
 		error,
@@ -39,7 +42,7 @@
 </script>
 
 <div class={['field', className]}>
-	<label for={id}>{label}</label>
+	<label for={id} class:sr-only={hideLabel}>{label}</label>
 	<!-- The box is the border; start and end sit inside it with the text. -->
 	<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions -->
 	<div
@@ -169,5 +172,13 @@
 	}
 	.error {
 		color: var(--ui-danger);
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>

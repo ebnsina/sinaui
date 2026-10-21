@@ -92,6 +92,22 @@ import TagGroupPage from '../../routes/components/tag-group/+page.svelte';
 import ThemingPage from '../../routes/theming/+page.svelte';
 import ChangelogPage from '../../routes/changelog/+page.svelte';
 import AlarmClock from '#lib/ui/AlarmClock.svelte';
+import Select from '#lib/ui/Select.svelte';
+import Input from '#lib/ui/Input.svelte';
+import SearchField from '#lib/ui/SearchField.svelte';
+import NumberField from '#lib/ui/NumberField.svelte';
+import Combobox from '#lib/ui/Combobox.svelte';
+import CustomSelect from '#lib/ui/CustomSelect.svelte';
+import MultiSelect from '#lib/ui/MultiSelect.svelte';
+import DatePicker from '#lib/ui/DatePicker.svelte';
+import DateRangePicker from '#lib/ui/DateRangePicker.svelte';
+import SignIn from '#lib/blocks/auth/SignIn.svelte';
+import SignUp from '#lib/blocks/auth/SignUp.svelte';
+import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
+import Chat from '#lib/blocks/chat/Chat.svelte';
+import Assistant from '#lib/blocks/chat/Assistant.svelte';
+import { fetchServerSentEvents } from '@tanstack/ai-svelte';
+import { createRawSnippet } from 'svelte';
 import { colorName, hexToHsv, hsvToHex } from '#lib/ui/color.js';
 import { tone } from '#lib/ui/Meter.svelte';
 import { pageRange } from '#lib/ui/Pagination.svelte';
@@ -622,6 +638,101 @@ describe('sinaui', () => {
 		expect(parseFloat(getComputedStyle(work.element()).fontSize)).toBeGreaterThanOrEqual(16);
 	});
 
+	it('select: hideLabel keeps the name for screen readers only', async () => {
+		mount(Select, {
+			label: 'Sort by',
+			hideLabel: true,
+			children: createRawSnippet(() => ({ render: () => '<option value="a">Newest</option>' }))
+		});
+		const sort = page.getByRole('combobox', { name: 'Sort by' });
+		await expect.element(sort).toBeInTheDocument();
+		const label = document.querySelector(`label[for="${sort.element().id}"]`)!;
+		expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+	});
+
+	it('hideLabel: every labeled field keeps its name for screen readers only', async () => {
+		const options = [{ value: 'a', label: 'Alpha' }];
+		const cases = [
+			[Input, {}],
+			[SearchField, {}],
+			[NumberField, {}],
+			[Combobox, { options }],
+			[CustomSelect, { options }],
+			[MultiSelect, { options }],
+			[DatePicker, {}],
+			[DateRangePicker, {}]
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- each field's own props
+		] as [Component<any>, object][];
+		for (const [Field, props] of cases) {
+			const r = mount(Field, { label: 'Hidden name', hideLabel: true, ...props });
+			const label = [...r.container.querySelectorAll('label, span')].find(
+				(e) => e.textContent?.trim() === 'Hidden name'
+			)!;
+			expect(label.getBoundingClientRect().width, Field.name).toBeLessThanOrEqual(1);
+			await expect
+				.poll(() =>
+					page
+						.getByLabelText('Hidden name')
+						.elements()
+						.some((e) => e.checkVisibility())
+				)
+				.toBe(true);
+			await r.unmount();
+		}
+	});
+
+	it('date range: with a hidden label, the trigger and its popover still carry the name', async () => {
+		mount(DateRangePicker, { label: 'Loan period', hideLabel: true });
+		const trigger = page.getByRole('button', { name: /Loan period/ });
+		await trigger.click();
+		await expect.element(page.getByRole('dialog', { name: 'Loan period' })).toBeVisible();
+	});
+
+	it('tabs: size sm is smaller and tighter; segmented fill spans its container', async () => {
+		render(TabsPage);
+		const small = page.getByRole('tab', { name: 'City' }).element();
+		const normal = page.getByRole('tab', { name: 'Ibn Sina' }).element();
+		expect(parseFloat(getComputedStyle(small).fontSize)).toBeLessThan(
+			parseFloat(getComputedStyle(normal).fontSize)
+		);
+		document.querySelector('body > main')?.remove();
+		render(SegmentedPage);
+		const group = page.getByRole('group', { name: 'Show the catalog as' }).element();
+		const box = getComputedStyle(group.parentElement!);
+		const inner =
+			group.parentElement!.clientWidth - parseFloat(box.paddingLeft) - parseFloat(box.paddingRight);
+		expect(group.getBoundingClientRect().width).toBeCloseTo(inner, 0);
+	});
+
+	it('chart: series colors come from the --ui-chart tokens', async () => {
+		render(ChartPage);
+		const chart = document.querySelector('.chart')!;
+		document.documentElement.style.setProperty('--ui-chart-1', 'rgb(1, 2, 3)');
+		try {
+			expect(getComputedStyle(chart).getPropertyValue('--ts-chart-1').trim()).toBe('rgb(1, 2, 3)');
+		} finally {
+			document.documentElement.style.removeProperty('--ui-chart-1');
+		}
+	});
+
+	it('select: focus is a border and halo, not an offset ring; red when invalid', async () => {
+		render(SelectPage);
+		const work = page.getByRole('combobox', { name: 'Work' });
+		const room = page.getByRole('combobox', { name: 'Reading room' });
+		const style = (l: typeof work) => {
+			(l.element() as HTMLElement).focus({ focusVisible: true } as FocusOptions);
+			const c = getComputedStyle(l.element());
+			return { outline: c.outlineColor, shadow: c.boxShadow, border: c.borderColor };
+		};
+		const ok = style(work);
+		expect(ok.outline).toBe('rgba(0, 0, 0, 0)');
+		expect(ok.shadow).not.toBe('none');
+		const bad = style(room);
+		expect(bad.shadow).not.toBe('none');
+		expect(bad.shadow).not.toBe(ok.shadow);
+		expect(bad.border).not.toBe(ok.border);
+	});
+
 	it('toast: announced in a live region; close and Undo work', async () => {
 		render(ToastPage);
 		render(Toaster);
@@ -902,6 +1013,51 @@ describe('sinaui', () => {
 				})
 				.toBeVisible();
 		}
+	});
+
+	it('sign in: leaving a field after a refusal keeps the message, so the button stays put', async () => {
+		mount(SignIn, {
+			onsubmit: () => {
+				throw Object.assign(new Error(), { code: 'invalid_credentials' });
+			}
+		});
+		await userEvent.fill(page.getByRole('textbox', { name: 'Email' }), 'maryam@aleppo.org');
+		const password = page.getByLabelText('Password', { exact: true });
+		await userEvent.fill(password, 'wrong');
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		const refusal = page.getByText('That email and password don’t match. Try again.');
+		await expect.element(refusal).toBeVisible();
+		(password.element() as HTMLElement).focus();
+		await userEvent.tab();
+		await expect.element(refusal).toBeVisible();
+	});
+
+	it('sign in: remember={false} drops the keep-me-signed-in box', async () => {
+		mount(SignIn, { onsubmit: () => {}, remember: false });
+		await expect.element(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
+		expect(page.getByRole('checkbox', { name: 'Keep me signed in' }).query()).toBeNull();
+	});
+
+	it('sign up: minLength 0 leaves the rule to the API, whose own words show by field', async () => {
+		mount(SignUp, { onsubmit: () => {} });
+		const fallback = page.getByLabelText('Password', { exact: true });
+		await expect.element(fallback).toHaveAttribute('minlength', '10');
+		await expect.element(fallback).toHaveAccessibleDescription(/At least 10 characters/);
+		document.body.replaceChildren();
+
+		mount(ServerWords);
+		const password = page.getByLabelText('Password', { exact: true });
+		await expect.element(password).not.toHaveAttribute('minlength');
+		expect(password.element().getAttribute('aria-describedby') ?? '').not.toMatch(/hint/);
+		expect(document.body.textContent).not.toMatch(/At least/);
+		await userEvent.fill(page.getByRole('textbox', { name: 'Name' }), 'Maryam');
+		await userEvent.fill(page.getByRole('textbox', { name: 'Email' }), 'maryam@aleppo.org');
+		await userEvent.fill(password, 'short');
+		await page.getByRole('button', { name: 'Create account' }).click();
+		await expect
+			.element(password, { timeout: 3000 })
+			.toHaveAccessibleDescription(/Use 12 characters or more\./);
+		await expect.element(page.getByText('Check the password, then try again.')).toBeVisible();
 	});
 
 	it('date picker: opens on today, arrows and pages move, Enter chooses, focus returns', async () => {
@@ -2364,6 +2520,35 @@ describe('sinaui', () => {
 		expect(chat.getByRole('article').all().length).toBe(4);
 		await chat.getByRole('button', { name: 'New chat' }).click();
 		await expect.element(chat.getByText('How can I help you today?')).toBeVisible();
+	});
+
+	it('ai chat: a refused reply shows the server’s words and the app’s link', async () => {
+		render(AiChatPage);
+		const chat = page.getByRole('region', { name: 'Ask the reading room', exact: true });
+		await chat.getByRole('button', { name: 'What was the House of Wisdom?' }).click();
+		const alert = chat.getByRole('alert');
+		await expect.element(alert, { timeout: 5000 }).toHaveTextContent(/asked all 20 questions/);
+		await expect.element(alert.getByRole('link', { name: 'See plans' })).toBeVisible();
+		await expect.element(alert).not.toHaveTextContent(/didn't come through/);
+	});
+
+	it('ai chat: without failure, a dropped reply says so in general words; named Assistant', async () => {
+		const connection = fetchServerSentEvents('/api/chat', {
+			fetchClient: async () => new Response('', { status: 500 })
+		});
+		mount(Chat, { connection, suggestions: ['Hello'] });
+		await expect.element(page.getByRole('region', { name: 'Assistant' })).toBeVisible();
+		await page.getByRole('button', { name: 'Hello' }).click();
+		await expect
+			.element(page.getByRole('alert'), { timeout: 5000 })
+			.toHaveTextContent(/didn't come through/);
+	});
+
+	it('assistant: attachments can be turned off', async () => {
+		const connection = fetchServerSentEvents('/api/chat');
+		mount(Assistant, { connection, storageKey: 'spec-off', attachments: false });
+		await expect.element(page.getByRole('textbox', { name: 'Message' })).toBeVisible();
+		expect(page.getByRole('button', { name: 'Attach files' }).query()).toBeNull();
 	});
 
 	it('search field: clear appears with text, clears and refocuses; Escape clears', async () => {

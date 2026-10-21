@@ -27,6 +27,9 @@
 	interface Props {
 		/** Where replies come from: fetchServerSentEvents('/api/chat'), or your own adapter. */
 		connection: ConnectionAdapter;
+		/** What screen readers call the replies ("Assistant is writing"). */
+		assistantName?: string;
+		/** Defaults to the assistant's name. */
 		title?: string;
 		/** Questions offered when the chat is empty. */
 		suggestions?: string[];
@@ -40,6 +43,10 @@
 		onsend?: (text: string) => void;
 		/** New chat starts a fresh conversation elsewhere (a new thread) instead of clearing this one. */
 		onnew?: () => void;
+		/** Why the last reply failed, in your server's words; without it, a general connection message. */
+		failure?: { message: string };
+		/** Shown beside the failure message: a link to upgrade, say. */
+		failureActions?: Snippet;
 		/** Replaces the header: gets New chat's action, and whether it's unavailable right now. */
 		header?: Snippet<[() => void, boolean]>;
 		class?: string;
@@ -47,7 +54,8 @@
 
 	let {
 		connection,
-		title = 'Ask the librarian',
+		assistantName = 'Assistant',
+		title = assistantName,
 		suggestions = [],
 		placeholder = 'Ask anything…',
 		threadId,
@@ -55,6 +63,8 @@
 		attachments = false,
 		onsend,
 		onnew,
+		failure,
+		failureActions,
 		header,
 		class: className
 	}: Props = $props();
@@ -243,7 +253,7 @@
 				(p) =>
 					p.type === 'image' || p.type === 'audio' || p.type === 'video' || p.type === 'document'
 			)}
-			<article class={['message', m.role]} aria-label={m.role === 'user' ? 'You' : 'Librarian'}>
+			<article class={['message', m.role]} aria-label={m.role === 'user' ? 'You' : assistantName}>
 				{#if media.length}
 					<div class="media">
 						{#each media as part, k (k)}
@@ -289,14 +299,18 @@
 		{/each}
 
 		{#if thinking}
-			<div class="thinking" aria-label="The librarian is writing">
+			<div class="thinking" aria-label="{assistantName} is writing">
 				<span></span><span></span><span></span>
 			</div>
 		{/if}
 
 		{#if chat.error}
 			<div class="failed" role="alert">
-				<p>The reply didn't come through. Check your connection and try again.</p>
+				<p>
+					{failure?.message ??
+						"The reply didn't come through. Check your connection and try again."}
+					{@render failureActions?.()}
+				</p>
 				<Button variant="secondary" size="sm" onclick={() => chat.reload()}>Retry</Button>
 			</div>
 		{/if}
@@ -579,6 +593,10 @@
 	}
 	.failed p {
 		margin: 0;
+	}
+	.failed p :global(a) {
+		color: inherit;
+		font-weight: 600;
 	}
 	.jump {
 		position: absolute;

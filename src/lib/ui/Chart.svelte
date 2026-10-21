@@ -105,12 +105,12 @@
 	/* TanStack Charts reads its colors from these variables and currentColor: the chart follows
 	   Sina UI's tokens in light and dark with no per-chart theme. */
 	.chart {
-		--ts-chart-1: var(--ui-accent);
-		--ts-chart-2: var(--ui-warning);
-		--ts-chart-3: light-dark(#0369a1, #38bdf8);
-		--ts-chart-4: light-dark(#be123c, #fb7185);
-		--ts-chart-5: light-dark(#6d28d9, #a78bfa);
-		--ts-chart-6: var(--ui-muted);
+		--ts-chart-1: var(--ui-chart-1);
+		--ts-chart-2: var(--ui-chart-2);
+		--ts-chart-3: var(--ui-chart-3);
+		--ts-chart-4: var(--ui-chart-4);
+		--ts-chart-5: var(--ui-chart-5);
+		--ts-chart-6: var(--ui-chart-6);
 		--ts-chart-focus-fill: var(--ui-surface);
 		--ts-chart-tooltip-background: var(--ui-surface);
 		--ts-chart-tooltip-color: var(--ui-fg);

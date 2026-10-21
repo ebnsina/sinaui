@@ -47,7 +47,8 @@ export function createForm(options: Options) {
 	/** Checks the named fields (all when omitted) and returns true when they pass. */
 	function check(names?: string[]): boolean {
 		const custom = options.validate?.(new FormData(form)) ?? {};
-		const next: Errors = { ...errors, form: undefined };
+		// A blur check of one field keeps the form-level message; only a full check clears it.
+		const next: Errors = names ? { ...errors } : { ...errors, form: undefined };
 		let ok = true;
 		for (const f of fields()) {
 			if (names && !names.includes(f.name)) continue;

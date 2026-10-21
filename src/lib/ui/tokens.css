@@ -32,6 +32,13 @@
 	--ui-ring: var(--ui-accent);
 	--ui-ring-width: 2px;
 	--ui-ring-offset: 2px;
+	/* Chart series, in order. Set these to recolor every chart. */
+	--ui-chart-1: var(--ui-accent);
+	--ui-chart-2: var(--ui-warning);
+	--ui-chart-3: light-dark(#0369a1, #38bdf8);
+	--ui-chart-4: light-dark(#be123c, #fb7185);
+	--ui-chart-5: light-dark(#6d28d9, #a78bfa);
+	--ui-chart-6: var(--ui-muted);
 	/* Overlays separate by shadow alone, no outline (by request). In dark mode --ui-surface-overlay does it. */
 	--ui-shadow-overlay:
 		0 1px 2px rgb(0 0 0 / 0.05), 0 4px 12px -2px rgb(0 0 0 / 0.08),

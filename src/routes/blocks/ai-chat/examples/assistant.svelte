@@ -6,6 +6,7 @@
 
 <Assistant
 	connection={demoConnection}
+	assistantName="Librarian"
 	suggestions={[
 		'What was the House of Wisdom?',
 		'How did Ibn al-Haytham explain sight?',

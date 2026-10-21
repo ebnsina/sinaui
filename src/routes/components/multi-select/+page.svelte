@@ -66,6 +66,10 @@
 	<tbody>
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr
+			><td><code>hideLabel</code></td><td><code>boolean</code>: label for screen readers only</td
+			><td><code>false</code></td></tr
+		>
+		<tr
 			><td><code>options</code></td><td
 				><code>{'{ value, label, description?, disabled? }[]'}</code></td
 			><td></td></tr

@@ -73,6 +73,13 @@
 	{...ex('tooltip')}
 />
 
+<h2 id="colors">Colors</h2>
+<p>
+	Series take <code>--ui-chart-1</code> to <code>--ui-chart-6</code> from <code>tokens.css</code>,
+	in order. Set them on <code>:root</code> to recolor every chart:
+	<code>:root {'{'} --ui-chart-1: #0f766e; }</code>.
+</p>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>

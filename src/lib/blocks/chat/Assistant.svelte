@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { pop, reflow } from '#lib/ui/motion.js';
 	import { scrollEdges } from '#lib/ui/scroll-edges.js';
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, type Snippet } from 'svelte';
 	import {
 		Delete02Icon,
 		PencilEdit02Icon,
@@ -22,6 +22,14 @@
 		suggestions?: string[];
 		/** Prefix for what's saved in this browser, so two assistants on one site keep apart. */
 		storageKey?: string;
+		/** What screen readers call the replies. */
+		assistantName?: string;
+		/** Lets people attach images, audio, video and PDFs; turn off when your server can't read them. */
+		attachments?: boolean;
+		/** Why the last reply failed, in your server's words; without it, a general connection message. */
+		failure?: { message: string };
+		/** Shown beside the failure message: a link to upgrade, say. */
+		failureActions?: Snippet;
 		class?: string;
 	}
 
@@ -29,6 +37,10 @@
 		connection,
 		suggestions = [],
 		storageKey = 'sinaui-chat',
+		assistantName,
+		attachments = true,
+		failure,
+		failureActions,
 		class: className
 	}: Props = $props();
 
@@ -153,6 +165,7 @@
 		<div class="search">
 			<SearchField
 				label="Search conversations"
+				hideLabel
 				placeholder="Search"
 				bind:value={query}
 				bind:element={searchBox}
@@ -211,7 +224,10 @@
 			{suggestions}
 			threadId={active}
 			{persistence}
-			attachments
+			{assistantName}
+			{attachments}
+			{failure}
+			{failureActions}
 			title={current?.title ?? 'New chat'}
 			onsend={sent}
 			onnew={start}
@@ -298,15 +314,6 @@
 	.search :global(.field) {
 		min-inline-size: 0;
 	}
-	/* The field's label is for screen readers; the placeholder and icon say it here. */
-	.search :global(label) {
-		position: absolute;
-		inline-size: 1px;
-		block-size: 1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
-	}
 	/* Doubled class: beats the chat's own card styles regardless of stylesheet order. */
 	.assistant :global(.chat.chat) {
 		block-size: 100%;
@@ -352,8 +359,10 @@
 		letter-spacing: 0.05em;
 		white-space: nowrap;
 	}
+	/* minmax(0, 1fr): a long title truncates inside the row instead of widening it past the edge. */
 	ul {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 1px;
 		margin: 0;
 		padding: 0;

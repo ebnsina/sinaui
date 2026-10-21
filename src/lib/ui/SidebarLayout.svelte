@@ -299,7 +299,9 @@
 		outline-offset: -2px;
 	}
 	/* Labels fade out as it collapses; the icons stay put. */
+	/* min-inline-size: 0 lets a long name shrink and truncate; a flex item won't by default. */
 	.text {
+		min-inline-size: 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		transition: opacity 150ms ease;
@@ -344,6 +346,7 @@
 	}
 	.foot {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 0.25rem;
 	}
 	.main {

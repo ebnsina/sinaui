@@ -5,7 +5,9 @@
 	import Icon from './Icon.svelte';
 
 	interface Props extends Omit<HTMLSelectAttributes, 'value' | 'children'> {
+		/** What the choice is about. Visible by default; hideLabel keeps it for screen readers only. */
 		label: string;
+		hideLabel?: boolean;
 		value?: string;
 		/** Shown until a choice is made; it can't be chosen back. */
 		placeholder?: string;
@@ -18,6 +20,7 @@
 	const uid = $props.id();
 	let {
 		label,
+		hideLabel = false,
 		value = $bindable(''),
 		placeholder,
 		hint,
@@ -35,7 +38,7 @@
 
 <!-- Native <select>: the platform picker (a sheet on phones), keyboard, typeahead and forms for free. -->
 <div class={['field', className]}>
-	<label for={id}>{label}</label>
+	<label for={id} class:sr-only={hideLabel}>{label}</label>
 	<div class="control">
 		<select
 			{id}
@@ -98,15 +101,19 @@
 	select :global(option) {
 		color: var(--ui-fg);
 	}
+	/* Chromium matches :focus-visible on a <select> after a mouse pick too, so an offset ring would
+	   stay on after every choice; a tinted border and halo reads as focus without looking stuck. */
 	select:focus-visible {
-		outline: var(--ui-ring-width) solid var(--ui-ring);
-		outline-offset: var(--ui-ring-offset);
+		/* Transparent outline: invisible normally, drawn in forced-colors mode where shadows vanish. */
+		outline: 2px solid transparent;
+		border-color: var(--ui-ring);
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ui-ring) 25%, transparent);
 	}
 	select[aria-invalid='true'] {
 		border-color: var(--ui-danger);
 	}
 	select[aria-invalid='true']:focus-visible {
-		outline-color: var(--ui-danger);
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ui-danger) 25%, transparent);
 	}
 	select:disabled {
 		background: var(--ui-subtle);
@@ -132,5 +139,13 @@
 	}
 	.error {
 		color: var(--ui-danger);
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>
