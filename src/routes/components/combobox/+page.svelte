@@ -117,6 +117,10 @@
 			></td></tr
 		>
 		<tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
+		<tr
+			><td><code>onchange</code></td><td><code>(value) =&gt; void</code>: after a choice</td><td
+			></td></tr
+		>
 	</tbody>
 </table>
 

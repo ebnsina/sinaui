@@ -81,6 +81,11 @@
 		<tr><td><code>name</code></td><td><code>string</code></td><td></td></tr>
 		<tr><td><code>hint</code>, <code>error</code></td><td><code>string</code></td><td></td></tr>
 		<tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
+		<tr
+			><td><code>fill</code></td><td><code>boolean</code>: stretch to the container’s width</td><td
+				><code>false</code></td
+			></tr
+		>
 	</tbody>
 </table>
 

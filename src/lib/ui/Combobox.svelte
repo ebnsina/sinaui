@@ -38,6 +38,8 @@
 		onloadmore?: () => void;
 		/** Options are on their way: shown at the end of the list. */
 		loading?: boolean;
+		/** Called after a choice, with the new value (to submit a filter, say). */
+		onchange?: (value: T) => void;
 		class?: string;
 	}
 
@@ -56,6 +58,7 @@
 		onsearch,
 		onloadmore,
 		loading = false,
+		onchange,
 		class: className
 	}: Props = $props();
 
@@ -131,6 +134,7 @@
 	}
 	function choose(i: number) {
 		if (i < 0 || options[i].disabled) return;
+		const changed = value !== options[i].value;
 		value = options[i].value;
 		chosen = options[i];
 		if (isApple()) announce(`${options[i].label}, selected`);
@@ -138,6 +142,7 @@
 		query = options[i].label;
 		filtering = false;
 		open = false;
+		if (changed) onchange?.(options[i].value);
 	}
 	/** Closes and puts the box back to the chosen option's label, like the typing never happened. */
 	function cancel() {

@@ -64,6 +64,15 @@ for (const href of [
 			() => document.documentElement.scrollWidth - document.documentElement.clientWidth
 		);
 		expect(overflow, 'page scrolls sideways').toBeLessThanOrEqual(0);
+		// Color transitions still run under reduced motion: let them land, or axe reads a half-faded fill.
+		await page.evaluate(() =>
+			Promise.all(
+				document
+					.getAnimations()
+					.filter((a) => a instanceof CSSTransition)
+					.map((a) => a.finished.catch(() => {}))
+			)
+		);
 		await page.addScriptTag({ path: axePath });
 		const violations = await page.evaluate(async () => {
 			// @ts-expect-error injected above

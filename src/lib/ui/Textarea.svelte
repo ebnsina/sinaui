@@ -3,6 +3,8 @@
 
 	interface Props extends Omit<HTMLTextareaAttributes, 'value' | 'children'> {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		value?: string | null;
 		hint?: string;
 		error?: string;
@@ -11,6 +13,7 @@
 	const uid = $props.id();
 	let {
 		label,
+		hideLabel = false,
 		value = $bindable(),
 		hint,
 		error,
@@ -26,7 +29,7 @@
 </script>
 
 <div class={['field', className]}>
-	<label for={id}>{label}</label>
+	<label for={id} class:sr-only={hideLabel}>{label}</label>
 	<textarea
 		{id}
 		{rows}
@@ -99,5 +102,13 @@
 	}
 	.error {
 		color: var(--ui-danger);
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>

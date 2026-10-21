@@ -1,7 +1,16 @@
 import { page, userEvent } from 'vitest/browser';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
-import type { Component } from 'svelte';
+import { createRawSnippet, type Component } from 'svelte';
+import Input from './Input.svelte';
+import NumberField from './NumberField.svelte';
+import Select from './Select.svelte';
+import Carousel from './Carousel.svelte';
+import CustomSelect from './CustomSelect.svelte';
+import Dialog from './Dialog.svelte';
+import Textarea from './Textarea.svelte';
+import Progress from './Progress.svelte';
+import Combobox from './Combobox.svelte';
 import axe from 'axe-core';
 import '#lib/ui/tokens.css';
 import '../../routes/docs.css';
@@ -92,12 +101,7 @@ import TagGroupPage from '../../routes/components/tag-group/+page.svelte';
 import ThemingPage from '../../routes/theming/+page.svelte';
 import ChangelogPage from '../../routes/changelog/+page.svelte';
 import AlarmClock from '#lib/ui/AlarmClock.svelte';
-import Select from '#lib/ui/Select.svelte';
-import Input from '#lib/ui/Input.svelte';
 import SearchField from '#lib/ui/SearchField.svelte';
-import NumberField from '#lib/ui/NumberField.svelte';
-import Combobox from '#lib/ui/Combobox.svelte';
-import CustomSelect from '#lib/ui/CustomSelect.svelte';
 import MultiSelect from '#lib/ui/MultiSelect.svelte';
 import DatePicker from '#lib/ui/DatePicker.svelte';
 import DateRangePicker from '#lib/ui/DateRangePicker.svelte';
@@ -327,6 +331,34 @@ describe('sinaui', () => {
 			.toHaveAttribute('aria-selected', 'true');
 	});
 
+	it('dialog: only the content scrolls; title and footer stay in view, a sheet keeps its footer at the bottom', async () => {
+		const tall = createRawSnippet(() => ({
+			render: () => '<div style="block-size: 300vh">Folios</div>'
+		}));
+		const short = createRawSnippet(() => ({ render: () => '<p>One folio</p>' }));
+		const footer = createRawSnippet(() => ({ render: () => '<button>Borrow</button>' }));
+		for (const [side, children] of [
+			['center', tall],
+			['end', tall],
+			['end', short]
+		] as const) {
+			const r = mount(Dialog, { open: true, title: 'Catalog', side, children, footer });
+			const dialog = r.container.ownerDocument.querySelector<HTMLDialogElement>('dialog[open]')!;
+			const content = dialog.querySelector<HTMLElement>('.content')!;
+			const button = page.getByRole('button', { name: 'Borrow' }).element();
+			const box = dialog.getBoundingClientRect();
+			const foot = button.getBoundingClientRect();
+			expect(foot.bottom).toBeLessThanOrEqual(box.bottom);
+			expect(dialog.querySelector('h2')!.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+				box.top
+			);
+			if (children === tall) expect(content.scrollHeight).toBeGreaterThan(content.clientHeight);
+			if (side === 'end') expect(box.bottom - foot.bottom).toBeLessThan(40);
+			dialog.close();
+			r.unmount();
+		}
+	});
+
 	it('dialog: Escape closes and focus returns to the trigger', async () => {
 		render(DialogPage);
 		const trigger = page.getByRole('button', { name: 'Edit scholar' });
@@ -518,6 +550,60 @@ describe('sinaui', () => {
 		expect(parseFloat(getComputedStyle(note.element()).fontSize)).toBeGreaterThanOrEqual(16);
 	});
 
+	it('hideLabel: Input, Select, CustomSelect and Textarea keep their name but hide the label', async () => {
+		const options = createRawSnippet(() => ({ render: () => '<option>Basra</option>' }));
+		mount(Input, { label: 'Search the catalog', hideLabel: true });
+		mount(CustomSelect, {
+			label: 'Sort by',
+			hideLabel: true,
+			options: [{ value: 'a', label: 'Newest' }]
+		});
+		mount(Select, { label: 'City', hideLabel: true, children: options });
+		mount(Textarea, { label: 'Reply', hideLabel: true });
+		for (const [role, name] of [
+			['textbox', 'Search the catalog'],
+			['combobox', 'City'],
+			['combobox', 'Sort by'],
+			['textbox', 'Reply']
+		] as const) {
+			await expect.element(page.getByRole(role, { name })).toBeInTheDocument();
+			const label = page.getByText(name, { exact: true }).element();
+			expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+		}
+	});
+
+	it('progress: hideLabel keeps the bar named, with nothing shown above it', async () => {
+		mount(Progress, {
+			label: 'Lessons complete',
+			value: 4,
+			max: 8,
+			hideLabel: true,
+			showValue: false
+		});
+		const bar = page.getByRole('progressbar', { name: 'Lessons complete' });
+		await expect.element(bar).toHaveAttribute('aria-valuenow', '4');
+		const label = page.getByText('Lessons complete', { exact: true }).element();
+		expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
+	});
+
+	it('combobox: onchange fires once per new choice', async () => {
+		const seen: string[] = [];
+		mount(Combobox, {
+			label: 'Student',
+			options: [
+				{ value: 'a', label: 'Abbas' },
+				{ value: 'b', label: 'Banu' }
+			],
+			onchange: (v: string) => seen.push(v)
+		});
+		const box = page.getByRole('combobox', { name: 'Student' });
+		await box.click();
+		await page.getByRole('option', { name: 'Banu' }).click();
+		await box.click();
+		await page.getByRole('option', { name: 'Banu' }).click();
+		expect(seen).toEqual(['b']);
+	});
+
 	it('accordion: summaries toggle; exclusive keeps one open', async () => {
 		render(AccordionPage);
 		// .first(): titles also appear in the code sample below each preview.
@@ -532,6 +618,15 @@ describe('sinaui', () => {
 		await algorithm.click();
 		await expect.poll(() => algorithm.element().closest('details')!.open).toBe(true);
 		expect(algebra.element().closest('details')!.open).toBe(false);
+
+		// A closed item inside an open one keeps its own (unturned) chevron.
+		const open = algorithm.element().closest('details')!;
+		const nested = open.cloneNode(true) as HTMLDetailsElement;
+		nested.open = false;
+		open.querySelector('.content')!.append(nested);
+		const turn = (d: Element) => getComputedStyle(d.querySelector('summary .chev')!).rotate;
+		await expect.poll(() => turn(open)).toBe('180deg');
+		expect(turn(nested)).toBe('none');
 	});
 
 	it('tooltip: names icon buttons; keyboard focus shows, Escape hides, hover waits', async () => {
@@ -638,18 +733,6 @@ describe('sinaui', () => {
 		expect(parseFloat(getComputedStyle(work.element()).fontSize)).toBeGreaterThanOrEqual(16);
 	});
 
-	it('select: hideLabel keeps the name for screen readers only', async () => {
-		mount(Select, {
-			label: 'Sort by',
-			hideLabel: true,
-			children: createRawSnippet(() => ({ render: () => '<option value="a">Newest</option>' }))
-		});
-		const sort = page.getByRole('combobox', { name: 'Sort by' });
-		await expect.element(sort).toBeInTheDocument();
-		const label = document.querySelector(`label[for="${sort.element().id}"]`)!;
-		expect(label.getBoundingClientRect().width).toBeLessThanOrEqual(1);
-	});
-
 	it('hideLabel: every labeled field keeps its name for screen readers only', async () => {
 		const options = [{ value: 'a', label: 'Alpha' }];
 		const cases = [
@@ -715,22 +798,20 @@ describe('sinaui', () => {
 		}
 	});
 
-	it('select: focus is a border and halo, not an offset ring; red when invalid', async () => {
-		render(SelectPage);
-		const work = page.getByRole('combobox', { name: 'Work' });
-		const room = page.getByRole('combobox', { name: 'Reading room' });
-		const style = (l: typeof work) => {
-			(l.element() as HTMLElement).focus({ focusVisible: true } as FocusOptions);
-			const c = getComputedStyle(l.element());
-			return { outline: c.outlineColor, shadow: c.boxShadow, border: c.borderColor };
-		};
-		const ok = style(work);
-		expect(ok.outline).toBe('rgba(0, 0, 0, 0)');
-		expect(ok.shadow).not.toBe('none');
-		const bad = style(room);
-		expect(bad.shadow).not.toBe('none');
-		expect(bad.shadow).not.toBe(ok.shadow);
-		expect(bad.border).not.toBe(ok.border);
+	it('select: focus ring for the keyboard, none left behind after a mouse pick', async () => {
+		const options = createRawSnippet(() => ({ render: () => '<option>Basra</option>' }));
+		mount(Select, { label: 'City', children: options });
+		const el = page.getByRole('combobox', { name: 'City' }).element() as HTMLSelectElement;
+		const ring = () => getComputedStyle(el).outlineStyle;
+		el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+		el.focus();
+		await expect.poll(() => el.dataset.pointer).toBe('true');
+		expect(ring()).toBe('none');
+		await userEvent.keyboard('{ArrowDown}');
+		await expect.poll(ring).toBe('solid');
+		el.blur();
+		await userEvent.keyboard('{Tab}');
+		await expect.poll(() => el.dataset.pointer).toBeUndefined();
 	});
 
 	it('toast: announced in a live region; close and Undo work', async () => {
@@ -761,6 +842,25 @@ describe('sinaui', () => {
 		await page.getByRole('button', { name: 'Undo' }).last().click();
 		await expect.element(page.getByText('3 loans active')).toBeVisible();
 		await expect.element(region).not.toHaveTextContent('Loan withdrawn.');
+	});
+
+	it('custom select: onchange fires once per different choice', async () => {
+		const seen: string[] = [];
+		mount(CustomSelect, {
+			label: 'Sort by',
+			options: [
+				{ value: 'newest', label: 'Newest' },
+				{ value: 'name', label: 'Name' }
+			],
+			value: 'newest',
+			onchange: (v: string) => seen.push(v)
+		});
+		const box = page.getByRole('combobox', { name: 'Sort by' });
+		await box.click();
+		await page.getByRole('option', { name: 'Newest' }).click();
+		await box.click();
+		await page.getByRole('option', { name: 'Name' }).click();
+		await expect.poll(() => seen).toEqual(['name']);
 	});
 
 	it('custom select: combobox keyboard contract, typeahead, cancel, hidden input', async () => {
@@ -1182,6 +1282,23 @@ describe('sinaui', () => {
 			await expect.poll(hidden).toBe(inTwoWeeks.toLocaleDateString('en-CA'));
 	});
 
+	it('number field: fill stretches to its container, without it the field fits the number', async () => {
+		mount(NumberField, { label: 'Copies', value: 3, fill: true });
+		mount(NumberField, { label: 'Pages', value: 3 });
+		// The box's width against the space it was given.
+		const share = (name: string) => {
+			const control = (page.getByRole('textbox', { name }).element() as HTMLElement).closest(
+				'.control'
+			)!;
+			return (
+				control.getBoundingClientRect().width /
+				control.closest('.field')!.parentElement!.getBoundingClientRect().width
+			);
+		};
+		await expect.poll(() => share('Copies')).toBeCloseTo(1, 2);
+		expect(share('Pages')).toBeLessThan(0.5);
+	});
+
 	it('number field: keys step and clamp, typing snaps, percent parses, holding repeats', async () => {
 		render(NumberFieldPage);
 		const copies = page.getByRole('textbox', { name: 'Copies to make' });
@@ -1575,6 +1692,19 @@ describe('sinaui', () => {
 		// Pointer hover opens it too.
 		link.element().dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
 		await expect.poll(() => card.matches(':popover-open'), { timeout: 2000 }).toBe(true);
+	});
+
+	it('carousel: go(i) moves it from outside (thumbnails), and the buttons carry on from there', async () => {
+		const slide = createRawSnippet((n: () => unknown) => ({
+			render: () => `<div style="block-size: 4rem">Folio ${n()}</div>`
+		}));
+		const r = mount(Carousel, { label: 'Folios', slides: [1, 2, 3, 4], slide });
+		const dot = (i: number) => page.getByRole('button', { name: `Go to slide ${i}` });
+		await expect.element(dot(1)).toHaveAttribute('aria-current', 'true');
+		(r.component as unknown as { go: (i: number) => void }).go(2);
+		await expect.element(dot(3)).toHaveAttribute('aria-current', 'true');
+		await page.getByRole('button', { name: 'Next slide' }).click();
+		await expect.element(dot(4)).toHaveAttribute('aria-current', 'true');
 	});
 
 	it('carousel: buttons and indicators move it, out-of-view slides are inert, pause toggles', async () => {

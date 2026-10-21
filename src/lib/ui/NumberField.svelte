@@ -21,6 +21,8 @@
 		/** Form field name: a hidden input carries the plain number. */
 		name?: string;
 		disabled?: boolean;
+		/** Stretch to the container's width (form grids, sheets); the number area takes the extra room. */
+		fill?: boolean;
 	}
 
 	let {
@@ -35,7 +37,8 @@
 		hint,
 		error,
 		name,
-		disabled = false
+		disabled = false,
+		fill = false
 	}: Props = $props();
 
 	const id = $props.id();
@@ -125,7 +128,7 @@
 	);
 </script>
 
-<div class="field" style:--chars="{chars}ch">
+<div class={['field', fill && 'fill']} style:--chars="{chars}ch">
 	<label for="{id}-input" class:sr-only={hideLabel}>{label}</label>
 	<div class="control">
 		<button
@@ -218,6 +221,14 @@
 	}
 	label {
 		font-weight: 500;
+	}
+	/* fill: as wide as the container, with the steppers at the ends. */
+	.fill,
+	.fill .control {
+		inline-size: auto;
+	}
+	.fill .well {
+		flex: 1;
 	}
 	/* One box like Input: minus, the number, plus. */
 	/* Fits its contents: a longer hint or label below never stretches the box. */
