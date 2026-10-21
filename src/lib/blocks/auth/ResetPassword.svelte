@@ -13,6 +13,7 @@
 		/** Save the new password (your reset token travels with your own call). Throw an Error with a code (e.g. "link_expired") to say why not. */
 		onsubmit: (password: string) => Promise<unknown> | unknown;
 		signInHref?: string;
+		/** Shortest password accepted. 0 drops the length rule and hint, for APIs that check it themselves. */
 		minLength?: number;
 	}
 
@@ -71,8 +72,8 @@
 				name="password"
 				isNew
 				required
-				minlength={minLength}
-				hint="At least {minLength} characters."
+				minlength={minLength || undefined}
+				hint={minLength ? `At least ${minLength} characters.` : undefined}
 				error={form.errors.password}
 			/>
 			<PasswordInput

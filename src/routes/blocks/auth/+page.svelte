@@ -49,6 +49,12 @@
 	{...ex('sign-up')}
 />
 <Example
+	id="server-words"
+	title="Your API's own words"
+	description="For an API that owns the password rule and writes its own messages: no length rule here, and any password under 12 characters is refused in the server's words."
+	{...ex('server-words')}
+/>
+<Example
 	id="forgot"
 	title="Forgot password"
 	description="Send the link, then it says where it went. Sending again waits out a short countdown."
@@ -97,6 +103,15 @@
 	</tbody>
 </table>
 
+<h3 id="user-facing">When your API's messages are already written for people</h3>
+<p>
+	Throw a <code>UserFacingError</code> from <code>errors.ts</code> instead:
+	<code>new UserFacingError(message, fields)</code>. The message shows above the form and each entry
+	of <code>fields</code> (field name → message) under its field, word for word. Only build it from your
+	API's user-facing copy, never from a caught exception; any other error still shows the plain message
+	above.
+</p>
+
 <h2 id="props">Props</h2>
 <h3 id="props-sign-in">SignIn</h3>
 <table>
@@ -113,6 +128,11 @@
 			></tr
 		>
 		<tr><td><code>onprovider</code></td><td><code>(id) =&gt; void</code></td><td></td></tr>
+		<tr
+			><td><code>remember</code></td><td
+				><code>boolean</code>: shows “Keep me signed in”; without it, <code>remember</code> is false</td
+			><td><code>true</code></td></tr
+		>
 		<tr
 			><td><code>forgotHref</code>, <code>signUpHref</code></td><td><code>string</code></td><td
 			></td></tr
@@ -137,7 +157,11 @@
 			><td><code>termsHref</code></td><td><code>string</code>: adds a terms box to tick</td><td
 			></td></tr
 		>
-		<tr><td><code>minLength</code></td><td><code>number</code></td><td><code>10</code></td></tr>
+		<tr
+			><td><code>minLength</code></td><td
+				><code>number</code>: <code>0</code> leaves the length rule to your API</td
+			><td><code>10</code></td></tr
+		>
 		<tr
 			><td><code>providers</code>, <code>onprovider</code>, <code>signInHref</code></td><td
 				>as SignIn</td
@@ -169,7 +193,11 @@
 			><td><code>onsubmit</code></td><td><code>(password) =&gt; Promise</code> (required)</td><td
 			></td></tr
 		>
-		<tr><td><code>minLength</code></td><td><code>number</code></td><td><code>10</code></td></tr>
+		<tr
+			><td><code>minLength</code></td><td
+				><code>number</code>: <code>0</code> leaves the length rule to your API</td
+			><td><code>10</code></td></tr
+		>
 		<tr><td><code>signInHref</code></td><td><code>string</code></td><td></td></tr>
 	</tbody>
 </table>

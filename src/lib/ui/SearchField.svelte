@@ -7,6 +7,8 @@
 
 	interface Props extends Omit<HTMLInputAttributes, 'value' | 'type' | 'children'> {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		value?: string;
 		hint?: string;
 		/** Enter pressed: search for what's typed. */

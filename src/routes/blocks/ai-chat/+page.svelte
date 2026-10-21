@@ -47,6 +47,12 @@
 	{...ex('assistant')}
 />
 <Example
+	id="failure"
+	title="When a reply is turned away"
+	description="Your server says why in its own words, and the chat shows them with a link of yours beside it. Without failure, a dropped reply shows a general connection message. Send a question to see it."
+	{...ex('failure')}
+/>
+<Example
 	id="terminal"
 	title="Terminal agent"
 	description="An agent in a terminal: it thinks, calls tools and shows what each returned, then answers. Try “How did Ibn al-Haytham explain sight?”, then /help. Escape interrupts a run; Up brings back what you sent."
@@ -85,16 +91,24 @@
 	<code>connection={'{'}fetchServerSentEvents('/api/chat')}</code>.
 </p>
 
+<h3 id="failure-message">Your server's words when a reply fails</h3>
+<p>
+	When your endpoint turns a question away (a plan limit, say) with a message written for people,
+	read it in <code>fetchClient</code> and pass it as <code>failure</code>, as the example above
+	does. Pass only copy your server wrote for people; it's shown word for word.
+</p>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
 	<tbody>
 		<tr><td><code>connection</code></td><td>TanStack AI connection (required)</td><td></td></tr>
 		<tr
-			><td><code>title</code></td><td><code>string</code></td><td
-				><code>'Ask the librarian'</code></td
-			></tr
+			><td><code>assistantName</code></td><td
+				><code>string</code>: what screen readers call the replies</td
+			><td><code>'Assistant'</code></td></tr
 		>
+		<tr><td><code>title</code></td><td><code>string</code></td><td>the assistant's name</td></tr>
 		<tr
 			><td><code>suggestions</code></td><td><code>string[]</code>: questions offered when empty</td
 			><td></td></tr
@@ -103,6 +117,20 @@
 			><td><code>placeholder</code></td><td><code>string</code></td><td
 				><code>'Ask anything…'</code></td
 			></tr
+		>
+		<tr
+			><td><code>failure</code></td><td
+				><code>{'{ message: string }'}</code>: why the last reply failed, in your server's words</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>failureActions</code></td><td
+				><code>Snippet</code>: shown beside the failure message, such as a link</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>attachments</code></td><td><code>boolean</code>: the paperclip, drop and paste</td
+			><td><code>false</code>; <code>true</code> in <code>Assistant</code></td></tr
 		>
 	</tbody>
 </table>
@@ -127,5 +155,6 @@
 		something to send.
 	</li>
 	<li>A failed reply is announced, in plain words, with a way to try again.</li>
+	<li>Each reply is labeled with the assistant's name, and so is the "is writing" indicator.</li>
 	<li>With reduced motion, messages appear without rising and the typing dots slow down.</li>
 </ul>

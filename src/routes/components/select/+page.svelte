@@ -62,6 +62,13 @@
 />
 <Example id="native-groups" title="Grouped options" stack {...ex('groups')} />
 <Example id="native-error" title="With an error" stack {...ex('invalid')} />
+<Example
+	id="native-hidden-label"
+	title="Label for screen readers only"
+	stack
+	description="Where the options say what they are, such as a sort order above a list, hideLabel keeps the label for screen readers only."
+	{...ex('hidden-label')}
+/>
 
 <h2 id="custom">Custom</h2>
 <p>
@@ -97,6 +104,7 @@
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
 	<tbody>
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
+		<tr><td><code>hideLabel</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
 		<tr
 			><td><code>hideLabel</code></td><td
 				><code>boolean</code>: keeps the label for screen readers only</td
@@ -122,6 +130,10 @@
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
 	<tbody>
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
+		<tr
+			><td><code>hideLabel</code></td><td><code>boolean</code>: label for screen readers only</td
+			><td><code>false</code></td></tr
+		>
 		<tr
 			><td><code>options</code></td><td
 				><code>{'{'} value, label, description?, disabled? }[]</code></td
@@ -167,6 +179,10 @@
 		>) and the highlighted option is announced through <code>aria-activedescendant</code>.
 	</li>
 	<li>Both: the same label, hint and error wiring as Input; 16px text so iOS doesn't zoom.</li>
+	<li>
+		Native: focus shows as a colored border and soft halo rather than an offset ring, because
+		Chromium keeps a select's focus ring on after a mouse pick.
+	</li>
 </ul>
 <h3 id="keys-custom">Keyboard (custom)</h3>
 <table>

@@ -5,6 +5,8 @@
 		/** What the choice is about. Visible by default; hideLabel keeps it for screen readers only. */
 		label: string;
 		hideLabel?: boolean;
+		/** Span the container's width, segments sharing it equally (say, on phones). */
+		fill?: boolean;
 		options: { value: string; label: string }[];
 		value?: string;
 		/** Form field name. Defaults to a unique id so separate controls never merge. */
@@ -17,6 +19,7 @@
 	let {
 		label,
 		hideLabel = false,
+		fill = false,
 		options,
 		value = $bindable(),
 		name = uid,
@@ -47,7 +50,7 @@
 </script>
 
 <!-- Native radios in a fieldset: one Tab stop, arrow keys, forms and screen readers for free. -->
-<fieldset class={['segmented', className]} {disabled}>
+<fieldset class={['segmented', fill && 'fill', className]} {disabled}>
 	<legend class:sr-only={hideLabel}>{label}</legend>
 	<!-- These handlers only note pointer vs keyboard for the thumb's motion; the radios are the controls. -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -83,6 +86,9 @@
 		max-inline-size: 100%;
 		font: 0.9375rem/1.4 var(--ui-font);
 		color: var(--ui-fg);
+	}
+	.fill {
+		inline-size: 100%;
 	}
 	legend {
 		margin-block-end: 0.375rem;

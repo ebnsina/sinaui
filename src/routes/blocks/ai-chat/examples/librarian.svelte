@@ -8,6 +8,7 @@
 <Chat
 	connection={demoConnection}
 	title="Ask the librarian"
+	assistantName="Librarian"
 	suggestions={[
 		'What was the House of Wisdom?',
 		'How did Ibn al-Haytham explain sight?',

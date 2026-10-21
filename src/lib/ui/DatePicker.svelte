@@ -8,6 +8,8 @@
 
 	interface Props {
 		label: string;
+		/** Keeps the label for screen readers only. */
+		hideLabel?: boolean;
 		value?: CalendarDate;
 		placeholder?: string;
 		hint?: string;
@@ -25,6 +27,7 @@
 
 	let {
 		label,
+		hideLabel = false,
 		value = $bindable(),
 		placeholder = 'Choose a date',
 		hint,
@@ -61,7 +64,7 @@
 </script>
 
 <div class="field">
-	<span id="{id}-label" class="label">{label}</span>
+	<span id="{id}-label" class="label" class:sr-only={hideLabel}>{label}</span>
 	<Popover bind:open title={label} hideTitle class="date-popover">
 		{#snippet trigger(props)}
 			<button
@@ -166,5 +169,13 @@
 	}
 	.error {
 		color: var(--ui-danger);
+	}
+	.sr-only {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>

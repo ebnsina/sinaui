@@ -20,7 +20,7 @@
 		/** Where the terms are; without it there's no terms box to tick. */
 		termsHref?: string;
 		signInHref?: string;
-		/** Shortest password accepted. */
+		/** Shortest password accepted. 0 drops the length rule and hint, for APIs that check it themselves. */
 		minLength?: number;
 		title?: string;
 		description?: string;
@@ -98,8 +98,8 @@
 			name="password"
 			isNew
 			required
-			minlength={minLength}
-			hint="At least {minLength} characters."
+			minlength={minLength || undefined}
+			hint={minLength ? `At least ${minLength} characters.` : undefined}
 			error={form.errors.password}
 		/>
 		{#if termsHref}

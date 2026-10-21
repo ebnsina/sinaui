@@ -81,6 +81,8 @@
 		['--ui-ring', 'Focus ring color (the accent)', true],
 		['--ui-ring-width', 'Focus ring thickness', false],
 		['--ui-ring-offset', 'Gap between ring and control', false],
+		['--ui-chart-1', 'First chart series (the accent)', true],
+		['--ui-chart-2 … 6', 'The other chart series, in order', false],
 		['--ui-radius', 'Corners of surfaces: cards, menus, dialogs', false],
 		['--ui-radius-control', 'Corners of controls: buttons, fields, tags; 999px for pills', false],
 		['--ui-shadow-card', 'Resting cards', false],
