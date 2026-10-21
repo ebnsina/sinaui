@@ -111,7 +111,6 @@ import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
-import { createRawSnippet } from 'svelte';
 import { colorName, hexToHsv, hsvToHex } from '#lib/ui/color.js';
 import { tone } from '#lib/ui/Meter.svelte';
 import { pageRange } from '#lib/ui/Pagination.svelte';
