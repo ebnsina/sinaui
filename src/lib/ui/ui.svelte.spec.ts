@@ -109,6 +109,10 @@ import SignIn from '#lib/blocks/auth/SignIn.svelte';
 import SignUp from '#lib/blocks/auth/SignUp.svelte';
 import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
+import Orb from '#lib/ui/Orb.svelte';
+import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
+import FieldRowPage from '../../routes/components/select/examples/row.svelte';
+import Table from '#lib/ui/Table.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -2747,6 +2751,58 @@ describe('sinaui', () => {
 		await userEvent.fill(box, 'Another');
 		await userEvent.keyboard('{Enter}');
 		await expect.poll(() => codes, { timeout: 5000 }).toEqual(['limit_reached']);
+	});
+
+	it('orb: decorative hides it from screen readers; otherwise it names itself and its state', async () => {
+		mount(Orb, { label: 'Librarian', mode: 'listening' });
+		await expect.element(page.getByRole('img', { name: 'Librarian, listening' })).toBeVisible();
+		const r = mount(Orb, { decorative: true, size: 24 });
+		const el = r.container.querySelector('.orb')!;
+		expect(el.getAttribute('aria-hidden')).toBe('true');
+		expect(el.hasAttribute('role')).toBe(false);
+		expect(el.hasAttribute('aria-label')).toBe(false);
+	});
+
+	it('table: striped by default; striped={false} leaves every row on the plain background', async () => {
+		const body = createRawSnippet(() => ({
+			render: () => '<tbody><tr><td>Optics</td></tr><tr><td>Algebra</td></tr></tbody>'
+		}));
+		const tint = (r: ReturnType<typeof mount>) =>
+			getComputedStyle(r.container.querySelector('td')!).backgroundColor;
+		const on = mount(Table, { caption: 'Books', children: body });
+		expect(tint(on)).not.toBe('rgba(0, 0, 0, 0)');
+		on.unmount();
+		const off = mount(Table, { caption: 'Books', children: body, striped: false });
+		expect(tint(off)).toBe('rgba(0, 0, 0, 0)');
+	});
+
+	it('fields side by side: a hint under one does not push the other’s control down', async () => {
+		const r = mount(FieldRowPage);
+		// The control's box is the field's second child: the label, then the control.
+		const tops = [...r.container.querySelectorAll('.field')].map((f) =>
+			Math.round(f.children[1].getBoundingClientRect().top)
+		);
+		expect(tops[0]).toBe(tops[1]);
+	});
+
+	it('tabs folder: the raised tab follows the choice, and shares the panel’s fill', async () => {
+		const r = mount(FolderTabs);
+		const caps = () => r.container.querySelectorAll<HTMLElement>('.cap');
+		await expect.poll(() => caps().length).toBe(2);
+		const x = (el: HTMLElement) => new DOMMatrix(getComputedStyle(el).transform).e;
+		const tab = (name: string) => page.getByRole('tab', { name }).element() as HTMLElement;
+		expect(x(caps()[0])).toBe(tab('Baghdad').offsetLeft);
+		await page.getByRole('tab', { name: 'Fez' }).click();
+		await expect.element(page.getByRole('tabpanel')).toHaveTextContent(/Al-Qarawiyyin/);
+		// Once the stretch settles, the left cap sits on Fez and the right cap ends where Fez ends.
+		await expect.poll(() => x(caps()[0]), { timeout: 2000 }).toBe(tab('Fez').offsetLeft);
+		await expect
+			.poll(() => x(caps()[1]) + caps()[1].offsetWidth, { timeout: 2000 })
+			.toBe(tab('Fez').offsetLeft + tab('Fez').offsetWidth);
+		const panel = page.getByRole('tabpanel').element();
+		expect(getComputedStyle(panel).backgroundColor).toBe(
+			getComputedStyle(caps()[0]).backgroundColor
+		);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

@@ -76,19 +76,29 @@
 	.tab[aria-selected='true'] {
 		color: var(--ui-accent);
 	}
+	:global(.tabs.folder) .tab[aria-selected='true'] {
+		color: var(--ui-fg);
+	}
 	.tab:disabled {
 		opacity: 0.55;
 		cursor: not-allowed;
 	}
 	/* Before hydration the sliding bar isn't measured yet: the tab draws the same bar itself, so
 	   the hand-over is invisible (an inset shadow would curve with the tab's corners). */
-	:global([role='tablist']:not([data-ready])) > .tab[aria-selected='true']::after {
+	:global(.tabs:not(.folder) [role='tablist']:not([data-ready]))
+		> .tab[aria-selected='true']::after {
 		content: '';
 		position: absolute;
 		inset: auto -1px -1px;
 		block-size: 3px;
 		border-radius: 3px 3px 0 0;
 		background: var(--ui-accent);
+	}
+	/* Folder, before hydration: the tab draws its own fill until the sliding shape is measured. */
+	:global(.tabs.folder [role='tablist']:not([data-ready])) > .tab[aria-selected='true'] {
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+		background: var(--ui-subtle);
 	}
 	:global([role='tablist'][aria-orientation='vertical']:not([data-ready]))
 		> .tab[aria-selected='true']::after {

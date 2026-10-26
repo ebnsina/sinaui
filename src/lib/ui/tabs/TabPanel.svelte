@@ -55,6 +55,11 @@
 			padding-block-start: calc((2.75rem - 1lh) / 2);
 		}
 	}
+	/* Folder: the panel shares the chosen tab's fill, so the two read as one sheet. */
+	:global(.tabs.folder) > .panel {
+		padding: 1rem;
+		background: var(--ui-subtle);
+	}
 	.panel:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);

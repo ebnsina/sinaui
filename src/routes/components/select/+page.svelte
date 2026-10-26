@@ -63,6 +63,12 @@
 <Example id="native-groups" title="Grouped options" stack {...ex('groups')} />
 <Example id="native-error" title="With an error" stack {...ex('invalid')} />
 <Example
+	id="native-row"
+	title="Beside other fields"
+	description="In a row, controls line up even when only one field has a hint."
+	{...ex('row')}
+/>
+<Example
 	id="native-hidden-label"
 	title="Label for screen readers only"
 	stack

@@ -212,6 +212,8 @@
 <style>
 	.field {
 		display: grid;
+		/* Label stays tight when a neighbor is taller. */
+		align-content: start;
 		/* As wide as the control, so layouts (and example frames) can place it. */
 		inline-size: max-content;
 		max-inline-size: 100%;

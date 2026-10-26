@@ -11,6 +11,8 @@
 		activation?: 'automatic' | 'manual';
 		/** sm: smaller text and a tighter gap, for compact panels such as dashboard cards. */
 		size?: 'sm' | 'md';
+		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab (horizontal only). */
+		variant?: 'line' | 'folder';
 		children: Snippet;
 	}
 
@@ -19,6 +21,7 @@
 		orientation = 'horizontal',
 		activation = 'automatic',
 		size = 'md',
+		variant = 'line',
 		children,
 		class: className,
 		...rest
@@ -36,6 +39,9 @@
 		get activation() {
 			return activation;
 		},
+		get variant() {
+			return variant;
+		},
 		select: (v) => (value = v),
 		ids: (v) => {
 			const safe = v.replace(/[^\w-]/g, '_');
@@ -44,7 +50,16 @@
 	});
 </script>
 
-<div class={['tabs', size, className]} data-orientation={orientation} {...rest}>
+<div
+	class={[
+		'tabs',
+		size,
+		variant === 'folder' && orientation === 'horizontal' && 'folder',
+		className
+	]}
+	data-orientation={orientation}
+	{...rest}
+>
 	{@render children()}
 </div>
 
@@ -57,6 +72,10 @@
 		min-inline-size: 0;
 		font: 0.9375rem/1.5 var(--ui-font);
 		color: var(--ui-fg);
+	}
+	/* The chosen tab joins the panel, so there's no gap between them. */
+	.folder {
+		gap: 0;
 	}
 	.sm {
 		gap: 0.75rem;

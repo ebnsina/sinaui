@@ -9,17 +9,25 @@
 		hideCaption?: boolean;
 		/** Your <thead>, <tbody> and <tfoot>. Mark number cells class="num" to right-align them. */
 		children: Snippet;
+		/** Tint every other row. Off: rows sit on the plain background and still light up under the pointer. */
+		striped?: boolean;
 		class?: string;
 	}
 
-	let { caption, hideCaption = false, children, class: className }: Props = $props();
+	let {
+		caption,
+		hideCaption = false,
+		children,
+		striped = true,
+		class: className
+	}: Props = $props();
 	const id = $props.id();
 </script>
 
 <!-- Scrolls sideways on narrow screens; focusable so keyboard users can scroll it too. -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-	class={['frame', className]}
+	class={['frame', striped && 'striped', className]}
 	role="region"
 	aria-labelledby="{id}-caption"
 	tabindex="0"
@@ -84,7 +92,7 @@
 		white-space: nowrap;
 	}
 	/* Rows told apart by tint, not rules; the one under the pointer is easier to follow across. */
-	.frame :global(tbody tr:nth-child(odd) > *) {
+	.frame.striped :global(tbody tr:nth-child(odd) > *) {
 		background: var(--ui-subtle);
 	}
 	.frame :global(tbody tr > *) {
