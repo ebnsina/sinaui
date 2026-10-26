@@ -463,10 +463,12 @@
 	.spacer {
 		flex: 1;
 	}
+	/* On a narrow player the controls give a little room, but never below a 24px target. */
 	.ctl {
 		display: grid;
-		flex: none;
+		flex: 0 1 auto;
 		place-items: center;
+		min-inline-size: 1.5rem;
 		inline-size: 2.25rem;
 		block-size: 2.25rem;
 		padding: 0;
