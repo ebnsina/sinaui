@@ -391,7 +391,7 @@
 		align-content: start;
 		gap: 0.25rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	label {
 		font-weight: 500;
@@ -538,7 +538,7 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	.popup:popover-open {
@@ -562,7 +562,7 @@
 	.search input {
 		flex: 1;
 		min-inline-size: 0;
-		block-size: 2.25rem;
+		block-size: var(--ui-item-h);
 		margin: 0;
 		padding: 0;
 		border: 0;
@@ -638,7 +638,7 @@
 		box-sizing: border-box;
 		align-items: center;
 		gap: 0.625rem;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-item-h);
 		padding: 0.375rem 0.625rem;
 		border-radius: calc(var(--ui-radius) - 0.25rem);
 		cursor: pointer;

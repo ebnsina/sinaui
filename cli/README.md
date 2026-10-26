@@ -15,6 +15,7 @@ need with your package manager, and imports the design tokens in `src/routes/+la
 ```sh
 npx sinaui add --all     # everything
 npx sinaui list          # what can be added
+npx sinaui upgrade       # update everything you already have to the latest
 ```
 
 Your edited files are kept on later runs; pass `--overwrite` to replace them. Needs Node 20+,

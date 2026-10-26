@@ -167,7 +167,7 @@
 		gap: 0.25rem;
 		min-inline-size: 0;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	.label {
 		color: var(--ui-muted);

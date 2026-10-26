@@ -595,7 +595,7 @@
 							tabindex="-1"
 							class={['toggle', n.collapsed && 'closed']}
 							style:--branch={color(i.p)}
-							style:transform="translate({i.x + i.p.side * (i.p.w / 2 + 2)}px, {i.y}px)
+							style:transform="translate({i.x + i.p.side * (i.p.w / 2 + 14)}px, {i.y}px)
 							translate(-50%, -50%) scale({i.o})"
 							style:opacity={i.o}
 							onclick={() => toggle(n.id)}

@@ -177,7 +177,7 @@
 		align-items: center;
 		gap: 0.625rem;
 		inline-size: 100%;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-item-h);
 		padding-block: 0;
 		padding-inline: 0.625rem 0.375rem;
 		border: 1px solid transparent;
@@ -235,7 +235,7 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	@media (forced-colors: active) {

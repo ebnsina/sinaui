@@ -9,8 +9,14 @@
 		level?: 2 | 3 | 4;
 		/** Makes the whole card a link; the title becomes the link text screen readers announce. */
 		href?: string;
+		/** Beside the title: a switch, a count, a link. */
+		aside?: Snippet;
 		children?: Snippet;
 		footer?: Snippet;
+		/** The panel's content runs edge to edge (a table, a list of rows). */
+		flush?: boolean;
+		/** Chosen from a set of cards. */
+		selected?: boolean;
 	}
 
 	let {
@@ -18,44 +24,70 @@
 		description,
 		level = 3,
 		href,
+		aside,
 		children,
 		footer,
+		flush = false,
+		selected = false,
 		class: className,
 		...rest
 	}: Props = $props();
 </script>
 
-<!-- A section, labeled by its title. With href, the title's link stretches over the whole card
-     (a single link, not a link wrapping the card), so screen readers hear one clear name. -->
-<article class={['card', href && 'linked', className]} {...rest}>
-	{#if title}
-		<svelte:element this={`h${level}`} class="title">
-			{#if href}<a {href}>{title}</a>{:else}{title}{/if}
-		</svelte:element>
+<!-- A tinted frame: the title sits on the frame, the content on a panel inside it, actions below.
+     With href, the title's link stretches over the whole card, so screen readers hear one name. -->
+<article class={['card', href && 'linked', selected && 'selected', className]} {...rest}>
+	{#if title || aside}
+		<div class="head">
+			{#if title}
+				<div class="heading">
+					<svelte:element this={`h${level}`} class="title">
+						{#if href}<a {href}>{title}</a>{:else}{title}{/if}
+					</svelte:element>
+					{#if description}<p class="description">{description}</p>{/if}
+				</div>
+			{/if}
+			{@render aside?.()}
+		</div>
 	{/if}
-	{#if description}<p class="description">{description}</p>{/if}
-	{#if children}<div class="content">{@render children()}</div>{/if}
+	{#if children}<div class={['panel', flush && 'flush']}>{@render children()}</div>{/if}
 	{#if footer}<div class="footer">{@render footer()}</div>{/if}
 </article>
 
 <style>
-	/* A surface with a soft shadow; no outline. */
+	/* A light tint around a surface panel, 4px apart; corners nest (frame = panel + 4px). */
 	.card {
 		position: relative;
 		box-sizing: border-box;
-		padding: 1.25rem;
+		display: grid;
+		gap: 0.25rem;
+		padding: 0.25rem;
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
-		background: var(--ui-surface);
+		border-radius: calc(var(--ui-radius) + 0.25rem);
+		background: var(--ui-subtle);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
-		box-shadow: var(--ui-shadow-card);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
+	}
+	.selected {
+		background: var(--ui-hover);
+		box-shadow: inset 0 0 0 1px var(--ui-fg);
+	}
+	/* Text on the frame lines up with text in the panel: the panel's padding plus its 1px edge. */
+	.head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.5rem calc(1rem + 1px) 0.25rem;
+	}
+	.heading {
+		min-inline-size: 0;
 	}
 	.title {
 		margin: 0;
 		font-family: var(--ui-font-heading);
-		font-size: 1rem;
+		font-size: var(--ui-font-size);
 		font-weight: 600;
 		letter-spacing: -0.01em;
 	}
@@ -91,25 +123,34 @@
 		}
 	}
 	.description {
-		margin: 0.25rem 0 0;
+		margin: 0.125rem 0 0;
 		color: var(--ui-muted);
 	}
-	.content {
-		margin-block-start: 1rem;
+	.panel {
+		display: grid;
+		gap: 0.75rem;
+		min-inline-size: 0;
+		padding: 1rem;
+		border: 1px solid var(--ui-line);
+		border-radius: var(--ui-radius);
+		background: var(--ui-surface);
 	}
-	.title + .content {
-		margin-block-start: 0.75rem;
+	.flush {
+		gap: 0;
+		overflow: hidden;
+		padding: 0;
 	}
 	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog. */
 	.footer {
 		display: flex;
 		flex-wrap: wrap-reverse;
+		align-items: center;
 		justify-content: flex-end;
 		gap: 0.5rem;
-		margin-block-start: 1.25rem;
+		padding: 0.25rem calc(0.75rem + 1px) 0.25rem;
 	}
 	/* Controls inside a linked card stay clickable above the stretched link. */
-	.linked :is(.content, .footer) :global(:is(a, button, input, select, textarea, label)) {
+	.linked :is(.panel, .footer) :global(:is(a, button, input, select, textarea, label)) {
 		position: relative;
 		z-index: 1;
 	}

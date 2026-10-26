@@ -65,7 +65,7 @@
 		gap: 1rem;
 		/* In a grid or flex parent, many tabs scroll sideways instead of widening the page. */
 		min-inline-size: 0;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	/* The chosen tab joins the panel, so there's no gap between them. */

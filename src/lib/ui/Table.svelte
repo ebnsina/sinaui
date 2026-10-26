@@ -46,7 +46,7 @@
 		min-inline-size: 0;
 		border-radius: var(--ui-radius);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	.frame:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);

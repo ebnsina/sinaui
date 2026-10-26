@@ -53,6 +53,12 @@
 	description="A topbar snippet adds a bar above the page on every screen, and the collapse button moves into it. Here --ui-sidebar-line draws the edges."
 	{...ex('topbar')}
 />
+<Example
+	id="studio"
+	title="Studio dashboard"
+	description="A full app shell: a search that narrows the menu, titled groups, a product switcher at the foot and a top bar with actions. The size tokens set a wider sidebar with 32px rows and larger type."
+	{...ex('studio')}
+/>
 
 <h2 id="props">Props</h2>
 <table>

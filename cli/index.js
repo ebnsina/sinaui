@@ -10,6 +10,7 @@ const HELP = `Sina UI
 
   npx sinaui add <name...>   Add components, e.g. add button dropdown blocks/chat
   npx sinaui add --all       Add everything
+  npx sinaui upgrade         Update every component you already have to the latest
   npx sinaui init            Add only the design tokens
   npx sinaui list            Show what can be added
 
@@ -62,6 +63,11 @@ export async function importIn(layout, line) {
 	return true;
 }
 
+/** Names of the registry items with at least one file already in the project. */
+export function installed(items, exists) {
+	return items.filter((i) => i.files.some((f) => exists(f.path))).map((i) => i.name);
+}
+
 async function get(registry, name) {
 	const url = new URL(`r/${name}.json`, registry.endsWith('/') ? registry : `${registry}/`);
 	let res;
@@ -91,17 +97,25 @@ async function main(argv) {
 		const { items } = await get(registry, 'index');
 		return console.log(items.join('\n'));
 	}
-	if (command !== 'add' && command !== 'init')
+	if (command !== 'add' && command !== 'init' && command !== 'upgrade')
 		throw new Error(`Unknown command "${command}".\n\n${HELP}`);
 	if (!existsSync('package.json'))
 		throw new Error("Run this in your SvelteKit project's folder (the one with package.json).");
+	// Upgrade: re-add, over your copies, everything that's already here.
+	const overwrite = flag('overwrite') || command === 'upgrade';
+	if (command === 'upgrade') {
+		const { items: all } = await get(registry, 'index');
+		const found = await Promise.all(all.map((n) => get(registry, n)));
+		names.push(...installed(found, (path) => existsSync(join(dir, path))));
+		if (!names.length) throw new Error(`Nothing from Sina UI found in ${dir}.`);
+	}
 	if (command === 'add' && flag('all')) names.push(...(await get(registry, 'index')).items);
 	if (command === 'add' && !names.length)
 		throw new Error('Name at least one component: npx sinaui add button');
 
 	// Tokens always come along: every component reads its colours and corners from them.
 	const items = await Promise.all(
-		['tokens', ...(command === 'add' ? names : [])].map((n) => get(registry, n))
+		['tokens', ...(command === 'init' ? [] : names)].map((n) => get(registry, n))
 	);
 	const files = new Map(items.flatMap((i) => i.files.map((f) => [f.path, f.content])));
 	const deps = Object.assign({}, ...items.map((i) => i.dependencies));
@@ -110,7 +124,7 @@ async function main(argv) {
 	const kept = [];
 	for (const [path, content] of files) {
 		const to = join(dir, path);
-		if (existsSync(to) && !flag('overwrite')) {
+		if (existsSync(to) && !overwrite) {
 			kept.push(to);
 			continue;
 		}

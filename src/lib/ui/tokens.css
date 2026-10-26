@@ -57,9 +57,8 @@
 	   their own, so they can go fully pill while surfaces stay sensible. */
 	--ui-radius: 0.75rem;
 	--ui-radius-control: 0.625rem;
-	/* Fields, selects, medium buttons and tabs share this height and text size. For a compact app,
-	   lower them inside @media (pointer: fine): touch keeps 44px targets, and text under 16px makes
-	   iOS Safari zoom into a field. */
+	/* Fields, selects, medium buttons and tabs share this height and text size. These are the
+	   pen and touch sizes (text under 16px makes iOS Safari zoom into a field); see the mouse sizes below. */
 	--ui-control-h: 2.5rem;
 	--ui-control-font: max(1rem, 16px);
 	--ui-control-h-sm: 2rem;
@@ -67,12 +66,20 @@
 	/* Every control's height on touch screens. Keep it at 2.75rem (44px) or more. */
 	--ui-control-h-touch: 2.75rem;
 	--ui-button-font: 0.9375rem;
+	/* Everyday UI text (labels, menus, lists) and the height of a menu or list row. */
+	--ui-font-size: 0.9375rem;
+	--ui-item-h: 2.25rem;
 
 	/* SidebarLayout: its panel, its edges (sidebar and top bar), and the current page's highlight. */
 	--ui-sidebar-bg: var(--ui-subtle);
 	--ui-sidebar-line: transparent;
 	--ui-sidebar-current-bg: var(--ui-surface);
 	--ui-sidebar-current-fg: var(--ui-fg);
+	/* Its size: open width, row height, row text and group titles. */
+	--ui-sidebar-w: 15rem;
+	--ui-sidebar-item-h: 2.25rem;
+	--ui-sidebar-font: 0.875rem;
+	--ui-sidebar-title-font: 0.75rem;
 
 	/* Motion: enter fast and settle, exit quicker than you came. --ui-ease-out is the everyday curve. */
 	--ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -125,6 +132,19 @@
 	--ui-dur: 240ms;
 	--ui-dur-overlay: 240ms;
 	--ui-dur-spring: 480ms;
+}
+
+/* With a mouse, controls are compact: 32px and 14px text. Touch keeps the sizes above. */
+@media (pointer: fine) {
+	:root {
+		--ui-control-h: 2rem;
+		--ui-control-font: 0.875rem;
+		--ui-control-h-sm: 1.75rem;
+		--ui-control-h-lg: 2.5rem;
+		--ui-button-font: 0.875rem;
+		--ui-font-size: 0.875rem;
+		--ui-item-h: 2rem;
+	}
 }
 
 :root[data-theme='light'] {

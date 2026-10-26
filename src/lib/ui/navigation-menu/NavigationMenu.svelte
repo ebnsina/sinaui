@@ -108,7 +108,7 @@
 		inline-size: fit-content;
 		max-inline-size: 100%;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 	}
 	.list {
 		display: flex;

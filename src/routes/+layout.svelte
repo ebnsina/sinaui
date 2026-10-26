@@ -22,6 +22,7 @@
 	import { search } from '#lib/site/search.svelte.js';
 	import { isDark, setTheme } from '#lib/site/theme.js';
 	import {
+		ArrowUp01Icon,
 		Menu01Icon,
 		Moon02Icon,
 		Search01Icon,
@@ -48,7 +49,6 @@
 		{ title: 'Blocks', href: '/blocks/dashboard' },
 		{ title: 'Pro', href: '/pro', pro: true }
 	];
-	let menuHover = $state() as HTMLSpanElement;
 
 	// From the address the page was served at, so no domain is written into the site.
 	const canonical = $derived(`${page.url.origin}${page.url.pathname}`);
@@ -337,18 +337,12 @@
 			<img src={favicon} alt="" width="22" height="22" />
 			<span>Sina UI</span>
 		</a>
-		<nav
-			class="menu"
-			aria-label="Main"
-			onpointerover={(e) => {
-				if (e.pointerType === 'touch') return;
-				glide(menuHover, (e.target as Element).closest<HTMLElement>('a'), true);
-			}}
-			onpointerleave={() => glide(menuHover, null, false)}
-		>
-			<span class="menu-hover" aria-hidden="true" bind:this={menuHover}></span>
+		<nav class="menu" aria-label="Main">
 			{#each menu as item (item.href)}
-				<a href={link(item.href)}>
+				<a
+					href={link(item.href)}
+					aria-current={page.url.pathname.startsWith(link(item.href)) ? 'page' : undefined}
+				>
 					{item.title}
 					{#if item.pro}<Badge tone="accent" icon={false} class="pro">Pro</Badge>{/if}
 				</a>
@@ -417,7 +411,8 @@
 				onpointerover={(e) => {
 					// The dropdown's hover: one pill glides between links (mouse only).
 					if (e.pointerType === 'touch') return;
-					glide(navHover, (e.target as Element).closest<HTMLElement>('li a'), true);
+					const a = (e.target as Element).closest<HTMLElement>('li a');
+					glide(navHover, a?.hasAttribute('aria-current') ? null : a, true);
 				}}
 				onpointerleave={() => glide(navHover, null, false)}
 			>
@@ -485,26 +480,27 @@
 				<button
 					type="button"
 					class="rail"
-					aria-label="On this page"
+					aria-label="On this page: {toc[current]?.text ?? toc[0].text}"
 					aria-expanded={tocOpen}
 					onclick={() => {
 						tocOpen = !tocOpen;
 						if (tocOpen) centerCurrent();
 					}}
 				>
-					<!-- A ring open at the bottom that fills as you read, with three dots in the opening. -->
-					<svg viewBox="0 0 40 40" aria-hidden="true">
-						<path class="track" d="M11.4 32.29 A15 15 0 1 1 28.6 32.29" />
-						<path
+					<!-- A small ring that fills as you read, then the section you're in. -->
+					<svg viewBox="0 0 20 20" aria-hidden="true">
+						<circle class="track" cx="10" cy="10" r="7.5" />
+						<circle
 							class="fill"
-							d="M11.4 32.29 A15 15 0 1 1 28.6 32.29"
+							cx="10"
+							cy="10"
+							r="7.5"
 							pathLength="1"
 							style:stroke-dashoffset={1 - progress}
 						/>
-						<circle cx="16.4" cy="33.4" r="1.25" />
-						<circle cx="20" cy="34.3" r="1.25" />
-						<circle cx="23.6" cy="33.4" r="1.25" />
 					</svg>
+					<span class="now">{toc[current]?.text ?? toc[0].text}</span>
+					<Icon icon={ArrowUp01Icon} size={14} />
 				</button>
 				<div class="card" bind:this={tocCard} {@attach scrollEdges} data-fade>
 					<p class="group">On this page</p>
@@ -609,8 +605,24 @@
 		gap: 1rem;
 		block-size: 4rem;
 		padding-inline: max(1rem, (100% - 76rem) / 2);
-		background: color-mix(in srgb, var(--ui-bg) 85%, transparent);
-		backdrop-filter: blur(12px);
+		background: color-mix(in srgb, var(--page) 72%, transparent);
+		backdrop-filter: blur(12px) saturate(1.4);
+	}
+	/* The same color as the page it sits on; a hairline fades in once the page scrolls under it. */
+	@supports (animation-timeline: scroll()) {
+		.bar {
+			animation: bar-edge linear both;
+			animation-timeline: scroll();
+			animation-range: 0 4rem;
+		}
+	}
+	@keyframes bar-edge {
+		from {
+			box-shadow: 0 1px transparent;
+		}
+		to {
+			box-shadow: 0 1px var(--ui-line);
+		}
 	}
 	.brand {
 		display: inline-flex;
@@ -621,14 +633,10 @@
 		font-weight: 600;
 		text-decoration: none;
 	}
+	/* Plain links: muted, dark when hovered or when you're in that section. */
 	.menu {
-		position: relative;
 		display: flex;
-		gap: 0.125rem;
-		padding: 0.25rem;
-		/* Concentric with the links inside: their radius plus this padding. */
-		border-radius: calc(var(--ui-radius-control) + 0.25rem);
-		background: var(--ui-subtle);
+		gap: 0.25rem;
 	}
 	.menu a {
 		position: relative;
@@ -642,22 +650,17 @@
 		text-decoration: none;
 		transition: color var(--ui-dur-press) ease;
 	}
+	.menu a[aria-current='page'] {
+		color: var(--ui-fg);
+	}
 	@media (hover: hover) {
 		.menu a:hover {
 			color: var(--ui-fg);
 		}
 	}
-	.menu-hover {
-		position: absolute;
-		top: 0;
-		left: 0;
-		transform-origin: 0 0;
-		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
-		box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity var(--ui-dur-exit) ease;
+	.menu a:focus-visible {
+		outline: var(--ui-ring-width) solid var(--ui-ring);
+		outline-offset: -2px;
 	}
 	.bar-end {
 		display: flex;
@@ -773,50 +776,64 @@
 		position: relative;
 	}
 	/* The corner button: round, lifted off the page. */
+	/* A pill: reading progress, the section you're in, and a chevron to open the list. */
 	.rail {
-		position: relative;
-		display: block;
-		color: var(--ui-fg);
-		inline-size: 2.75rem;
-		block-size: 2.75rem;
-		padding: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		max-inline-size: 15rem;
+		block-size: 2.25rem;
+		padding: 0 0.75rem 0 0.625rem;
 		border: 1px solid transparent;
-		border-radius: 50%;
+		border-radius: 999px;
 		background: var(--ui-surface-overlay);
 		box-shadow: var(--ui-shadow-overlay);
+		color: var(--ui-fg);
+		font: 500 0.8125rem/1 var(--ui-font);
 		cursor: pointer;
 		transition:
 			scale var(--ui-dur-press) var(--ui-ease-out),
 			opacity var(--ui-dur) var(--ui-ease-out);
 	}
 	.rail:active {
-		scale: 0.94;
+		scale: 0.97;
 	}
 	.rail:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);
 	}
 	.rail svg {
-		position: absolute;
-		inset: 0;
-		inline-size: 100%;
-		block-size: 100%;
+		flex: none;
+		inline-size: 1.125rem;
+		block-size: 1.125rem;
+		rotate: -90deg;
 	}
-	.rail path {
+	.rail circle {
 		fill: none;
-		stroke-width: 2;
-		stroke-linecap: round;
+		stroke-width: 2.5;
 	}
 	.rail .track {
-		stroke: color-mix(in srgb, var(--ui-muted) 30%, transparent);
+		stroke: var(--ui-line);
 	}
 	.rail .fill {
 		stroke: var(--ui-accent);
+		stroke-linecap: round;
 		stroke-dasharray: 1;
 		transition: stroke-dashoffset var(--ui-dur) var(--ui-ease-out);
 	}
-	.rail circle {
-		fill: var(--ui-muted);
+	.now {
+		min-inline-size: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.rail :global(svg:last-child) {
+		flex: none;
+		color: var(--ui-muted);
+		transition: rotate var(--ui-dur) var(--ui-ease-out);
+	}
+	.rail[aria-expanded='true'] :global(svg:last-child) {
+		rotate: 180deg;
 	}
 	/* Genie: the card grows out of the button: squeezed narrow and short at the button's corner, it
 	   stretches up and out on the spring, and pulls back into the button quickly when it closes. */

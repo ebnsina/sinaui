@@ -119,7 +119,7 @@
 		padding: 0;
 		border: 0;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	legend {
 		margin-block-end: 0.5rem;

@@ -23,11 +23,11 @@
 	.link {
 		display: inline-flex;
 		align-items: center;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-control-h);
 		padding: 0 0.75rem;
 		border-radius: var(--ui-radius);
 		color: inherit;
-		font: 500 0.9375rem/1 var(--ui-font);
+		font: 500 var(--ui-font-size)/1 var(--ui-font);
 		text-decoration: none;
 		transition: background-color var(--ui-dur-press) ease;
 	}

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { rewrite } from './index.js';
+import { installed, rewrite } from './index.js';
 
 test('lib imports become relative to where the file is written', () => {
 	assert.equal(
@@ -35,4 +35,17 @@ test('the tokens import goes into the layout once, and a missing layout is creat
 	assert.equal(await importIn(existing, line), false);
 	assert.equal((await readFile(existing, 'utf8')).split(line).length, 2);
 	assert.match(await readFile(existing, 'utf8'), /^<script lang="ts">\n\timport/);
+});
+
+test('upgrade picks the items with any file already in the project', () => {
+	const items = [
+		{ name: 'button', files: [{ path: 'ui/Button.svelte' }] },
+		{ name: 'tabs', files: [{ path: 'ui/tabs/Tabs.svelte' }, { path: 'ui/tabs/Tab.svelte' }] },
+		{ name: 'chart', files: [{ path: 'ui/Chart.svelte' }] }
+	];
+	const have = new Set(['ui/Button.svelte', 'ui/tabs/Tab.svelte']);
+	assert.deepEqual(
+		installed(items, (p) => have.has(p)),
+		['button', 'tabs']
+	);
 });

@@ -269,8 +269,8 @@
 	.control {
 		display: grid;
 		place-items: center;
-		inline-size: 2.25rem;
-		block-size: 2.25rem;
+		inline-size: var(--ui-control-h);
+		block-size: var(--ui-control-h);
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;

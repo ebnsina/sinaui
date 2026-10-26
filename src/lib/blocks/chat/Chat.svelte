@@ -681,7 +681,7 @@
 		background: none;
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		resize: none;
 		/* Grows with what's typed, up to a few lines. */
 		field-sizing: content;

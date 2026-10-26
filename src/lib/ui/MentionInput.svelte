@@ -327,7 +327,7 @@
 		align-content: start;
 		gap: 0.25rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	label {
 		font-weight: 500;
@@ -422,7 +422,7 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	.popup:popover-open {
@@ -452,7 +452,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.625rem;
-		min-block-size: 2.5rem;
+		min-block-size: calc(var(--ui-item-h) + 0.25rem);
 		padding: 0.25rem 0.5rem;
 		border-radius: calc(var(--ui-radius) - 0.25rem);
 		cursor: pointer;

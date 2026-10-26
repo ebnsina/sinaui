@@ -117,7 +117,7 @@
 		margin: 0;
 		padding: 0;
 		list-style: none;
-		font: 0.9375rem/1 var(--ui-font);
+		font: var(--ui-font-size)/1 var(--ui-font);
 		font-variant-numeric: tabular-nums;
 	}
 	.item,
@@ -125,8 +125,8 @@
 		box-sizing: border-box;
 		display: inline-grid;
 		place-items: center;
-		min-inline-size: 2.25rem;
-		block-size: 2.25rem;
+		min-inline-size: var(--ui-control-h);
+		block-size: var(--ui-control-h);
 		padding: 0 0.5rem;
 	}
 	@media (pointer: coarse) {

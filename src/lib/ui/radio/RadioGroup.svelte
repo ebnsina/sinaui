@@ -202,7 +202,7 @@
 		padding: 0;
 		border: 0;
 		min-inline-size: 0;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	legend {

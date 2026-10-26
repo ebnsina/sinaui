@@ -335,7 +335,7 @@
 		/* Label stays tight when a neighbor is taller. */
 		align-content: start;
 		gap: 0.25rem;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	label {
@@ -409,7 +409,7 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	.option {
@@ -418,7 +418,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		box-sizing: border-box;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-item-h);
 		padding: 0.375rem 0.625rem;
 		border-radius: calc(var(--ui-radius) - 0.25rem);
 		cursor: pointer;

@@ -24,7 +24,7 @@
 	/* Fills its column, so opening a section never changes its width. */
 	.accordion {
 		inline-size: 100%;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	/* Dividers between items only, no frame around the group (as shadcn/Radix do). Set here because

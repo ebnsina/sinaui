@@ -23,8 +23,6 @@
 	}: Props = $props();
 
 	const last = $derived(steps.length - 1);
-	// How far the track is filled: from the first marker to the current one.
-	const fill = $derived(last > 0 ? Math.min(current, last) / last : 0);
 </script>
 
 <nav aria-label={label} class={['stepper', orientation]}>
@@ -33,7 +31,6 @@
 		Step {Math.min(current, last) + 1} of {steps.length}: {steps[Math.min(current, last)]?.label}
 	</p>
 	<div class="rail" style:--n={steps.length}>
-		<span class="track" aria-hidden="true"><span class="fill" style:--fill={fill}></span></span>
 		<ol>
 			{#each steps as step, i (i)}
 				{@const state = i < current ? 'done' : i === current ? 'current' : 'next'}
@@ -41,7 +38,7 @@
 					class={[state, step.error && 'error']}
 					aria-current={state === 'current' ? 'step' : undefined}
 				>
-					<!-- Vertical: the line down to the next marker, filled once this step is done. -->
+					<!-- The line on to the next marker, filled once this step is done. -->
 					{#if i < last}<span class="link" aria-hidden="true"></span>{/if}
 					{#if state === 'done' && onstep}
 						<button type="button" class="step" onclick={() => onstep(i)}>
@@ -94,40 +91,19 @@
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
 	}
-	/* Equal columns; each marker sits at its column's center, the track runs between the outer ones. */
+	/* Horizontal: equal columns, a marker centered in each, its name below, lines between. */
 	.rail {
 		position: relative;
 	}
 	ol {
-		position: relative;
 		display: grid;
 		grid-template-columns: repeat(var(--n), minmax(0, 1fr));
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
-	.track {
-		position: absolute;
-		inset-block-start: calc(1rem - 1px);
-		inset-inline: calc(50% / var(--n));
-		block-size: 2px;
-		border-radius: 1px;
-		background: var(--ui-line);
-		overflow: hidden;
-	}
-	/* Filled with a transform, so it moves smoothly even while the page is busy. */
-	.fill {
-		position: absolute;
-		inset: 0;
-		background: var(--ui-accent);
-		transform: scaleX(var(--fill));
-		transform-origin: left;
-		transition: transform 450ms var(--ui-ease-out);
-	}
-	.fill:dir(rtl) {
-		transform-origin: right;
-	}
 	li {
+		position: relative;
 		display: flex;
 		justify-content: center;
 		min-inline-size: 0;
@@ -135,7 +111,7 @@
 	.step {
 		display: grid;
 		justify-items: center;
-		gap: 0.375rem;
+		gap: 0.5rem;
 		max-inline-size: 100%;
 		margin: 0;
 		padding: 0 0.25rem;
@@ -153,39 +129,48 @@
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);
 	}
+	/* A rounded square: faint ahead, solid ink for the step you're on, a light tint with a tick once done. */
 	.marker {
 		position: relative;
+		z-index: 1;
 		display: grid;
 		place-items: center;
+		box-sizing: border-box;
 		inline-size: 2rem;
 		block-size: 2rem;
-		box-sizing: border-box;
-		border-radius: 50%;
+		border: 1px solid var(--ui-field-line);
+		border-radius: 0.75rem;
 		background: var(--ui-surface);
-		box-shadow: inset 0 0 0 2px var(--ui-control-line);
 		color: var(--ui-muted);
+		font-size: 0.8125rem;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		transition:
 			background-color var(--ui-dur-overlay) ease,
-			box-shadow var(--ui-dur-overlay) ease,
+			border-color var(--ui-dur-overlay) ease,
 			color var(--ui-dur-overlay) ease,
 			transform var(--ui-dur-press) var(--ui-ease-out);
 	}
 	.current .marker {
-		box-shadow:
-			inset 0 0 0 2px var(--ui-accent),
-			0 0 0 4px color-mix(in srgb, var(--ui-accent) 18%, transparent);
-		color: var(--ui-accent);
+		border-color: var(--ui-accent);
+		background: var(--ui-accent);
+		color: var(--ui-on-accent);
 	}
 	.done .marker {
-		background: var(--ui-accent);
+		border-color: transparent;
+		background: var(--ui-hover);
+		color: var(--ui-fg);
+	}
+	.error .marker,
+	.error.done .marker {
+		border-color: var(--ui-danger);
+		background: var(--ui-surface);
+		color: var(--ui-danger);
 		box-shadow: none;
-		color: var(--ui-on-accent);
 	}
 	@media (hover: hover) and (pointer: fine) {
 		button.step:hover .marker {
-			transform: scale(1.08);
+			transform: scale(1.06);
 		}
 	}
 	button.step:active .marker {
@@ -204,6 +189,31 @@
 			opacity: 0;
 		}
 	}
+	/* From just past this marker to just before the next; fills once this step is done. */
+	.link {
+		position: absolute;
+		inset-block-start: calc(1rem - 1px);
+		inset-inline: calc(50% + 1.5rem) calc(-50% + 1.5rem);
+		block-size: 2px;
+		overflow: hidden;
+		border-radius: 1px;
+		background: var(--ui-line);
+	}
+	.link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: var(--ui-accent);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 450ms var(--ui-ease-out);
+	}
+	.link:dir(rtl)::after {
+		transform-origin: right;
+	}
+	.done .link::after {
+		transform: none;
+	}
 	.text {
 		display: grid;
 		min-inline-size: 0;
@@ -214,6 +224,7 @@
 		font-weight: 500;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		transition: color var(--ui-dur-overlay) ease;
 	}
 	.current .name,
 	.done .name {
@@ -223,24 +234,11 @@
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
 	}
-	/* A step with something to fix: its marker and message in the danger color. */
-	.error .marker,
-	.error.done .marker {
-		background: var(--ui-surface);
-		box-shadow: inset 0 0 0 2px var(--ui-danger);
-		color: var(--ui-danger);
-	}
-	.error.current .marker {
-		box-shadow:
-			inset 0 0 0 2px var(--ui-danger),
-			0 0 0 4px color-mix(in srgb, var(--ui-danger) 18%, transparent);
-	}
 	.problem {
 		color: var(--ui-danger);
 	}
 
 	/* Vertical: one step per row, marker on the start side with its name beside it. */
-	.vertical .track,
 	.vertical .count {
 		display: none;
 	}
@@ -266,28 +264,16 @@
 	.vertical .name {
 		white-space: normal;
 	}
-	/* The link runs from under this marker to the next one, and fills downwards when this step is done. */
-	.link {
-		display: none;
-	}
+	/* Vertical: the link runs down from under this marker to the next one, and fills downwards. */
 	.vertical .link {
-		position: absolute;
 		inset-block: calc(2rem + 0.25rem) calc(-1.25rem + 0.25rem);
-		inset-inline-start: calc(1rem - 1px);
-		display: block;
+		inset-inline: calc(1rem - 1px) auto;
 		inline-size: 2px;
-		border-radius: 1px;
-		background: var(--ui-line);
-		overflow: hidden;
+		block-size: auto;
 	}
 	.vertical .link::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: var(--ui-accent);
 		transform: scaleY(0);
 		transform-origin: top;
-		transition: transform 450ms var(--ui-ease-out);
 	}
 	.vertical .done .link::after {
 		transform: none;
@@ -308,15 +294,13 @@
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.fill,
-		.vertical .link::after,
+		.link::after,
 		.tick {
 			transition: none;
 		}
 	}
 	@media (forced-colors: active) {
-		.current .marker,
-		.done .marker {
+		:is(.current, .done) .marker {
 			outline: 2px solid Highlight;
 		}
 	}

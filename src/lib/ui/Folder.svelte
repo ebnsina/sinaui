@@ -93,9 +93,10 @@
 		margin-block-end: 0.25rem;
 		perspective: calc(var(--w) * 4);
 	}
+	/* Inset by the front's top corner radius, so the front's rounded corners never show the back's edge. */
 	.back {
 		position: absolute;
-		inset: 8% 0 0;
+		inset: 8% calc(var(--w) * 0.05) 0;
 		border-radius: calc(var(--w) * 0.08);
 		background: color-mix(in oklab, var(--c) 78%, #000);
 	}
@@ -140,7 +141,8 @@
 	.front {
 		position: absolute;
 		inset: 30% 0 0;
-		border-radius: calc(var(--w) * 0.08);
+		border-radius: calc(var(--w) * 0.05) calc(var(--w) * 0.05) calc(var(--w) * 0.08)
+			calc(var(--w) * 0.08);
 		background: linear-gradient(
 			to bottom,
 			color-mix(in srgb, var(--c) 72%, #fff 8%),

@@ -417,7 +417,10 @@ describe('sinaui', () => {
 		await expect.element(email).not.toHaveAttribute('aria-invalid');
 
 		const el = name.element() as HTMLInputElement;
-		expect(parseFloat(getComputedStyle(el).fontSize)).toBeGreaterThanOrEqual(16);
+		// 14px with a mouse; 16px on touch, where iOS would zoom into smaller text.
+		expect(getComputedStyle(el).fontSize).toBe(
+			matchMedia('(pointer: fine)').matches ? '14px' : '16px'
+		);
 		// The border and ring belong to the box around the input (it holds start/end add-ons too).
 		const box = el.parentElement!;
 		const resting = getComputedStyle(box).borderBottomColor;
@@ -553,7 +556,10 @@ describe('sinaui', () => {
 		await expect.element(box).not.toHaveAttribute('aria-invalid');
 		const note = page.getByRole('textbox', { name: 'Marginal note' });
 		await expect.element(note).toHaveAccessibleDescription('It grows as you write.');
-		expect(parseFloat(getComputedStyle(note.element()).fontSize)).toBeGreaterThanOrEqual(16);
+		// 14px with a mouse; 16px on touch, where iOS would zoom into smaller text.
+		expect(getComputedStyle(note.element()).fontSize).toBe(
+			matchMedia('(pointer: fine)').matches ? '14px' : '16px'
+		);
 	});
 
 	it('hideLabel: Input, Select, CustomSelect and Textarea keep their name but hide the label', async () => {
@@ -736,7 +742,10 @@ describe('sinaui', () => {
 		await expect.element(room).not.toHaveAttribute('aria-invalid');
 		const work = page.getByRole('combobox', { name: 'Work' });
 		await expect.element(work).toHaveValue('canon');
-		expect(parseFloat(getComputedStyle(work.element()).fontSize)).toBeGreaterThanOrEqual(16);
+		// 14px with a mouse; 16px on touch, where iOS would zoom into smaller text.
+		expect(getComputedStyle(work.element()).fontSize).toBe(
+			matchMedia('(pointer: fine)').matches ? '14px' : '16px'
+		);
 	});
 
 	it('hideLabel: every labeled field keeps its name for screen readers only', async () => {
@@ -2841,9 +2850,10 @@ describe('sinaui', () => {
 				)
 			);
 		mount(SizeRow);
-		expect(heights()).toEqual([40, 40, 40]);
-		document.querySelector<HTMLElement>('.row')!.style.setProperty('--ui-control-h', '2rem');
-		await expect.poll(heights).toEqual([32, 32, 32]);
+		// A mouse gets the compact size by default.
+		expect(heights()).toEqual([32, 32, 32]);
+		document.querySelector<HTMLElement>('.row')!.style.setProperty('--ui-control-h', '2.5rem');
+		await expect.poll(heights).toEqual([40, 40, 40]);
 	});
 
 	it('button tokens: small and large heights, text size; an outline variant', async () => {
@@ -2854,8 +2864,9 @@ describe('sinaui', () => {
 			['Annotate', 'Borrow manuscript', 'Enter Bayt al-Hikma'].map((n) =>
 				Math.round(btn(n).getBoundingClientRect().height)
 			);
-		expect(sizes()).toEqual([32, 40, 48]);
-		expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('15px');
+		// The compact sizes a mouse gets by default.
+		expect(sizes()).toEqual([28, 32, 40]);
+		expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('14px');
 		const root = document.documentElement.style;
 		const set = {
 			'--ui-control-h-sm': '1.75rem',

@@ -46,14 +46,14 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-control-h);
 		margin: 0;
 		padding: 0 0.75rem;
 		border: 0;
 		border-radius: var(--ui-radius);
 		background: none;
 		color: inherit;
-		font: 500 0.9375rem/1 var(--ui-font);
+		font: 500 var(--ui-font-size)/1 var(--ui-font);
 		cursor: pointer;
 		transition: background-color var(--ui-dur-press) ease;
 	}

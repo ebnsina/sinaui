@@ -101,7 +101,7 @@
 		border-radius: calc(var(--ui-radius) * 1.75);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	.dialog::backdrop {

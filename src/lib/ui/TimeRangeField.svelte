@@ -152,7 +152,7 @@
 		display: grid;
 		gap: 0.25rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	.label {
 		font-weight: 500;

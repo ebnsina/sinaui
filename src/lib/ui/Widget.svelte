@@ -37,6 +37,6 @@
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--tone);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 	}
 </style>

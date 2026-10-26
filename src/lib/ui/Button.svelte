@@ -72,7 +72,7 @@
 		justify-content: center;
 		gap: 0.5em;
 		min-block-size: var(--ui-control-h);
-		padding-inline: 1rem;
+		padding-inline: 0.75rem;
 		/* Invisible normally; becomes the button's outline in Windows High Contrast. */
 		border: 1px solid transparent;
 		border-radius: var(--ui-radius-control);
@@ -95,13 +95,13 @@
 	}
 	.sm {
 		min-block-size: var(--ui-control-h-sm);
-		padding-inline: 0.75rem;
+		padding-inline: 0.625rem;
 		font-size: 0.8125rem;
 	}
 	.lg {
 		min-block-size: var(--ui-control-h-lg);
-		padding-inline: 1.5rem;
-		font-size: 1rem;
+		padding-inline: 1rem;
+		font-size: 0.9375rem;
 	}
 	@media (pointer: coarse) {
 		.btn {

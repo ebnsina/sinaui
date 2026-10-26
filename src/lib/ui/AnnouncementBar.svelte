@@ -1,6 +1,8 @@
 <script lang="ts" module>
 	export type Announcement = {
 		text: string;
+		/** A short label before the text, such as "New". */
+		tag?: string;
 		/** A call to action: a link with href, or a button with onclick. */
 		link?: string;
 		href?: string;
@@ -57,8 +59,8 @@
 		if (persist && load(persist, false)) gone = true;
 	});
 
-	// The ring's own animation is the timer: when it completes, the next message comes. Pausing it
-	// pauses both, so the ring always shows exactly how long is left.
+	// The progress bar's own animation is the timer: when it completes, the next message comes.
+	// Pausing it pauses both, so the bar always shows exactly how long is left.
 	function next() {
 		left = current;
 		current = (current + 1) % messages.length;
@@ -104,33 +106,6 @@
 	>
 		<div class="inner">
 			<div class="bar">
-				{#if messages.length > 1}
-					<!-- Time to the next message, drawn round the pause button. -->
-					<button
-						type="button"
-						class="dial"
-						aria-label={paused ? 'Play announcements' : 'Pause announcements'}
-						onclick={() => (paused = !paused)}
-					>
-						{#key current}
-							<svg viewBox="0 0 20 20" aria-hidden="true">
-								<circle class="track" cx="10" cy="10" r="8.5" />
-								<circle
-									class="fill"
-									cx="10"
-									cy="10"
-									r="8.5"
-									pathLength="1"
-									style:animation-duration="{interval}ms"
-									style:animation-play-state={held || paused || !open ? 'paused' : 'running'}
-									onanimationend={next}
-								/>
-							</svg>
-						{/key}
-						<span class="glyph"><Icon icon={paused ? PlayIcon : PauseIcon} size={10} /></span>
-					</button>
-				{/if}
-
 				<div class="viewport">
 					{#each messages as m, i (i)}
 						<div
@@ -141,6 +116,7 @@
 							inert={i !== current}
 						>
 							<p class="message">
+								{#if m.tag}<span class="tag">{m.tag}</span>{/if}
 								<span class="text">{m.text}</span>
 								{#if m.countdown}
 									{@const r = remaining(m.countdown.to)}
@@ -178,10 +154,40 @@
 					{/each}
 				</div>
 
+				{#if messages.length > 1}
+					<button
+						type="button"
+						class="icon"
+						aria-label={paused ? 'Play announcements' : 'Pause announcements'}
+						onclick={() => (paused = !paused)}
+					>
+						<Icon icon={paused ? PlayIcon : PauseIcon} size={14} />
+					</button>
+				{/if}
 				{#if dismissible}
 					<button type="button" class="icon" aria-label="Dismiss" onclick={dismiss}>
 						<Icon icon={Cancel01Icon} size={16} />
 					</button>
+				{/if}
+
+				{#if messages.length > 1}
+					<!-- One segment per message along the bottom edge; the running one fills to the next. -->
+					<div class="steps" aria-hidden="true">
+						{#each messages as _, i (i)}
+							<span class={['step', i < current && 'past']}>
+								{#if i === current}
+									{#key current}
+										<span
+											class="run"
+											style:animation-duration="{interval}ms"
+											style:animation-play-state={held || paused || !open ? 'paused' : 'running'}
+											onanimationend={next}
+										></span>
+									{/key}
+								{/if}
+							</span>
+						{/each}
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -193,6 +199,8 @@
 		--bg: var(--ui-fg);
 		--fg: var(--ui-bg);
 		--muted: color-mix(in srgb, var(--ui-bg) 66%, transparent);
+		/* Text on a tag, which is filled with --fg. */
+		--on-fg: var(--ui-fg);
 		display: grid;
 		grid-template-rows: 1fr;
 		color: var(--fg);
@@ -210,6 +218,11 @@
 		--bg: var(--ui-subtle);
 		--fg: var(--ui-fg);
 		--muted: var(--ui-muted);
+	}
+	.accent,
+	.neutral,
+	.warning {
+		--on-fg: var(--ui-surface);
 	}
 	.warning {
 		--bg: color-mix(in srgb, var(--ui-warning) 12%, var(--ui-surface));
@@ -233,9 +246,40 @@
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border-block-end: 1px solid transparent;
 		background: var(--bg);
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
 	}
-	.bar:has(.dial) {
-		padding-inline-start: 0.375rem;
+	/* Room under the text for the progress segments. */
+	.bar:has(.steps) {
+		padding-block-end: 0.75rem;
+	}
+	/* Now and then a soft band of light passes across the bar. */
+	.bar::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(
+				100deg,
+				transparent 20%,
+				color-mix(in srgb, var(--fg) 9%, transparent) 50%,
+				transparent 80%
+			)
+			no-repeat;
+		background-size: 40% 100%;
+		background-position: -60% 0;
+		animation: sheen 8s ease-in-out infinite;
+		pointer-events: none;
+	}
+	@keyframes sheen {
+		0%,
+		65% {
+			background-position: -60% 0;
+		}
+		100% {
+			background-position: 160% 0;
+		}
 	}
 
 	/* Every message in one cell, so the bar keeps the tallest one's height and never jumps. The old
@@ -277,7 +321,8 @@
 	.message {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: baseline;
+		align-items: center;
+		justify-content: center;
 		gap: 0.125rem 0.75rem;
 		margin: 0;
 		padding-block: 0.375rem;
@@ -285,6 +330,14 @@
 	}
 	.text {
 		min-inline-size: 0;
+	}
+	.tag {
+		padding: 0.0625rem 0.5rem;
+		border-radius: 999px;
+		background: var(--fg);
+		color: var(--on-fg);
+		font-size: 0.75rem;
+		font-weight: 600;
 	}
 	.countdown {
 		display: inline-flex;
@@ -319,10 +372,11 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
-		padding: 0;
+		padding: 0.1875rem 0.5rem 0.1875rem 0.75rem;
 		border: 0;
-		border-radius: 4px;
-		background: none;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--fg) 12%, transparent);
+		transition: background-color var(--ui-dur-press) ease;
 		color: inherit;
 		font: inherit;
 		font-weight: 500;
@@ -333,6 +387,9 @@
 		transition: translate var(--ui-dur-press) var(--ui-ease-out);
 	}
 	@media (hover: hover) {
+		.cta:hover {
+			background: color-mix(in srgb, var(--fg) 20%, transparent);
+		}
 		.cta:hover :global(svg) {
 			translate: 2px 0;
 		}
@@ -341,8 +398,7 @@
 		scale: -1 1;
 	}
 
-	.icon,
-	.dial {
+	.icon {
 		position: relative;
 		display: grid;
 		flex: none;
@@ -361,51 +417,52 @@
 			scale var(--ui-dur-press) var(--ui-ease-out);
 	}
 	@media (hover: hover) {
-		.icon:hover,
-		.dial:hover {
+		.icon:hover {
 			background: color-mix(in srgb, currentColor 14%, transparent);
 			color: var(--fg);
 		}
 	}
-	.icon:active,
-	.dial:active {
+	.icon:active {
 		scale: 0.94;
 	}
-	.dial svg {
-		inline-size: 1.25rem;
-		block-size: 1.25rem;
-		overflow: visible;
-		rotate: -90deg;
+	.steps {
+		position: absolute;
+		inset-block-end: 0.25rem;
+		inset-inline: 0;
+		display: flex;
+		gap: 0.25rem;
+		inline-size: min(7rem, 30%);
+		margin-inline: auto;
 	}
-	.dial circle {
-		fill: none;
-		stroke: currentColor;
-		stroke-width: 1.75;
+	.step {
+		flex: 1;
+		block-size: 2px;
+		overflow: hidden;
+		border-radius: 1px;
+		background: color-mix(in srgb, var(--fg) 22%, transparent);
 	}
-	.track {
-		stroke-opacity: 0.25;
+	.past {
+		background: color-mix(in srgb, var(--fg) 60%, transparent);
 	}
 	/* Linear: it is the time left, so it must move at a steady pace. */
-	.fill {
-		stroke-linecap: round;
-		stroke-dasharray: 1;
-		stroke-dashoffset: 1;
-		animation-name: ring;
+	.run {
+		display: block;
+		block-size: 100%;
+		background: var(--fg);
+		transform-origin: left;
+		animation-name: run;
 		animation-timing-function: linear;
 		animation-fill-mode: forwards;
 	}
-	@keyframes ring {
-		to {
-			stroke-dashoffset: 0;
+	.run:dir(rtl) {
+		transform-origin: right;
+	}
+	@keyframes run {
+		from {
+			transform: scaleX(0);
 		}
 	}
-	.glyph {
-		position: absolute;
-		inset: 0;
-		display: grid;
-		place-items: center;
-	}
-	:is(.cta, .icon, .dial):focus-visible {
+	:is(.cta, .icon):focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: 2px;
 	}
@@ -418,8 +475,7 @@
 		white-space: nowrap;
 	}
 	@media (pointer: coarse) {
-		.icon,
-		.dial {
+		.icon {
 			inline-size: 2.75rem;
 			block-size: 2.75rem;
 		}
@@ -432,6 +488,9 @@
 		}
 		.announcement {
 			transition: opacity var(--ui-dur-exit) ease;
+		}
+		.bar::before {
+			animation: none;
 		}
 	}
 </style>
