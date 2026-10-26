@@ -14,7 +14,7 @@
 		MusicNote01Icon,
 		Tick02Icon
 	} from '@hugeicons/core-free-icons';
-	import type { ContentPart } from '@tanstack/ai';
+	import type { ContentPart, ToolCallPart, ToolResultPart, UIMessage } from '@tanstack/ai';
 	import {
 		createChat,
 		type ChatClientPersistence,
@@ -49,6 +49,14 @@
 		failureActions?: Snippet;
 		/** Replaces the header: gets New chat's action, and whether it's unavailable right now. */
 		header?: Snippet<[() => void, boolean]>;
+		/** What the conversation opens with, such as the assistant's greeting. */
+		initialMessages?: UIMessage[];
+		/** Shows a tool the assistant called, with its result once there is one; without it, tool calls stay hidden. */
+		tool?: Snippet<[ToolCallPart, ToolResultPart | undefined]>;
+		/** Called with each reply once it's complete. */
+		onfinish?: (message: UIMessage) => void;
+		/** Called when a reply fails, with the error your server sent (its `code` included): to choose `failure`. */
+		onerror?: (error: Error) => void;
 		class?: string;
 	}
 
@@ -66,6 +74,10 @@
 		failure,
 		failureActions,
 		header,
+		initialMessages,
+		tool,
+		onfinish,
+		onerror,
 		class: className
 	}: Props = $props();
 
@@ -74,12 +86,19 @@
 	const chat = createChat({
 		connection,
 		...((threadId && persistence ? { threadId, persistence } : {}) as { threadId?: string }),
+		initialMessages,
+		onError: (e) => onerror?.(e),
 		// Heard once the whole reply is in, not word by word as it streams.
 		onFinish: (message) => {
 			const text = message.parts.map((p) => (p.type === 'text' ? p.content : '')).join('');
 			announce(text.slice(0, 280));
+			onfinish?.(message);
 		}
 	});
+
+	const calls = (m: UIMessage) => m.parts.filter((p): p is ToolCallPart => p.type === 'tool-call');
+	const resultOf = (m: UIMessage, id: string) =>
+		m.parts.find((p): p is ToolResultPart => p.type === 'tool-result' && p.toolCallId === id);
 
 	let input = $state('');
 	let box = $state<HTMLTextAreaElement>();
@@ -281,6 +300,11 @@
 							</p>
 						{/each}
 					</div>
+				{/if}
+				{#if tool}
+					{#each calls(m) as call (call.id)}
+						<div class="tool">{@render tool(call, resultOf(m, call.id))}</div>
+					{/each}
 				{/if}
 				{#if m.role === 'assistant' && !streaming && text}
 					<div class="tools">
@@ -539,6 +563,9 @@
 		50% {
 			opacity: 0.2;
 		}
+	}
+	.tool {
+		inline-size: min(100%, 32rem);
 	}
 	.tools {
 		display: flex;
