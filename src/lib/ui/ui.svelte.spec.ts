@@ -110,6 +110,8 @@ import SignUp from '#lib/blocks/auth/SignUp.svelte';
 import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
+import FieldRowPage from '../../routes/components/select/examples/row.svelte';
+import Table from '#lib/ui/Table.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -2758,6 +2760,28 @@ describe('sinaui', () => {
 		expect(el.getAttribute('aria-hidden')).toBe('true');
 		expect(el.hasAttribute('role')).toBe(false);
 		expect(el.hasAttribute('aria-label')).toBe(false);
+	});
+
+	it('table: striped by default; striped={false} leaves every row on the plain background', async () => {
+		const body = createRawSnippet(() => ({
+			render: () => '<tbody><tr><td>Optics</td></tr><tr><td>Algebra</td></tr></tbody>'
+		}));
+		const tint = (r: ReturnType<typeof mount>) =>
+			getComputedStyle(r.container.querySelector('td')!).backgroundColor;
+		const on = mount(Table, { caption: 'Books', children: body });
+		expect(tint(on)).not.toBe('rgba(0, 0, 0, 0)');
+		on.unmount();
+		const off = mount(Table, { caption: 'Books', children: body, striped: false });
+		expect(tint(off)).toBe('rgba(0, 0, 0, 0)');
+	});
+
+	it('fields side by side: a hint under one does not push the other’s control down', async () => {
+		const r = mount(FieldRowPage);
+		// The control's box is the field's second child: the label, then the control.
+		const tops = [...r.container.querySelectorAll('.field')].map((f) =>
+			Math.round(f.children[1].getBoundingClientRect().top)
+		);
+		expect(tops[0]).toBe(tops[1]);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

@@ -64,6 +64,11 @@
 			><td><code>hideCaption</code></td><td><code>boolean</code></td><td><code>false</code></td></tr
 		>
 		<tr
+			><td><code>striped</code></td><td><code>boolean</code>: tint every other row</td><td
+				><code>true</code></td
+			></tr
+		>
+		<tr
 			><td><code>children</code></td><td
 				><code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code></td
 			><td></td></tr

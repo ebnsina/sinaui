@@ -244,6 +244,8 @@
 <style>
 	.field {
 		display: grid;
+		/* Label stays tight when a neighbor is taller. */
+		align-content: start;
 		justify-items: start;
 		gap: 0.25rem;
 		font: 0.9375rem/1.5 var(--ui-font);

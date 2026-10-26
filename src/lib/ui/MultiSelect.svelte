@@ -387,6 +387,8 @@
 <style>
 	.field {
 		display: grid;
+		/* Label stays tight when a neighbor is taller. */
+		align-content: start;
 		gap: 0.25rem;
 		color: var(--ui-fg);
 		font: 0.9375rem/1.5 var(--ui-font);

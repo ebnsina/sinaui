@@ -120,6 +120,8 @@
 <style>
 	.field {
 		display: grid;
+		/* Label stays tight when a neighbor is taller. */
+		align-content: start;
 		grid-template-columns: minmax(0, 1fr);
 		gap: 0.375rem;
 		font: 0.9375rem/1.5 var(--ui-font);
