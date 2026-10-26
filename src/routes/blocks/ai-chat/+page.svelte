@@ -98,6 +98,15 @@
 	does. Pass only copy your server wrote for people; it's shown word for word.
 </p>
 
+<h2 id="agents">Agents and tools</h2>
+<p>
+	To test an agent, start it with its greeting in <code>initialMessages</code> and show what it does
+	through <code>tool</code>: the snippet gets the call (its <code>input</code> is set once the
+	arguments are complete) and, when there is one, the result. <code>onfinish</code> tells you a
+	reply is complete, to refresh what the agent recorded. A stream error keeps your server's
+	<code>code</code>, so <code>onerror</code> can pick the words for <code>failure</code>.
+</p>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
@@ -126,6 +135,28 @@
 		<tr
 			><td><code>failureActions</code></td><td
 				><code>Snippet</code>: shown beside the failure message, such as a link</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>initialMessages</code></td><td
+				><code>UIMessage[]</code>: what the conversation opens with, such as a greeting</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>tool</code></td><td
+				><code>Snippet&lt;[ToolCallPart, ToolResultPart | undefined]&gt;</code>: shows a tool the
+				assistant called; without it, tool calls stay hidden</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>onfinish</code></td><td
+				><code>(message: UIMessage) =&gt; void</code>: each reply, once it's complete</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>onerror</code></td><td
+				><code>(error: Error) =&gt; void</code>: a failed reply, with your server's
+				<code>code</code>, to choose <code>failure</code></td
 			><td></td></tr
 		>
 		<tr

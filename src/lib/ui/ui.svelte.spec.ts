@@ -111,6 +111,7 @@ import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
+import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
 import { colorName, hexToHsv, hsvToHex } from '#lib/ui/color.js';
 import { tone } from '#lib/ui/Meter.svelte';
 import { pageRange } from '#lib/ui/Pagination.svelte';
@@ -2671,6 +2672,81 @@ describe('sinaui', () => {
 		await expect
 			.element(page.getByRole('alert'), { timeout: 5000 })
 			.toHaveTextContent(/didn't come through/);
+	});
+
+	it('ai chat: opens with a greeting, shows tool calls, hands back the reply and the error code', async () => {
+		const sse = (...events: object[]) =>
+			new Response(events.map((e) => `data: ${JSON.stringify(e)}\n\n`).join(''), {
+				headers: { 'Content-Type': 'text/event-stream' }
+			});
+		const replies = [
+			sse(
+				{ type: 'RUN_STARTED', threadId: 't', runId: 'r1' },
+				{ type: 'TEXT_MESSAGE_START', messageId: 'm1', role: 'assistant' },
+				{ type: 'TEXT_MESSAGE_CONTENT', messageId: 'm1', delta: 'Your loan is booked.' },
+				{ type: 'TEXT_MESSAGE_END', messageId: 'm1' },
+				{ type: 'TOOL_CALL_START', toolCallId: 'c1', toolCallName: 'book_loan' },
+				{ type: 'TOOL_CALL_ARGS', toolCallId: 'c1', delta: '{"title":"Book of Optics"}' },
+				{ type: 'TOOL_CALL_END', toolCallId: 'c1' },
+				{ type: 'RUN_FINISHED', threadId: 't', runId: 'r1' },
+				{
+					type: 'TOOL_CALL_RESULT',
+					messageId: 'm1',
+					toolCallId: 'c1',
+					content: '{"ok":true}',
+					role: 'tool'
+				},
+				{ type: 'RUN_FINISHED', threadId: 't', runId: 'r1' }
+			),
+			sse(
+				{ type: 'RUN_STARTED', threadId: 't', runId: 'r2' },
+				{ type: 'RUN_ERROR', runId: 'r2', code: 'limit_reached', message: 'Out of turns.' }
+			)
+		];
+		const connection = fetchServerSentEvents('/api/chat', {
+			fetchClient: async () => replies.shift()!
+		});
+		const finished: string[] = [];
+		const codes: unknown[] = [];
+		const tool = createRawSnippet(
+			// Arguments stream in; `input` is the parsed object once they're complete.
+			(call: () => ToolCallPart, result: () => ToolResultPart | undefined) => ({
+				render: () => '<p></p>',
+				setup: (el) => {
+					$effect(() => {
+						const title = (call().input as { title?: string } | undefined)?.title ?? '';
+						el.textContent = `${call().name} ${title}: ${result() ? 'done' : 'working'}`;
+					});
+				}
+			})
+		);
+		mount(Chat, {
+			connection,
+			initialMessages: [
+				{
+					id: 'hello',
+					role: 'assistant',
+					parts: [{ type: 'text', content: 'Salaam! Which book?' }]
+				}
+			],
+			tool,
+			onfinish: (m) => finished.push(m.id),
+			onerror: (e) => codes.push((e as Error & { code?: string }).code)
+		});
+		await expect.element(page.getByText('Salaam! Which book?')).toBeVisible();
+		expect(page.getByText('How can I help you today?').query()).toBeNull();
+
+		const box = page.getByRole('textbox', { name: 'Message' });
+		await userEvent.fill(box, 'Optics, please');
+		await userEvent.keyboard('{Enter}');
+		await expect
+			.element(page.getByText('book_loan Book of Optics: done'), { timeout: 5000 })
+			.toBeVisible();
+		await expect.poll(() => finished.length).toBe(1);
+
+		await userEvent.fill(box, 'Another');
+		await userEvent.keyboard('{Enter}');
+		await expect.poll(() => codes, { timeout: 5000 }).toEqual(['limit_reached']);
 	});
 
 	it('assistant: attachments can be turned off', async () => {
