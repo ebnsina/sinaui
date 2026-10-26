@@ -37,7 +37,7 @@ deployed to GitHub Pages.
 
 ## Design rules
 
-- Tokens only (`--ui-*`), emerald accent. Radii: `--ui-radius` (surfaces), `--ui-radius-control`.
+- Tokens only (`--ui-*`), monochrome accent (the text ink); Inter for UI and headings. Radii: `--ui-radius` (surfaces), `--ui-radius-control`.
 - No borders except on fields, checkbox/radio outlines, the tab hairline and accordion dividers.
   Everything else separates by tint or shadow; no colored edge stripes on cards or events.
 - Motion: `--ui-ease-enter|out|exit|spring`, `--ui-dur-*`, and `ease`/`ms`/`reflow`/`pop` from

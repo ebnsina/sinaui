@@ -14,18 +14,17 @@ export const GET: RequestHandler = ({ url }) => {
 	const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <style>
-	@font-face { font-family: Plex; src: url(/fonts/plex/IBMPlexSans-SemiBold-Latin1.woff2) format('woff2'); font-weight: 600; }
-	@font-face { font-family: Plex; src: url(/fonts/plex/IBMPlexSans-Regular-Latin1.woff2) format('woff2'); font-weight: 400; }
+	@font-face { font-family: Inter; src: url(/fonts/inter/inter-latin-opsz-normal.woff2) format('woff2-variations'); font-weight: 100 900; }
 	body { margin: 0; }
 	.card { position: relative; display: grid; grid-template-rows: auto 1fr auto; box-sizing: border-box;
 		width: 1200px; height: 630px; padding: 72px 80px; overflow: hidden; background: #fff; color: #0f172a;
-		font-family: Plex, system-ui, sans-serif; }
-	.pattern { position: absolute; top: -40px; right: -120px; width: 620px; color: #047857; opacity: .14;
+		font-family: Inter, system-ui, sans-serif; }
+	.pattern { position: absolute; top: -40px; right: -120px; width: 620px; color: #0f172a; opacity: .14;
 		mask-image: linear-gradient(to left, #000 40%, transparent); }
 	.brand { margin: 0; font-size: 34px; font-weight: 600; }
-	.mark { color: #047857; }
+	.mark { color: #0f172a; }
 	.words { align-self: center; max-width: 820px; }
-	.section { margin: 0 0 12px; color: #047857; font-size: 30px; font-weight: 600; }
+	.section { margin: 0 0 12px; color: #0f172a; font-size: 30px; font-weight: 600; }
 	h1 { margin: 0; font-size: 96px; line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance; font-weight: 600; }
 	.tagline { margin: 0; color: #475569; font-size: 28px; }
 </style></head>

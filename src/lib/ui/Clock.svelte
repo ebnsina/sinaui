@@ -23,7 +23,7 @@
 		timeZone,
 		label,
 		variant = 'analog',
-		color = 'color-mix(in srgb, var(--ui-accent) 55%, #fff)',
+		color = 'color-mix(in oklab, var(--ui-accent) 30%, #fff)',
 		seconds = true,
 		size = 144,
 		locale = 'en',

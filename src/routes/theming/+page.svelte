@@ -10,6 +10,11 @@
 
 	// Accents in light/dark pairs, each with a text color that reads on it at 4.5:1 or better.
 	const accents = {
+		mono: {
+			label: 'Monochrome',
+			accent: 'light-dark(#0f172a, #ededed)',
+			on: 'light-dark(#ffffff, #0a0a0a)'
+		},
 		emerald: {
 			label: 'Emerald',
 			accent: 'light-dark(#047857, #34d399)',
@@ -36,7 +41,7 @@
 			on: 'light-dark(#ffffff, #451a03)'
 		}
 	};
-	let accent = $state<keyof typeof accents>('emerald');
+	let accent = $state<keyof typeof accents>('mono');
 	// Corners in named steps; the last makes controls fully round (surfaces stop at 16px).
 	const corners = [
 		{ name: 'Sharp', px: 0 },

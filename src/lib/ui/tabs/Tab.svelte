@@ -80,10 +80,10 @@
 		color: var(--ui-fg);
 	}
 	:global(.tabs.pill) .tab {
-		border-radius: 999px;
+		border-radius: var(--ui-radius-control);
 	}
 	:global(.tabs.pill) .tab[aria-selected='true'] {
-		color: var(--ui-bg);
+		color: var(--ui-fg);
 	}
 	.tab:disabled {
 		opacity: 0.55;
@@ -107,7 +107,8 @@
 		background: var(--ui-subtle);
 	}
 	:global(.tabs.pill [role='tablist']:not([data-ready])) > .tab[aria-selected='true'] {
-		background: var(--ui-fg);
+		background: light-dark(var(--ui-surface), color-mix(in oklab, var(--ui-fg) 12%, var(--ui-bg)));
+		box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
 	}
 	:global([role='tablist'][aria-orientation='vertical']:not([data-ready]))
 		> .tab[aria-selected='true']::after {

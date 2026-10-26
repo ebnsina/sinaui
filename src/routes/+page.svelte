@@ -124,7 +124,7 @@
 		inline-size: min(76rem, 100% - 2rem);
 		margin-inline: auto;
 	}
-	/* A soft emerald wash behind the headline; it rises in once when the page opens. */
+	/* A soft accent wash behind the headline; it rises in once when the page opens. */
 	.hero {
 		display: grid;
 		justify-items: center;
