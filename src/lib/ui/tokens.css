@@ -57,6 +57,11 @@
 	   their own, so they can go fully pill while surfaces stay sensible. */
 	--ui-radius: 0.75rem;
 	--ui-radius-control: 0.625rem;
+	/* Fields, selects, medium buttons and tabs share this height and text size. For a compact app,
+	   lower them inside @media (pointer: fine): touch keeps 44px targets, and text under 16px makes
+	   iOS Safari zoom into a field. */
+	--ui-control-h: 2.5rem;
+	--ui-control-font: max(1rem, 16px);
 
 	/* Motion: enter fast and settle, exit quicker than you came. --ui-ease-out is the everyday curve. */
 	--ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);

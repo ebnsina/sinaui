@@ -71,7 +71,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.5em;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		padding-inline: 1rem;
 		/* Invisible normally; becomes the button's outline in Windows High Contrast. */
 		border: 1px solid transparent;

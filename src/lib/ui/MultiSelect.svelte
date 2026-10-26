@@ -404,7 +404,7 @@
 		align-items: center;
 		gap: 0.375rem;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		padding: 0.3125rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
@@ -512,7 +512,7 @@
 		background: none;
 		color: var(--ui-muted);
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		text-align: start;
 		cursor: pointer;
 	}
@@ -570,7 +570,7 @@
 		background: none;
 		color: var(--ui-fg);
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	.bulk {
 		display: flex;

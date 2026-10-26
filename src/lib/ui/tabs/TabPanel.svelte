@@ -46,9 +46,9 @@
 		min-inline-size: 0;
 		border-radius: var(--ui-radius);
 	}
-	/* Beside a vertical list: the first line centers on the first tab (min-block-size 2.5rem). */
+	/* Beside a vertical list: the first line centers on the first tab (the control height). */
 	:global(.tabs[data-orientation='vertical']) > .panel {
-		padding-block-start: calc((2.5rem - 1lh) / 2);
+		padding-block-start: calc((var(--ui-control-h) - 1lh) / 2);
 	}
 	@media (pointer: coarse) {
 		:global(.tabs[data-orientation='vertical']) > .panel {

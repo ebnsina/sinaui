@@ -499,7 +499,7 @@
 		min-block-size: 8rem;
 		padding: 0.625rem 0.875rem 0.875rem;
 		outline: none;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		line-height: 1.6;
 		overflow-wrap: anywhere;
 	}
@@ -613,7 +613,7 @@
 		background: var(--ui-surface);
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	.link input:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);

@@ -41,7 +41,7 @@
 		box-sizing: border-box;
 		position: relative;
 		flex: none;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		padding: 0 0.875rem;
 		/* Invisible normally; outlines the tab in Windows High Contrast. */
 		border: 1px solid transparent;

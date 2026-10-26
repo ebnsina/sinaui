@@ -86,7 +86,7 @@
 		box-sizing: border-box;
 		/* Shrinks with its field; without this the input's default width can push it past a narrow one. */
 		min-inline-size: 0;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
@@ -118,7 +118,7 @@
 		min-inline-size: 0;
 		align-self: stretch;
 		margin: 0;
-		padding: 0.375rem 0.75rem;
+		padding: 0 0.75rem;
 		border: 0;
 		border-radius: inherit;
 		outline: none;
@@ -126,7 +126,7 @@
 		color: inherit;
 		/* 16px minimum: iOS Safari zooms the page into any smaller input on focus. */
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		/* Neutralize @tailwindcss/forms and similar resets that add their own focus shadow. */
 		box-shadow: none;
 	}

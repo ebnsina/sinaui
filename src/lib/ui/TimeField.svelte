@@ -497,13 +497,13 @@
 		display: flex;
 		align-items: center;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		/* Less block padding than Input: the 28px clock button would otherwise make it 42px. */
 		padding: 0.25rem 0.625rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		font-variant-numeric: tabular-nums;
 		cursor: text;
 	}

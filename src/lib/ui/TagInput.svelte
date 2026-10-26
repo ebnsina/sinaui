@@ -195,7 +195,7 @@
 		align-items: center;
 		gap: 0.375rem;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		padding: 0.3125rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
 		/* Pill while it is one line; rounded, not stretched, once tags wrap. */
@@ -290,7 +290,7 @@
 		background: none;
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	input::placeholder {
 		color: var(--ui-muted);

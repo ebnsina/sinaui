@@ -345,7 +345,7 @@
 		padding: 0.5rem 0.75rem;
 		border: 1px solid transparent;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		line-height: 1.5;
 		letter-spacing: normal;
 		white-space: pre-wrap;

@@ -129,8 +129,8 @@
 		/* Equal widths when stretched; never narrower than its label. */
 		flex: 1 1 0;
 		place-items: center;
-		/* 40px with the track's padding, like Input and Button. */
-		min-block-size: 2.125rem;
+		/* The control height with the track's padding, like Input and Button. */
+		min-block-size: calc(var(--ui-control-h) - 0.375rem);
 		padding: 0 0.875rem;
 		border-radius: calc(var(--ui-radius-control) - 0.1875rem);
 		color: var(--ui-muted);

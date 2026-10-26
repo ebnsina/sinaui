@@ -85,6 +85,12 @@
 		['--ui-chart-2 … 6', 'The other chart series, in order', false],
 		['--ui-radius', 'Corners of surfaces: cards, menus, dialogs', false],
 		['--ui-radius-control', 'Corners of controls: buttons, fields, tags; 999px for pills', false],
+		['--ui-control-h', 'Height of fields, selects, medium buttons and tabs', false],
+		[
+			'--ui-control-font',
+			'Text size inside fields (16px or more on touch: iOS zooms smaller)',
+			false
+		],
 		['--ui-shadow-card', 'Resting cards', false],
 		['--ui-shadow-overlay', 'Menus, popovers, dialogs', false],
 		['--ui-font', 'Text', false],
@@ -201,6 +207,14 @@
 	Surfaces and controls round separately. <code>--ui-radius</code> shapes cards, menus and dialogs;
 	<code>--ui-radius-control</code> shapes buttons, fields and tags. Set the control radius to
 	<code>999px</code> for pill-shaped controls while cards keep their corners.
+</p>
+
+<h2 id="size">Size</h2>
+<p>
+	Fields, selects, medium buttons and tabs share one height, <code>--ui-control-h</code>, and one
+	text size, <code>--ui-control-font</code>, so a form lines up at any size. For a compact
+	interface, set them inside <code>@media (pointer: fine)</code>: touch screens keep 44px targets,
+	and iOS Safari zooms into any field with text under 16px.
 </p>
 
 <h2 id="dark-mode">Dark mode</h2>
