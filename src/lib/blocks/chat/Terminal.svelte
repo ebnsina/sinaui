@@ -14,9 +14,12 @@
 		cwd?: string;
 		model?: string;
 		class?: string;
+		/** Names this conversation for your server and devtools; one is made up when you leave it out. */
+		threadId?: string;
 	}
 
 	let {
+		threadId,
 		connection,
 		name = 'Librarian',
 		cwd = '~/house-of-wisdom',
@@ -27,6 +30,7 @@
 	const uid = $props.id();
 	// svelte-ignore state_referenced_locally
 	const chat = createChat({
+		threadId: threadId ?? uid,
 		connection,
 		onFinish: (m) =>
 			announce(

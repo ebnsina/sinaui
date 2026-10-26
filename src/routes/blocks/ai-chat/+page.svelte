@@ -138,6 +138,12 @@
 			><td></td></tr
 		>
 		<tr
+			><td><code>threadId</code></td><td
+				><code>string</code>: names the conversation for your server; kept across reloads with
+				<code>persistence</code></td
+			><td>one made up per chat</td></tr
+		>
+		<tr
 			><td><code>initialMessages</code></td><td
 				><code>UIMessage[]</code>: what the conversation opens with, such as a greeting</td
 			><td></td></tr

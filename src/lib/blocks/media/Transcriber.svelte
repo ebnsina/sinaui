@@ -27,13 +27,17 @@
 			o?: { signal?: AbortSignal }
 		) => Promise<TranscriptionResult>;
 		class?: string;
+		/** Names this conversation for your server and devtools; one is made up when you leave it out. */
+		threadId?: string;
 	}
 
-	let { connection, fetcher, class: className }: Props = $props();
+	let { threadId, connection, fetcher, class: className }: Props = $props();
 
 	let problem = $state('');
+	const uid = $props.id();
 	// svelte-ignore state_referenced_locally
 	const gen = createTranscription({
+		threadId: threadId ?? uid,
 		...(connection ? { connection } : { fetcher }),
 		onResult: (r) => announce(`Transcribed: ${r.text.slice(0, 200)}`)
 	});

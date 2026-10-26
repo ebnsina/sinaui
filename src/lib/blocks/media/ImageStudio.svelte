@@ -24,12 +24,23 @@
 		count?: number;
 		placeholder?: string;
 		class?: string;
+		/** Names this conversation for your server and devtools; one is made up when you leave it out. */
+		threadId?: string;
 	}
 
-	let { connection, fetcher, count = 2, placeholder = '', class: className }: Props = $props();
+	let {
+		threadId,
+		connection,
+		fetcher,
+		count = 2,
+		placeholder = '',
+		class: className
+	}: Props = $props();
 
+	const uid = $props.id();
 	// svelte-ignore state_referenced_locally
 	const gen = createGenerateImage({
+		threadId: threadId ?? uid,
 		...(connection ? { connection } : { fetcher }),
 		onResult: (r) => announce(`${r.images.length} images ready`)
 	});
