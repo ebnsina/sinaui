@@ -60,7 +60,7 @@
 	}
 	@media (pointer: coarse) {
 		.tab {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 	@media (hover: hover) and (pointer: fine) {

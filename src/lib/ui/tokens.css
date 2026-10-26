@@ -52,6 +52,7 @@
 		'Inter', 'IBM Plex Sans Arabic', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
 	--ui-font-mono:
 		'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, SFMono-Regular, Menlo, monospace;
+	/* --ui-font-heading: titles' font (dialogs, cards, alerts...). Unset, they follow the text around them. */
 	/* Surfaces (cards, menus, dialogs) round with --ui-radius. Controls (buttons, fields, tags) have
 	   their own, so they can go fully pill while surfaces stay sensible. */
 	--ui-radius: 0.75rem;
@@ -61,6 +62,17 @@
 	   iOS Safari zoom into a field. */
 	--ui-control-h: 2.5rem;
 	--ui-control-font: max(1rem, 16px);
+	--ui-control-h-sm: 2rem;
+	--ui-control-h-lg: 3rem;
+	/* Every control's height on touch screens. Keep it at 2.75rem (44px) or more. */
+	--ui-control-h-touch: 2.75rem;
+	--ui-button-font: 0.9375rem;
+
+	/* SidebarLayout: its panel, its edges (sidebar and top bar), and the current page's highlight. */
+	--ui-sidebar-bg: var(--ui-subtle);
+	--ui-sidebar-line: transparent;
+	--ui-sidebar-current-bg: var(--ui-surface);
+	--ui-sidebar-current-fg: var(--ui-fg);
 
 	/* Motion: enter fast and settle, exit quicker than you came. --ui-ease-out is the everyday curve. */
 	--ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);

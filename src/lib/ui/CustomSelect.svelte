@@ -425,7 +425,7 @@
 	}
 	@media (pointer: coarse) {
 		.trigger {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 	.trigger:focus-visible {

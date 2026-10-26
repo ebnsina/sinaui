@@ -142,7 +142,7 @@
 	}
 	@media (pointer: coarse) {
 		.segment {
-			min-block-size: 2.5rem;
+			min-block-size: calc(var(--ui-control-h-touch) - 0.25rem);
 		}
 	}
 	@media (hover: hover) and (pointer: fine) {

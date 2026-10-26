@@ -102,7 +102,7 @@
 	}
 	@media (pointer: coarse) {
 		select {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 	/* The placeholder reads as a hint, not a value. */

@@ -52,7 +52,7 @@
 	}
 	@media (pointer: coarse) {
 		:global(.tabs[data-orientation='vertical']) > .panel {
-			padding-block-start: calc((2.75rem - 1lh) / 2);
+			padding-block-start: calc((var(--ui-control-h-touch) - 1lh) / 2);
 		}
 	}
 	/* Folder: the panel shares the chosen tab's fill, so the two read as one sheet. */

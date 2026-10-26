@@ -363,7 +363,7 @@
 	}
 	@media (pointer: coarse) {
 		input {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 	input::placeholder {

@@ -246,6 +246,7 @@
 	}
 	h2 {
 		margin: 0;
+		font-family: var(--ui-font-heading);
 		overflow: hidden;
 		font-size: 0.9375rem;
 		font-weight: 600;
