@@ -11,8 +11,8 @@
 		activation?: 'automatic' | 'manual';
 		/** sm: smaller text and a tighter gap, for compact panels such as dashboard cards. */
 		size?: 'sm' | 'md';
-		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab (horizontal only). */
-		variant?: 'line' | 'folder';
+		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab. pill: a solid capsule carries the chosen tab. folder and pill are horizontal only. */
+		variant?: 'line' | 'folder' | 'pill';
 		children: Snippet;
 	}
 
@@ -51,12 +51,7 @@
 </script>
 
 <div
-	class={[
-		'tabs',
-		size,
-		variant === 'folder' && orientation === 'horizontal' && 'folder',
-		className
-	]}
+	class={['tabs', size, variant !== 'line' && orientation === 'horizontal' && variant, className]}
 	data-orientation={orientation}
 	{...rest}
 >
