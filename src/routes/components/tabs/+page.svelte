@@ -70,7 +70,7 @@
 <Example
 	id="pill"
 	title="Pill"
-	description="A solid capsule carries the chosen tab inside a quiet track, and stretches toward the next one the same way the folder tab does. It takes the page's ink, so it inverts in dark mode."
+	description="The chosen tab lifts onto the surface inside a quiet track, with the same corners as a button, and stretches toward the next one the same way the folder tab does."
 	{...ex('pill')}
 />
 

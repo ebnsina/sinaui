@@ -2,7 +2,7 @@
 :root {
 	color-scheme: light dark;
 
-	/* Slate neutrals (light) / onyx neutrals (dark, no blue) + emerald (emerald-700 light: white text on it is 5.48:1; emerald-600 fails at 3.77). */
+	/* Slate neutrals (light) / onyx neutrals (dark, no blue), monochrome: the accent is the text ink. */
 	--ui-bg: light-dark(#ffffff, #0a0a0a);
 	--ui-surface: light-dark(#ffffff, #141414);
 	/* Menus, popovers, dialogs, toasts: a step lighter in dark mode, where shadows don't show. */
@@ -21,8 +21,8 @@
 	/* Checkbox/radio outlines: an empty box has nothing else to show it's there, so these keep 3:1+
 	   (3.41:1 on white, 3.34:1 on slate-100, 4.46:1 dark) where text-field borders stay light. */
 	--ui-control-line: light-dark(rgb(15 23 42 / 0.5), rgb(255 255 255 / 0.45));
-	--ui-accent: light-dark(#047857, #34d399);
-	--ui-on-accent: light-dark(#ffffff, #022c22);
+	--ui-accent: light-dark(#0f172a, #ededed);
+	--ui-on-accent: light-dark(#ffffff, #0a0a0a);
 	--ui-danger: light-dark(#b42318, #ff8a7a);
 	/* Amber: 4.55:1 as text on its own 10% tint (light), 8.29:1 (dark). */
 	--ui-warning: light-dark(#a15c07, #fbbf24);
@@ -49,8 +49,7 @@
 	--ui-shadow-card: 0 1px 2px rgb(0 0 0 / 0.05), 0 6px 20px -8px rgb(0 0 0 / 0.14);
 
 	--ui-font:
-		'IBM Plex Sans', 'IBM Plex Sans Arabic', 'IBM Plex Sans Fallback', ui-sans-serif, system-ui,
-		sans-serif;
+		'Inter', 'IBM Plex Sans Arabic', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
 	--ui-font-mono:
 		'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, SFMono-Regular, Menlo, monospace;
 	/* Surfaces (cards, menus, dialogs) round with --ui-radius. Controls (buttons, fields, tags) have

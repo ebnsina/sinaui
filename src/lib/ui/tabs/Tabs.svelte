@@ -11,7 +11,7 @@
 		activation?: 'automatic' | 'manual';
 		/** sm: smaller text and a tighter gap, for compact panels such as dashboard cards. */
 		size?: 'sm' | 'md';
-		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab. pill: a solid capsule carries the chosen tab. folder and pill are horizontal only. */
+		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab. pill: the chosen tab lifts out of a quiet track. folder and pill are horizontal only. */
 		variant?: 'line' | 'folder' | 'pill';
 		children: Snippet;
 	}

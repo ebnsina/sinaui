@@ -1,9 +1,9 @@
 # Sina UI
 
 [![Tests and deploy](https://github.com/ebnsina/sinaui/actions/workflows/deploy.yml/badge.svg)](https://github.com/ebnsina/sinaui/actions/workflows/deploy.yml)
-[![Docs](https://img.shields.io/badge/docs-live-059669)](https://ebnsina.github.io/sinaui/)
+[![Docs](https://img.shields.io/badge/docs-live-0f172a)](https://ebnsina.github.io/sinaui/)
 [![Svelte 5](https://img.shields.io/badge/Svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev)
-[![License: MIT](https://img.shields.io/badge/license-MIT-059669)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0f172a)](LICENSE)
 
 Accessible Svelte 5 components that feel finished. You copy a component into your project and own
 the code: no package to update, nothing hidden.

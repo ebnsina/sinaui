@@ -329,7 +329,7 @@
 			var(--ui-subtle) calc(var(--curve) + 0.5px)
 		);
 	}
-	/* Pill: a solid capsule in the page's ink, inside a quiet track; the caps are the round ends. */
+	/* Pill: the chosen tab lifts onto the surface inside a quiet track, like Segmented's thumb. */
 	.pill {
 		--pad: 0.1875rem;
 		isolation: isolate;
@@ -337,7 +337,7 @@
 		max-inline-size: 100%;
 		gap: 0;
 		padding: var(--pad);
-		border-radius: 999px;
+		border-radius: calc(var(--ui-radius-control) + var(--pad));
 		background: var(--ui-subtle);
 		box-shadow: none;
 	}
@@ -351,30 +351,23 @@
 		border-radius: 0;
 		background: none;
 		z-index: -1;
-		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.2));
+		filter: drop-shadow(0 0 0.5px rgb(0 0 0 / 0.2)) drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.08));
 	}
 	.pill .cap,
 	.pill .mid {
-		background: linear-gradient(
-			color-mix(in oklab, var(--ui-fg) 80%, var(--ui-bg)),
-			var(--ui-fg) 65%
-		);
+		/* Opaque, so the ends can overlap the middle without a darker seam. */
+		background: light-dark(var(--ui-surface), color-mix(in oklab, var(--ui-fg) 12%, var(--ui-bg)));
 	}
-	/* Half as wide as tall, so the ends are true semicircles at any tab height. */
+	/* Half as wide as tall, so the ends fit any corner radius up to a full semicircle. */
 	.pill .cap {
 		inline-size: auto;
 		aspect-ratio: 1 / 2;
 	}
 	.pill .cap.l {
-		border-radius: 999px 0 0 999px;
-		box-shadow: inset 1px 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
+		border-radius: var(--ui-radius-control) 0 0 var(--ui-radius-control);
 	}
 	.pill .cap.r {
-		border-radius: 0 999px 999px 0;
-		box-shadow: inset -1px 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
-	}
-	.pill .mid {
-		box-shadow: inset 0 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
+		border-radius: 0 var(--ui-radius-control) var(--ui-radius-control) 0;
 	}
 	/* The fill is opaque, so each end overlaps the middle by a pixel to hide the seam mid-stretch. */
 	.pill .cap::before {

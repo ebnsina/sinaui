@@ -264,14 +264,7 @@
 	<!-- The faces nearly every page uses; the rest load as needed. -->
 	<link
 		rel="preload"
-		href={asset('fonts/plex/IBMPlexSans-Regular-Latin1.woff2')}
-		as="font"
-		type="font/woff2"
-		crossorigin="anonymous"
-	/>
-	<link
-		rel="preload"
-		href={asset('fonts/plex/IBMPlexSans-SemiBold-Latin1.woff2')}
+		href={asset('fonts/inter/inter-latin-opsz-normal.woff2')}
 		as="font"
 		type="font/woff2"
 		crossorigin="anonymous"
@@ -729,7 +722,7 @@
 		}
 	}
 	li a[aria-current='page'] {
-		/* Emerald pulled 20% toward the text color: 4.5:1+ on the gray highlight (plain emerald was 4.18). */
+		/* Pulled 20% toward the text color, so a colored accent still reads 4.5:1+ on the gray highlight. */
 		color: color-mix(in srgb, var(--ui-accent) 80%, var(--ui-fg));
 		font-weight: 500;
 	}
