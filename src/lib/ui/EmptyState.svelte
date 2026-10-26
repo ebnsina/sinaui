@@ -61,6 +61,7 @@
 	}
 	.title {
 		margin: 0;
+		font-family: var(--ui-font-heading);
 		font-size: 1rem;
 		font-weight: 600;
 		text-wrap: balance;

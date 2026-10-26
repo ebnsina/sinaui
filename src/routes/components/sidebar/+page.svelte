@@ -47,6 +47,12 @@
 	description="Collapse to an icon rail with the button or ⌘B; the icons name themselves in tooltips. The highlight glides to the page you choose."
 	{...ex('basic')}
 />
+<Example
+	id="topbar"
+	title="With a top bar"
+	description="A topbar snippet adds a bar above the page on every screen, and the collapse button moves into it. Here --ui-sidebar-line draws the edges."
+	{...ex('topbar')}
+/>
 
 <h2 id="props">Props</h2>
 <table>
@@ -73,6 +79,11 @@
 		>
 		<tr><td><code>onselect</code></td><td><code>(item) =&gt; void</code></td><td></td></tr>
 		<tr><td><code>header</code>, <code>footer</code></td><td><code>Snippet</code></td><td></td></tr>
+		<tr
+			><td><code>topbar</code></td><td
+				><code>Snippet</code>: a bar above the page; holds the collapse button</td
+			><td></td></tr
+		>
 	</tbody>
 </table>
 
@@ -85,3 +96,10 @@
 	<li>The collapse button says whether the sidebar is open, and its shortcut is announced.</li>
 	<li>On narrow screens the same links open in a modal sheet with a close button.</li>
 </ul>
+
+<h2 id="theming">Theming</h2>
+<p>
+	<code>--ui-sidebar-bg</code> colors the sidebar and <code>--ui-sidebar-line</code> its edges
+	(transparent by default). <code>--ui-sidebar-current-bg</code> and
+	<code>--ui-sidebar-current-fg</code> color the current page's highlight.
+</p>

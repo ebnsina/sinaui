@@ -413,7 +413,7 @@
 	}
 	@media (pointer: coarse) {
 		.control {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 	.control:has(.trigger:focus-visible) {

@@ -4,7 +4,7 @@
 
 	type Props = {
 		/** link: looks like inline text link (for navigation that shouldn't look like a button). */
-		variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link';
+		variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link';
 		size?: 'sm' | 'md' | 'lg';
 		/** Swaps the label for a spinner at the same width; stays focusable but blocks activation. */
 		loading?: boolean;
@@ -76,7 +76,7 @@
 		/* Invisible normally; becomes the button's outline in Windows High Contrast. */
 		border: 1px solid transparent;
 		border-radius: var(--ui-radius-control);
-		font: 500 0.9375rem/1 var(--ui-font);
+		font: 500 var(--ui-button-font)/1 var(--ui-font);
 		letter-spacing: -0.005em;
 		text-decoration: none;
 		white-space: nowrap;
@@ -94,18 +94,18 @@
 		outline-offset: var(--ui-ring-offset);
 	}
 	.sm {
-		min-block-size: 2rem;
+		min-block-size: var(--ui-control-h-sm);
 		padding-inline: 0.75rem;
 		font-size: 0.8125rem;
 	}
 	.lg {
-		min-block-size: 3rem;
+		min-block-size: var(--ui-control-h-lg);
 		padding-inline: 1.5rem;
 		font-size: 1rem;
 	}
 	@media (pointer: coarse) {
 		.btn {
-			min-block-size: 2.75rem;
+			min-block-size: var(--ui-control-h-touch);
 		}
 	}
 
@@ -135,6 +135,11 @@
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 	}
+	.outline {
+		background: transparent;
+		color: var(--ui-fg);
+		border-color: var(--ui-field-line);
+	}
 	.ghost {
 		background: transparent;
 		color: var(--ui-fg);
@@ -145,6 +150,7 @@
 			background-image: linear-gradient(rgb(0 0 0 / 0.1) 0 0);
 		}
 		.secondary:hover,
+		.outline:hover,
 		.ghost:hover {
 			background: var(--ui-hover);
 		}
@@ -177,6 +183,7 @@
 
 	/* Toggle buttons (aria-pressed) show their on state without relying on the icon alone. */
 	.secondary[aria-pressed='true'],
+	.outline[aria-pressed='true'],
 	.ghost[aria-pressed='true'] {
 		background: var(--ui-hover);
 	}

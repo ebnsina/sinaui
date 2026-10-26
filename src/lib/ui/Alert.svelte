@@ -103,6 +103,7 @@
 	}
 	.title {
 		margin: 0;
+		font-family: var(--ui-font-heading);
 		font-weight: 600;
 	}
 	.text {

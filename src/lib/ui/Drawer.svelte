@@ -203,6 +203,7 @@
 	}
 	h2 {
 		margin: 0.25rem 0 0;
+		font-family: var(--ui-font-heading);
 		font-size: 1.125rem;
 		font-weight: 600;
 		line-height: 1.3;

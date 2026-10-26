@@ -1751,16 +1751,16 @@ describe('sinaui', () => {
 			.element(nav.getByRole('link', { name: 'My loans' }))
 			.toHaveAttribute('aria-current', 'page');
 
-		const toggle = page.getByRole('button', { name: /Collapse sidebar/ });
+		const toggle = page.getByRole('button', { name: /Collapse sidebar/ }).first();
 		await toggle.click();
 		await expect
-			.element(page.getByRole('button', { name: /Expand sidebar/ }))
+			.element(page.getByRole('button', { name: /Expand sidebar/ }).first())
 			.toHaveAttribute('aria-expanded', 'false');
 		// Collapsed: icons are still named, by their tooltips.
 		await expect.element(nav.getByRole('link', { name: 'Bookings' })).toBeVisible();
 		await userEvent.keyboard('{Control>}b{/Control}');
 		await expect
-			.element(page.getByRole('button', { name: /Collapse sidebar/ }))
+			.element(page.getByRole('button', { name: /Collapse sidebar/ }).first())
 			.toHaveAttribute('aria-expanded', 'true');
 		await page.viewport(414, 896);
 	});
@@ -2844,6 +2844,116 @@ describe('sinaui', () => {
 		expect(heights()).toEqual([40, 40, 40]);
 		document.querySelector<HTMLElement>('.row')!.style.setProperty('--ui-control-h', '2rem');
 		await expect.poll(heights).toEqual([32, 32, 32]);
+	});
+
+	it('button tokens: small and large heights, text size; an outline variant', async () => {
+		render(ButtonPage);
+		const btn = (name: string) =>
+			page.getByRole('button', { name }).first().element() as HTMLElement;
+		const sizes = () =>
+			['Annotate', 'Borrow manuscript', 'Enter Bayt al-Hikma'].map((n) =>
+				Math.round(btn(n).getBoundingClientRect().height)
+			);
+		expect(sizes()).toEqual([32, 40, 48]);
+		expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('15px');
+		const root = document.documentElement.style;
+		const set = {
+			'--ui-control-h-sm': '1.75rem',
+			'--ui-control-h': '2rem',
+			'--ui-control-h-lg': '2.25rem'
+		};
+		for (const [k, v] of Object.entries(set)) root.setProperty(k, v);
+		root.setProperty('--ui-button-font', '0.8125rem');
+		try {
+			await expect.poll(sizes).toEqual([28, 32, 36]);
+			expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('13px');
+		} finally {
+			for (const k of [...Object.keys(set), '--ui-button-font']) root.removeProperty(k);
+		}
+		const outline = getComputedStyle(btn('Cite this page'));
+		expect(outline.borderTopWidth).toBe('1px');
+		expect(outline.borderTopColor).not.toBe('rgba(0, 0, 0, 0)');
+		expect(outline.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+	});
+
+	it('touch height token: every shared-height control takes --ui-control-h-touch on touch screens', () => {
+		mount(SizeRow);
+		const touch = [...document.styleSheets]
+			.flatMap((s) => [...s.cssRules])
+			.filter((r): r is CSSMediaRule => r instanceof CSSMediaRule)
+			.filter((r) => r.conditionText.includes('pointer: coarse'))
+			.flatMap((r) => [...r.cssRules] as CSSStyleRule[])
+			.filter((r) => r.cssText.includes('min-block-size: var(--ui-control-h-touch)'))
+			.map((r) => r.selectorText);
+		for (const el of [
+			document.querySelector('.row input')!.closest('.control')!,
+			document.querySelector('.row select')!,
+			document.querySelector('.row button')!
+		])
+			expect(touch.some((sel) => el.matches(sel))).toBe(true);
+	});
+
+	it('heading font token: titles follow the text, or --ui-font-heading when set', async () => {
+		for (const Page of [CardPage, AlertPage, EmptyStatePage]) {
+			const r = render(Page);
+			const title = document.querySelector<HTMLElement>('main .title')!;
+			expect(getComputedStyle(title).fontFamily).toBe(
+				getComputedStyle(title.parentElement!).fontFamily
+			);
+			document.documentElement.style.setProperty('--ui-font-heading', 'Georgia');
+			try {
+				expect(getComputedStyle(title).fontFamily).toBe('Georgia');
+			} finally {
+				document.documentElement.style.removeProperty('--ui-font-heading');
+			}
+			r.unmount();
+		}
+	});
+
+	it('breadcrumb: links show no underline until hovered', () => {
+		render(BreadcrumbPage);
+		const link = page
+			.getByRole('navigation', { name: 'Breadcrumb' })
+			.first()
+			.getByRole('link')
+			.first();
+		expect(getComputedStyle(link.element()).textDecorationColor).toBe('rgba(0, 0, 0, 0)');
+	});
+
+	it('sidebar layout: theme tokens, and a top bar that holds the collapse button', async () => {
+		await page.viewport(1280, 900);
+		render(SidebarPage);
+		const root = document.documentElement.style;
+		root.setProperty('--ui-sidebar-bg', 'rgb(1, 2, 3)');
+		root.setProperty('--ui-sidebar-current-bg', 'rgb(4, 5, 6)');
+		root.setProperty('--ui-sidebar-current-fg', 'rgb(7, 8, 9)');
+		try {
+			const sidebar = document.querySelector<HTMLElement>('.sidebar')!;
+			expect(getComputedStyle(sidebar).backgroundColor).toBe('rgb(1, 2, 3)');
+			expect(getComputedStyle(sidebar).borderInlineEndColor).toBe('rgba(0, 0, 0, 0)');
+			expect(getComputedStyle(sidebar.querySelector('.pill.current')!).backgroundColor).toBe(
+				'rgb(4, 5, 6)'
+			);
+			expect(getComputedStyle(sidebar.querySelector('[aria-current="page"]')!).color).toBe(
+				'rgb(7, 8, 9)'
+			);
+		} finally {
+			for (const k of ['--ui-sidebar-bg', '--ui-sidebar-current-bg', '--ui-sidebar-current-fg'])
+				root.removeProperty(k);
+		}
+		// The top bar example: its collapse button sits in the bar, named by its tooltip, not in the footer.
+		const top = page.getByRole('navigation', { name: 'Reading room' });
+		await expect.element(top).toBeVisible();
+		const bar = document.querySelector<HTMLElement>('.bar.top')!;
+		expect(getComputedStyle(bar).display).toBe('flex');
+		expect(bar.textContent).toContain('Reserve a seat');
+		const fold = page.getByRole('button', { name: 'Collapse sidebar' }).last();
+		await expect.element(fold).toBeVisible();
+		await fold.click();
+		await expect
+			.element(page.getByRole('button', { name: 'Expand sidebar' }))
+			.toHaveAttribute('aria-expanded', 'false');
+		await page.viewport(414, 896);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

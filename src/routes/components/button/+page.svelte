@@ -56,6 +56,13 @@
 />
 
 <Example
+	id="outline"
+	title="Outline"
+	description="A secondary action with a hairline border, for light surfaces where a filled button is too heavy."
+	{...ex('outline')}
+/>
+
+<Example
 	id="ghost"
 	title="Ghost"
 	description="For quiet actions in toolbars, cards and lists."
@@ -72,7 +79,7 @@
 <Example
 	id="small"
 	title="Small"
-	description="For tight spaces like table rows. On touch screens every size grows to at least 44px tall."
+	description="For tight spaces like table rows. Heights follow --ui-control-h-sm, --ui-control-h and --ui-control-h-lg; on touch screens every size is --ui-control-h-touch (44px)."
 	{...ex('small')}
 />
 
@@ -131,7 +138,7 @@
 	<tbody>
 		<tr
 			><td><code>variant</code></td><td
-				><code>'primary' | 'secondary' | 'ghost' | 'danger' | 'link'</code></td
+				><code>'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'</code></td
 			><td><code>'primary'</code></td></tr
 		>
 		<tr

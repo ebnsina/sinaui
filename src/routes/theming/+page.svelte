@@ -91,6 +91,10 @@
 		['--ui-radius', 'Corners of surfaces: cards, menus, dialogs', false],
 		['--ui-radius-control', 'Corners of controls: buttons, fields, tags; 999px for pills', false],
 		['--ui-control-h', 'Height of fields, selects, medium buttons and tabs', false],
+		['--ui-control-h-sm', 'Height of small buttons', false],
+		['--ui-control-h-lg', 'Height of large buttons', false],
+		['--ui-control-h-touch', 'Height of every control on touch screens (44px or more)', false],
+		['--ui-button-font', 'Text size of medium buttons', false],
 		[
 			'--ui-control-font',
 			'Text size inside fields (16px or more on touch: iOS zooms smaller)',
@@ -100,6 +104,11 @@
 		['--ui-shadow-overlay', 'Menus, popovers, dialogs', false],
 		['--ui-font', 'Text', false],
 		['--ui-font-mono', 'Code and numbers', false],
+		['--ui-font-heading', 'Titles of dialogs, cards, alerts; unset, they follow the text', false],
+		['--ui-sidebar-bg', 'Sidebar layout: the sidebar', true],
+		['--ui-sidebar-line', 'Sidebar layout: its edges (transparent by default)', true],
+		['--ui-sidebar-current-bg', 'Sidebar layout: the current page', true],
+		['--ui-sidebar-current-fg', 'Sidebar layout: the current page’s text', true],
 		['--ui-ease-out', 'Things arriving', false],
 		['--ui-ease-in-out', 'Things moving on screen', false],
 		['--ui-ease-drawer', 'Sheets and drawers', false],
@@ -219,7 +228,10 @@
 	Fields, selects, medium buttons and tabs share one height, <code>--ui-control-h</code>, and one
 	text size, <code>--ui-control-font</code>, so a form lines up at any size. For a compact
 	interface, set them inside <code>@media (pointer: fine)</code>: touch screens keep 44px targets,
-	and iOS Safari zooms into any field with text under 16px.
+	and iOS Safari zooms into any field with text under 16px. Small and large buttons follow
+	<code>--ui-control-h-sm</code> and <code>--ui-control-h-lg</code>, button text
+	<code>--ui-button-font</code>, and on touch screens every control is
+	<code>--ui-control-h-touch</code> tall.
 </p>
 
 <h2 id="dark-mode">Dark mode</h2>
@@ -243,6 +255,10 @@
 	<code>--ui-font</code> only when your app doesn't set its own. If it does (Tailwind sets one), the
 	components take your app's font. To use <code>--ui-font</code> everywhere, add
 	<code>html &#123; font-family: var(--ui-font); &#125;</code> after your own CSS.
+</p>
+<p>
+	For a display face on titles (dialogs, drawers, cards, alerts, empty states), set
+	<code>--ui-font-heading</code>. Left unset, titles follow the text around them.
 </p>
 
 <h2 id="tailwind">With Tailwind</h2>

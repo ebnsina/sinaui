@@ -39,6 +39,8 @@
 		/** Top of the sidebar; given whether it's collapsed, to show a compact mark in the rail. */
 		header?: Snippet<[boolean]>;
 		footer?: Snippet;
+		/** A bar above the page on every screen size; the collapse button moves into it. */
+		topbar?: Snippet;
 		children: Snippet;
 	}
 
@@ -51,6 +53,7 @@
 		onselect,
 		header,
 		footer,
+		topbar,
 		children
 	}: Props = $props();
 
@@ -121,6 +124,21 @@
 	</a>
 {/snippet}
 
+{#snippet fold(extra: object = {})}
+	<button
+		type="button"
+		class="fold"
+		aria-expanded={!collapsed}
+		aria-controls="{id}-content"
+		aria-keyshortcuts="Control+B Meta+B"
+		{...extra}
+		onclick={toggle}
+	>
+		<Icon icon={SidebarLeftIcon} size={18} />
+		{#if !topbar}<span class="text">{collapsed ? 'Expand' : 'Collapse'} sidebar</span>{/if}
+	</button>
+{/snippet}
+
 {#snippet list(asRail: boolean)}
 	{#each groups as group, g (g)}
 		{#if group.title}<p class="group">{group.title}</p>{/if}
@@ -163,23 +181,17 @@
 			</nav>
 			<div class="foot">
 				{@render footer?.()}
-				<button
-					type="button"
-					class="fold"
-					aria-expanded={!collapsed}
-					aria-controls="{id}-content"
-					aria-keyshortcuts="Control+B Meta+B"
-					onclick={toggle}
-				>
-					<Icon icon={SidebarLeftIcon} size={18} />
-					<span class="text">{collapsed ? 'Expand' : 'Collapse'} sidebar</span>
-				</button>
+				{#if !topbar}{@render fold()}{/if}
 			</div>
 		</aside>
 
 		<div bind:this={main} id="{id}-content" class="main" {@attach scrollEdges} data-fade>
-			<!-- Phones only, while the sidebar is hidden: the same navigation, one tap away. -->
-			<div class="bar" role="navigation" aria-label={label}>
+			<!-- Phones: the same navigation, one tap away. With a topbar, it shows on every screen. -->
+			<div
+				class={['bar', topbar && 'top']}
+				role={topbar ? undefined : 'navigation'}
+				aria-label={topbar ? undefined : label}
+			>
 				<button
 					type="button"
 					class="menu"
@@ -188,7 +200,13 @@
 				>
 					<Icon icon={Menu01Icon} size={20} />
 				</button>
+				{#if topbar}
+					<Tooltip text="{collapsed ? 'Expand' : 'Collapse'} sidebar" labels side="bottom">
+						{#snippet trigger(props)}{@render fold(props)}{/snippet}
+					</Tooltip>
+				{/if}
 				{#if header}<div class="bar-head">{@render header(false)}</div>{/if}
+				{#if topbar}<div class="bar-top">{@render topbar()}</div>{/if}
 			</div>
 			{@render children()}
 		</div>
@@ -225,7 +243,8 @@
 		min-inline-size: 0;
 		padding: 0.75rem 0.5rem;
 		overflow: hidden;
-		background: var(--ui-subtle);
+		border-inline-end: 1px solid var(--ui-sidebar-line);
+		background: var(--ui-sidebar-bg);
 	}
 	.head {
 		padding: 0.25rem 0.375rem;
@@ -285,11 +304,11 @@
 		flex: none;
 	}
 	.item:hover,
-	.fold:hover,
-	.item[aria-current='page'] {
+	.fold:hover {
 		color: var(--ui-fg);
 	}
 	.item[aria-current='page'] {
+		color: var(--ui-sidebar-current-fg);
 		font-weight: 500;
 	}
 	.item:focus-visible,
@@ -338,7 +357,7 @@
 		transition: opacity 120ms ease;
 	}
 	.pill.current {
-		background: var(--ui-surface);
+		background: var(--ui-sidebar-current-bg);
 		box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
 	}
 	.pill.hover {
@@ -353,11 +372,42 @@
 		min-inline-size: 0;
 		overflow: auto;
 	}
+	/* Pinned while the content scrolls, so the menu is always one tap away. */
 	.bar {
+		position: sticky;
+		inset-block-start: 0;
+		z-index: 4;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		min-block-size: 3.25rem;
+		box-sizing: border-box;
+		padding: 0.25rem;
+		border-block-end: 1px solid var(--ui-sidebar-line);
+		background: color-mix(in srgb, var(--ui-bg) 92%, transparent);
+		backdrop-filter: blur(12px);
+	}
+	.bar:not(.top),
+	.menu,
+	.bar-head {
 		display: none;
 	}
+	.bar .fold {
+		inline-size: 2.25rem;
+		padding: 0;
+		justify-content: center;
+	}
+	@media (pointer: coarse) {
+		.bar .fold {
+			inline-size: 2.75rem;
+			min-block-size: 2.75rem;
+		}
+	}
+	.bar-top {
+		flex: 1;
+		min-inline-size: 0;
+	}
 	.menu {
-		display: grid;
 		place-items: center;
 		inline-size: 2.75rem;
 		block-size: 2.75rem;
@@ -369,7 +419,7 @@
 		color: var(--ui-fg);
 		cursor: pointer;
 	}
-	.bar-head {
+	.bar .bar-head {
 		min-inline-size: 0;
 		font-weight: 600;
 	}
@@ -387,22 +437,21 @@
 		.app.collapsed {
 			grid-template-columns: minmax(0, 1fr);
 		}
-		.sidebar {
+		.sidebar,
+		.bar .fold {
 			display: none;
 		}
-		/* Pinned while the content scrolls, so the menu is always one tap away. */
-		.bar {
-			position: sticky;
-			inset-block-start: 0;
-			z-index: 4;
+		.bar:not(.top) {
 			display: flex;
-			align-items: center;
-			gap: 0.25rem;
+		}
+		.bar {
 			block-size: 3.25rem;
-			box-sizing: border-box;
-			padding: 0.25rem;
-			background: color-mix(in srgb, var(--ui-bg) 92%, transparent);
-			backdrop-filter: blur(12px);
+		}
+		.menu {
+			display: grid;
+		}
+		.bar-head {
+			display: block;
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
