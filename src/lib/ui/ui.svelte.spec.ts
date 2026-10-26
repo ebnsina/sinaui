@@ -110,6 +110,7 @@ import SignUp from '#lib/blocks/auth/SignUp.svelte';
 import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
+import SizeRow from '../../routes/theming/examples/size.svelte';
 import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
@@ -2803,6 +2804,27 @@ describe('sinaui', () => {
 		expect(getComputedStyle(panel).backgroundColor).toBe(
 			getComputedStyle(caps()[0]).backgroundColor
 		);
+		// The first tab's outer curve starts past the panel's rounded corner, so the edges meet cleanly.
+		const radius = parseFloat(getComputedStyle(panel).borderTopLeftRadius);
+		const curve = caps()[0].offsetWidth;
+		const first = tab('Baghdad').getBoundingClientRect().left - curve;
+		expect(first - panel.getBoundingClientRect().left).toBeGreaterThanOrEqual(radius);
+	});
+
+	it('size tokens: one height for fields, selects and buttons, at the default or a compact size', async () => {
+		const heights = () =>
+			['input', 'select', 'button'].map((sel) =>
+				Math.round(
+					document
+						.querySelector<HTMLElement>(`.row ${sel}`)!
+						.closest('.control, .btn, select')!
+						.getBoundingClientRect().height
+				)
+			);
+		mount(SizeRow);
+		expect(heights()).toEqual([40, 40, 40]);
+		document.querySelector<HTMLElement>('.row')!.style.setProperty('--ui-control-h', '2rem');
+		await expect.poll(heights).toEqual([32, 32, 32]);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

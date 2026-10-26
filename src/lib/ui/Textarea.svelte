@@ -66,7 +66,7 @@
 		color: inherit;
 		/* 16px minimum: iOS Safari zooms the page into any smaller field on focus. */
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		line-height: 1.5;
 		box-shadow: none;
 		resize: vertical;

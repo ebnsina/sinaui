@@ -1335,7 +1335,7 @@
 		background: var(--ui-surface);
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		resize: none;
 		field-sizing: content;
 	}

@@ -344,7 +344,7 @@
 		align-items: center;
 		box-sizing: border-box;
 		min-inline-size: 0;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
@@ -432,7 +432,7 @@
 		min-inline-size: 0;
 		align-self: stretch;
 		margin: 0;
-		padding: 0.375rem 0.75rem 0.375rem 0.5rem;
+		padding: 0 0.75rem 0 0.5rem;
 		border: 0;
 		border-radius: inherit;
 		outline: none;
@@ -440,7 +440,7 @@
 		color: inherit;
 		font: inherit;
 		/* 16px minimum: iOS Safari zooms the page into any smaller input on focus. */
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		font-variant-numeric: tabular-nums;
 		box-shadow: none;
 	}
@@ -514,7 +514,7 @@
 		background: none;
 		color: var(--ui-fg);
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	.list {
 		position: relative;

@@ -122,15 +122,15 @@
 		gap: 0.5rem;
 		box-sizing: border-box;
 		inline-size: 100%;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		margin: 0;
-		padding: 0.375rem 0.75rem;
+		padding: 0 0.75rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		font-variant-numeric: tabular-nums;
 		text-align: start;
 		cursor: pointer;

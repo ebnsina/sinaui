@@ -163,12 +163,12 @@
 		align-items: center;
 		gap: 0.375rem;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		padding: 0.25rem 0.625rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		cursor: text;
 	}
 	@media (pointer: coarse) {

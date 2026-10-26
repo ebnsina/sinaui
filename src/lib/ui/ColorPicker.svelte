@@ -260,9 +260,9 @@
 		align-items: center;
 		gap: 0.625rem;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		margin: 0;
-		padding-block: 0.375rem;
+		padding-block: 0;
 		padding-inline: 0.5rem 0.875rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
@@ -402,7 +402,7 @@
 		background: none;
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		text-transform: uppercase;
 	}
 	.pick {

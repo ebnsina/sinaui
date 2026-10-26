@@ -181,7 +181,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		margin-inline: -0.625rem;
 		border: 1px solid transparent;
 		border-radius: var(--ui-radius-control);
@@ -192,7 +192,7 @@
 		color: inherit;
 		font: inherit;
 		/* Same size as the field, which is 16px at least: iOS Safari zooms into anything smaller. */
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		text-align: start;
 		cursor: text;
 		transition: background-color var(--ui-dur-press) ease;
@@ -286,7 +286,7 @@
 		background: none;
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	input[readonly] {
 		color: var(--ui-muted);

@@ -285,7 +285,7 @@
 		background: none;
 		color: var(--ui-fg);
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 	}
 	input::placeholder {
 		color: var(--ui-muted);

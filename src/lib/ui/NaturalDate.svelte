@@ -201,16 +201,16 @@
 		box-sizing: border-box;
 		appearance: none;
 		inline-size: 100%;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		margin: 0;
-		padding-block: 0.375rem;
+		padding-block: 0;
 		padding-inline: 0.75rem 2.75rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		box-shadow: none;
 	}
 	@media (pointer: coarse) {

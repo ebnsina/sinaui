@@ -270,7 +270,8 @@
 	.folder {
 		--curve: 0.75rem;
 		isolation: isolate;
-		padding-inline: var(--curve);
+		/* The outer curves land on the panel's straight top edge, past its rounded corners. */
+		padding-inline: calc(var(--ui-radius) + var(--curve));
 		box-shadow: none;
 	}
 	.folder > .hover {

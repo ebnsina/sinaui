@@ -239,7 +239,7 @@
 		inline-size: max-content;
 		align-items: stretch;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: var(--ui-control-h);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
@@ -274,7 +274,7 @@
 		inset: 0;
 		display: none;
 		place-items: center;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		pointer-events: none;
 	}
 	.rolling .display {
@@ -294,7 +294,7 @@
 		background: none;
 		color: inherit;
 		font: inherit;
-		font-size: max(1rem, 16px);
+		font-size: var(--ui-control-font);
 		font-variant-numeric: tabular-nums;
 		text-align: center;
 	}
