@@ -32,7 +32,7 @@
 		gap: 0.5rem;
 		padding: 2.5rem 1.5rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		text-align: center;
 		/* Rises in when it replaces content, so the change doesn't read as a glitch. */
 		transition:

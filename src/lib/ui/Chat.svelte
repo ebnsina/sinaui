@@ -994,7 +994,7 @@
 		block-size: 100%;
 		min-block-size: 0;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	.head {
 		box-shadow: inset 0 -1px var(--ui-line);

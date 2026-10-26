@@ -18,6 +18,7 @@
 			ondismiss={() => setTimeout(() => (shown = false), 360)}
 			messages={[
 				{
+					tag: 'New',
 					text: 'Al-Biruni’s Chronology of Ancient Nations is back on the shelves.',
 					link: 'Borrow it',
 					href: '#rotating'

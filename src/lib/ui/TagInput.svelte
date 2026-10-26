@@ -182,7 +182,7 @@
 		/* Label stays tight when a neighbor is taller. */
 		align-content: start;
 		gap: 0.25rem;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	label {

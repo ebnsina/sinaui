@@ -133,7 +133,7 @@
 		border-radius: calc(var(--ui-radius) * 2) calc(var(--ui-radius) * 2) 0 0;
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 		touch-action: pan-y;
 		translate: 0 100%;

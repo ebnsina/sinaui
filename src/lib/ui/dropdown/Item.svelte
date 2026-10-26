@@ -63,7 +63,7 @@
 		align-items: center;
 		gap: 0.625rem;
 		inline-size: 100%;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-item-h);
 		padding: 0 0.625rem;
 		/* Invisible normally; outlines the item in Windows High Contrast. */
 		border: 1px solid transparent;

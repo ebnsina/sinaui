@@ -12,7 +12,7 @@ body {
 	margin: 0;
 	background: var(--page);
 	color: var(--ui-fg);
-	font: 400 1rem/1.65 var(--ui-font);
+	font: 400 0.9375rem/1.6 var(--ui-font);
 	font-optical-sizing: auto;
 	-webkit-font-smoothing: antialiased;
 }
@@ -39,30 +39,30 @@ main .eyebrow:not(.preview *) {
 }
 main h1:not(.preview *) {
 	margin: 0;
-	font-size: clamp(2rem, 4vw, 2.5rem);
-	font-weight: 650;
-	line-height: 1.15;
+	font-size: clamp(1.625rem, 3vw, 2rem);
+	font-weight: 600;
+	line-height: 1.2;
 	letter-spacing: -0.025em;
 	text-wrap: balance;
 }
 main .lede:not(.preview *) {
 	margin: 0.75rem 0 0;
 	color: var(--ui-muted);
-	font-size: 1.125rem;
+	font-size: 1rem;
 	text-wrap: pretty;
 }
 /* Hierarchy: sections (h2) clearly outrank examples (h3), and sit further from what came before
    than from what follows, so each section visibly owns the examples under it. */
 main h2:not(.preview *) {
-	margin: 3.5rem 0 1rem;
-	font-size: 1.5rem;
-	font-weight: 650;
+	margin: 3rem 0 0.875rem;
+	font-size: 1.25rem;
+	font-weight: 600;
 	line-height: 1.25;
 	letter-spacing: -0.02em;
 }
 main h3:not(.preview *) {
 	margin: 2rem 0 0.5rem;
-	font-size: 1rem;
+	font-size: 0.9375rem;
 	font-weight: 600;
 }
 main :is(h2 + h3, h2 + .example > h3):not(.preview *) {
@@ -182,7 +182,7 @@ main > table td:not(:first-child) {
 main > table {
 	inline-size: 100%;
 	border-collapse: collapse;
-	font-size: 0.9375rem;
+	font-size: 0.875rem;
 }
 main > table :is(th, td) {
 	padding: 0.625rem 0.75rem;

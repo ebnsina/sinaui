@@ -288,7 +288,7 @@
 		display: grid;
 		gap: 0.75rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 	}
 	.bar {
 		display: flex;

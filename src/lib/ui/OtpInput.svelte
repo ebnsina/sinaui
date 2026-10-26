@@ -124,7 +124,7 @@
 		align-content: start;
 		grid-template-columns: minmax(0, 1fr);
 		gap: 0.375rem;
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	label {
@@ -164,13 +164,13 @@
 		box-sizing: border-box;
 		/* Shrinks on a phone rather than push the page sideways. */
 		flex: 0 1 auto;
-		inline-size: 3rem;
+		inline-size: calc(var(--ui-control-h) + 0.5rem);
 		min-inline-size: 1.75rem;
-		block-size: 3.5rem;
+		block-size: calc(var(--ui-control-h) + 0.75rem);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
-		font-size: 1.375rem;
+		font-size: 1.25rem;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		transition:

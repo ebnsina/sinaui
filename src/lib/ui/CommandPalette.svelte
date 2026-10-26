@@ -217,7 +217,7 @@
 		border-radius: calc(var(--ui-radius) * 1.75);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
 	}
 	.palette::backdrop {
@@ -311,7 +311,7 @@
 		align-items: center;
 		gap: 0.75rem;
 		box-sizing: border-box;
-		min-block-size: 2.5rem;
+		min-block-size: calc(var(--ui-item-h) + 0.25rem);
 		padding: 0.375rem 0.625rem;
 		border-radius: var(--ui-radius);
 		cursor: pointer;

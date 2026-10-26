@@ -32,7 +32,7 @@
 		align-items: center;
 		gap: 0.625rem;
 		min-block-size: 2.75rem;
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		color: var(--ui-fg);
 		cursor: pointer;
 		-webkit-tap-highlight-color: transparent;

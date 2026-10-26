@@ -581,6 +581,7 @@
 						</Dropdown.Item>
 						<Dropdown.Separator />
 						<Dropdown.Item onselect={() => change(current, { archived: !current.archived })}>
+							<Icon icon={Archive02Icon} />
 							{current.archived ? 'Move back to the list' : 'Archive'}
 						</Dropdown.Item>
 					</Dropdown.Root>
@@ -791,7 +792,7 @@
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
 	.list,
 	.conversation,

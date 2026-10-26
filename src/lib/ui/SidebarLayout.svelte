@@ -135,7 +135,6 @@
 		onclick={toggle}
 	>
 		<Icon icon={SidebarLeftIcon} size={18} />
-		{#if !topbar}<span class="text">{collapsed ? 'Expand' : 'Collapse'} sidebar</span>{/if}
 	</button>
 {/snippet}
 
@@ -162,7 +161,7 @@
 <!-- The outer box is the container its own width is measured by; the grid sits inside it. -->
 <div class="shell">
 	<div class={['app', collapsed && 'collapsed']}>
-		<aside class="sidebar">
+		<div class="sidebar">
 			{#if header}<div class="head">{@render header(collapsed)}</div>{/if}
 			<nav
 				bind:this={nav}
@@ -171,7 +170,9 @@
 				aria-label={label}
 				onpointerover={(e) => {
 					if (e.pointerType === 'touch' || !hoverPill) return;
-					glide(hoverPill, (e.target as Element).closest<HTMLElement>('a.item'), true);
+					// The current page already has its own fill; hovering it adds nothing.
+					const a = (e.target as Element).closest<HTMLElement>('a.item');
+					glide(hoverPill, a?.hasAttribute('aria-current') ? null : a, true);
 				}}
 				onpointerleave={() => hoverPill && glide(hoverPill, null, false)}
 			>
@@ -181,9 +182,13 @@
 			</nav>
 			<div class="foot">
 				{@render footer?.()}
-				{#if !topbar}{@render fold()}{/if}
+				{#if !topbar}
+					<Tooltip text="{collapsed ? 'Expand' : 'Collapse'} sidebar" labels side="right">
+						{#snippet trigger(props)}{@render fold(props)}{/snippet}
+					</Tooltip>
+				{/if}
 			</div>
-		</aside>
+		</div>
 
 		<div bind:this={main} id="{id}-content" class="main" {@attach scrollEdges} data-fade>
 			<!-- Phones: the same navigation, one tap away. With a topbar, it shows on every screen. -->
@@ -227,11 +232,11 @@
 	}
 	.app {
 		display: grid;
-		grid-template-columns: 15rem minmax(0, 1fr);
+		grid-template-columns: var(--ui-sidebar-w) minmax(0, 1fr);
 		block-size: 100%;
 		min-block-size: 0;
 		color: var(--ui-fg);
-		font: 0.875rem/1.4 var(--ui-font);
+		font: var(--ui-sidebar-font)/1.4 var(--ui-font);
 	}
 	.app.collapsed {
 		grid-template-columns: 3.75rem minmax(0, 1fr);
@@ -264,7 +269,7 @@
 		padding-inline: 0.625rem;
 		overflow: hidden;
 		color: var(--ui-muted);
-		font-size: 0.75rem;
+		font-size: var(--ui-sidebar-title-font);
 		font-weight: 500;
 		white-space: nowrap;
 		transition: opacity 150ms ease;
@@ -286,7 +291,7 @@
 		gap: 0.75rem;
 		box-sizing: border-box;
 		inline-size: 100%;
-		min-block-size: 2.25rem;
+		min-block-size: var(--ui-sidebar-item-h);
 		margin: 0;
 		padding: 0 0.625rem;
 		border: 0;
@@ -298,6 +303,12 @@
 		white-space: nowrap;
 		cursor: pointer;
 		transition: color var(--ui-dur) ease;
+	}
+	/* Icon only; the tooltip names it. */
+	.fold {
+		justify-content: center;
+		inline-size: var(--ui-sidebar-item-h);
+		padding: 0;
 	}
 	.item :global(svg),
 	.fold :global(svg) {

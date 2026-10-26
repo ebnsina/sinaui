@@ -450,8 +450,8 @@
 		place-items: center;
 		box-sizing: border-box;
 		/* Narrows on a 320px phone so seven days fit beside the page gutters. */
-		inline-size: min(2.25rem, (100vw - 5rem) / 7);
-		block-size: 2.25rem;
+		inline-size: min(var(--ui-item-h), (100vw - 5rem) / 7);
+		block-size: var(--ui-item-h);
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;

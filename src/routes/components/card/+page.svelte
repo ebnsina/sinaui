@@ -59,6 +59,20 @@
 		>
 		<tr><td><code>href</code></td><td><code>string</code>: whole card links</td><td></td></tr>
 		<tr><td><code>footer</code></td><td>Snippet</td><td></td></tr>
+		<tr
+			><td><code>aside</code></td><td>Snippet: beside the title (a switch, a count, a link)</td><td
+			></td></tr
+		>
+		<tr
+			><td><code>flush</code></td><td
+				><code>boolean</code>: the panel's content runs edge to edge</td
+			><td><code>false</code></td></tr
+		>
+		<tr
+			><td><code>selected</code></td><td><code>boolean</code>: chosen from a set of cards</td><td
+				><code>false</code></td
+			></tr
+		>
 	</tbody>
 </table>
 

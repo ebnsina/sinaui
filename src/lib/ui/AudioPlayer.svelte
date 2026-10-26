@@ -298,7 +298,7 @@
 		border-radius: calc(var(--ui-radius) * 1.5);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 	}
 	.head {
 		display: flex;

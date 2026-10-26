@@ -124,7 +124,7 @@
 		border-radius: calc(var(--ui-radius) * 1.5);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
-		font: 0.9375rem/1.5 var(--ui-font);
+		font: var(--ui-font-size)/1.5 var(--ui-font);
 		/* Rendered inline beside its trigger: don't inherit centered running text. */
 		text-align: start;
 		box-shadow: var(--ui-shadow-overlay);

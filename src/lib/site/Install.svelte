@@ -8,7 +8,7 @@
 	let { names, children }: { names: string; children?: Snippet } = $props();
 </script>
 
-<Tabs.Root class="install">
+<Tabs.Root class="install" variant="pill" size="sm">
 	<Tabs.List label="How to install">
 		<Tabs.Tab value="cli">CLI</Tabs.Tab>
 		<Tabs.Tab value="manual">Manual</Tabs.Tab>

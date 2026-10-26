@@ -290,7 +290,7 @@
 		justify-items: center;
 		gap: 1rem;
 		color: var(--ui-fg);
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 	}
 	svg {
 		inline-size: 9rem;

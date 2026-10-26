@@ -84,7 +84,7 @@
 		border: 0;
 		min-inline-size: 0;
 		max-inline-size: 100%;
-		font: 0.9375rem/1.4 var(--ui-font);
+		font: var(--ui-font-size)/1.4 var(--ui-font);
 		color: var(--ui-fg);
 	}
 	.fill {
