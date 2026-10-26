@@ -34,7 +34,7 @@
 		/** Questions offered when the chat is empty. */
 		suggestions?: string[];
 		placeholder?: string;
-		/** Keeps the conversation across reloads: a stable id for it, and where to store it. */
+		/** Names the conversation; with persistence, keeps it across reloads under this id. */
 		threadId?: string;
 		persistence?: ChatClientPersistence;
 		/** Lets people attach images, audio, video and PDFs (by button, drop or paste). */
@@ -85,7 +85,8 @@
 	// svelte-ignore state_referenced_locally
 	const chat = createChat({
 		connection,
-		...((threadId && persistence ? { threadId, persistence } : {}) as { threadId?: string }),
+		threadId: threadId ?? uid,
+		...((persistence ? { persistence } : {}) as object),
 		initialMessages,
 		onError: (e) => onerror?.(e),
 		// Heard once the whole reply is in, not word by word as it streams.

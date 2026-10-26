@@ -22,9 +22,12 @@
 		voices?: { value: string; label: string }[];
 		text?: string;
 		class?: string;
+		/** Names this conversation for your server and devtools; one is made up when you leave it out. */
+		threadId?: string;
 	}
 
 	let {
+		threadId,
 		connection,
 		fetcher,
 		voices = [
@@ -37,8 +40,10 @@
 	}: Props = $props();
 
 	let audio = $state<HTMLAudioElement>();
+	const uid = $props.id();
 	// svelte-ignore state_referenced_locally
 	const gen = createGenerateSpeech({
+		threadId: threadId ?? uid,
 		...(connection ? { connection } : { fetcher }),
 		onResult: () => {
 			announce('Ready to play');

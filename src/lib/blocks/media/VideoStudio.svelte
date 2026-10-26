@@ -24,12 +24,16 @@
 		) => Promise<VideoGenerateResult>;
 		placeholder?: string;
 		class?: string;
+		/** Names this conversation for your server and devtools; one is made up when you leave it out. */
+		threadId?: string;
 	}
 
-	let { connection, fetcher, placeholder = '', class: className }: Props = $props();
+	let { threadId, connection, fetcher, placeholder = '', class: className }: Props = $props();
 
+	const uid = $props.id();
 	// svelte-ignore state_referenced_locally
 	const gen = createGenerateVideo({
+		threadId: threadId ?? uid,
 		...(connection ? { connection } : { fetcher }),
 		onResult: () => announce('Video ready')
 	});
