@@ -67,6 +67,12 @@
 	description="The chosen tab rises out of the panel like a folder tab. Switching stretches it toward the new tab, leading edge first, and it settles on a spring; with reduced motion it simply moves."
 	{...ex('folder')}
 />
+<Example
+	id="pill"
+	title="Pill"
+	description="A solid capsule carries the chosen tab inside a quiet track, and stretches toward the next one the same way the folder tab does. It takes the page's ink, so it inverts in dark mode."
+	{...ex('pill')}
+/>
 
 <h2 id="props">Props</h2>
 <h3 id="props-root">Tabs.Root</h3>
@@ -89,7 +95,8 @@
 		>
 		<tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td></tr>
 		<tr
-			><td><code>variant</code></td><td><code>'line' | 'folder'</code> (folder: horizontal only)</td
+			><td><code>variant</code></td><td
+				><code>'line' | 'folder' | 'pill'</code> (folder and pill: horizontal only)</td
 			><td><code>'line'</code></td></tr
 		>
 	</tbody>

@@ -79,13 +79,19 @@
 	:global(.tabs.folder) .tab[aria-selected='true'] {
 		color: var(--ui-fg);
 	}
+	:global(.tabs.pill) .tab {
+		border-radius: 999px;
+	}
+	:global(.tabs.pill) .tab[aria-selected='true'] {
+		color: var(--ui-bg);
+	}
 	.tab:disabled {
 		opacity: 0.55;
 		cursor: not-allowed;
 	}
 	/* Before hydration the sliding bar isn't measured yet: the tab draws the same bar itself, so
 	   the hand-over is invisible (an inset shadow would curve with the tab's corners). */
-	:global(.tabs:not(.folder) [role='tablist']:not([data-ready]))
+	:global(.tabs:not(.folder, .pill) [role='tablist']:not([data-ready]))
 		> .tab[aria-selected='true']::after {
 		content: '';
 		position: absolute;
@@ -99,6 +105,9 @@
 		border-end-start-radius: 0;
 		border-end-end-radius: 0;
 		background: var(--ui-subtle);
+	}
+	:global(.tabs.pill [role='tablist']:not([data-ready])) > .tab[aria-selected='true'] {
+		background: var(--ui-fg);
 	}
 	:global([role='tablist'][aria-orientation='vertical']:not([data-ready]))
 		> .tab[aria-selected='true']::after {

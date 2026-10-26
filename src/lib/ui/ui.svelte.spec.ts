@@ -112,6 +112,7 @@ import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
 import SizeRow from '../../routes/theming/examples/size.svelte';
 import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
+import PillTabs from '../../routes/components/tabs/examples/pill.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
@@ -2809,6 +2810,24 @@ describe('sinaui', () => {
 		const curve = caps()[0].offsetWidth;
 		const first = tab('Baghdad').getBoundingClientRect().left - curve;
 		expect(first - panel.getBoundingClientRect().left).toBeGreaterThanOrEqual(radius);
+	});
+
+	it('tabs pill: the capsule ends on the chosen tab, with round ends and inverted text', async () => {
+		mount(PillTabs);
+		const caps = () => document.querySelectorAll<HTMLElement>('.pill .cap');
+		await expect.poll(() => caps().length).toBe(2);
+		const x = (el: HTMLElement) => new DOMMatrix(getComputedStyle(el).transform).e;
+		const tab = (name: string) => page.getByRole('tab', { name }).element() as HTMLElement;
+		await page.getByRole('tab', { name: 'Month' }).click();
+		await expect.poll(() => x(caps()[0]), { timeout: 2000 }).toBe(tab('Month').offsetLeft);
+		await expect
+			.poll(() => x(caps()[1]) + caps()[1].offsetWidth, { timeout: 2000 })
+			.toBe(tab('Month').offsetLeft + tab('Month').offsetWidth);
+		// Semicircle ends: each cap is half as wide as it is tall.
+		expect(caps()[0].offsetWidth * 2).toBeCloseTo(caps()[0].offsetHeight, -0.5);
+		const month = getComputedStyle(tab('Month'));
+		const week = getComputedStyle(tab('Week'));
+		expect(month.color).not.toBe(week.color);
 	});
 
 	it('size tokens: one height for fields, selects and buttons, at the default or a compact size', async () => {

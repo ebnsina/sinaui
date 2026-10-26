@@ -23,6 +23,7 @@
 	let mid = $state<HTMLSpanElement>();
 	let capR = $state<HTMLSpanElement>();
 	const folder = $derived(tabs.variant === 'folder' && !vertical);
+	const pill = $derived(tabs.variant === 'pill' && !vertical);
 	let ready = $state(false);
 	// First placement and keyboard moves snap; only pointer changes animate.
 	let fromPointer = false;
@@ -34,7 +35,7 @@
 	function place(animate = false) {
 		const t = list.querySelector<HTMLElement>('[aria-selected="true"]');
 		if (!t) return;
-		if (folder) return placeFolder(t, animate);
+		if (folder || pill) return placeFolder(t, animate);
 		const v = vertical;
 		const was = new DOMMatrix(getComputedStyle(bar).transform);
 		const wasPos = v ? was.f : was.e;
@@ -163,7 +164,7 @@
 	aria-label={label}
 	aria-orientation={tabs.orientation}
 	data-ready={ready ? '' : undefined}
-	class={['list', folder && 'folder', className]}
+	class={['list', folder && 'folder', pill && 'pill', className]}
 	{...rest}
 	onpointerdown={(e) => {
 		fromPointer = true;
@@ -187,9 +188,9 @@
 >
 	<span bind:this={hover} class="hover" aria-hidden="true"></span>
 	{@render children()}
-	<!-- One underline (or, as a folder, one raised tab) that slides and resizes to the selected tab. -->
+	<!-- One underline (or a folder tab, or a pill) that slides and resizes to the selected tab. -->
 	<span bind:this={bar} class="bar" aria-hidden="true">
-		{#if folder}
+		{#if folder || pill}
 			<span bind:this={capL} class="cap l"></span>
 			<span bind:this={mid} class="mid"></span>
 			<span bind:this={capR} class="cap r"></span>
@@ -327,6 +328,66 @@
 			transparent var(--curve),
 			var(--ui-subtle) calc(var(--curve) + 0.5px)
 		);
+	}
+	/* Pill: a solid capsule in the page's ink, inside a quiet track; the caps are the round ends. */
+	.pill {
+		--pad: 0.1875rem;
+		isolation: isolate;
+		inline-size: fit-content;
+		max-inline-size: 100%;
+		gap: 0;
+		padding: var(--pad);
+		border-radius: 999px;
+		background: var(--ui-subtle);
+		box-shadow: none;
+	}
+	.pill > .hover {
+		display: none;
+	}
+	.pill > .bar {
+		inset: var(--pad) auto var(--pad) 0;
+		inline-size: 0;
+		block-size: auto;
+		border-radius: 0;
+		background: none;
+		z-index: -1;
+		filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.2));
+	}
+	.pill .cap,
+	.pill .mid {
+		background: linear-gradient(
+			color-mix(in oklab, var(--ui-fg) 80%, var(--ui-bg)),
+			var(--ui-fg) 65%
+		);
+	}
+	/* Half as wide as tall, so the ends are true semicircles at any tab height. */
+	.pill .cap {
+		inline-size: auto;
+		aspect-ratio: 1 / 2;
+	}
+	.pill .cap.l {
+		border-radius: 999px 0 0 999px;
+		box-shadow: inset 1px 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
+	}
+	.pill .cap.r {
+		border-radius: 0 999px 999px 0;
+		box-shadow: inset -1px 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
+	}
+	.pill .mid {
+		box-shadow: inset 0 1px color-mix(in oklab, var(--ui-bg) 20%, transparent);
+	}
+	/* The fill is opaque, so each end overlaps the middle by a pixel to hide the seam mid-stretch. */
+	.pill .cap::before {
+		inset: 0 auto;
+		inline-size: 2px;
+		block-size: auto;
+		background: inherit;
+	}
+	.pill .cap.l::before {
+		right: -1px;
+	}
+	.pill .cap.r::before {
+		left: -1px;
 	}
 	@media (forced-colors: active) {
 		.bar {
