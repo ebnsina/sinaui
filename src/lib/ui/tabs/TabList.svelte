@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ease, reduced } from '../motion';
+	import { springAt } from '../spring';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { getTabs } from './context';
@@ -18,6 +19,10 @@
 	let list: HTMLDivElement;
 	let bar: HTMLSpanElement;
 	let hover: HTMLSpanElement;
+	let capL = $state<HTMLSpanElement>();
+	let mid = $state<HTMLSpanElement>();
+	let capR = $state<HTMLSpanElement>();
+	const folder = $derived(tabs.variant === 'folder' && !vertical);
 	let ready = $state(false);
 	// First placement and keyboard moves snap; only pointer changes animate.
 	let fromPointer = false;
@@ -29,6 +34,7 @@
 	function place(animate = false) {
 		const t = list.querySelector<HTMLElement>('[aria-selected="true"]');
 		if (!t) return;
+		if (folder) return placeFolder(t, animate);
 		const v = vertical;
 		const was = new DOMMatrix(getComputedStyle(bar).transform);
 		const wasPos = v ? was.f : was.e;
@@ -53,6 +59,61 @@
 			duration: 220,
 			easing: ease.inOut
 		});
+	}
+
+	// Folder: two caps (rounded top corner and the curve into the panel) and a middle strip that
+	// stretches between them. Edges move separately, the leading one first, so the shape stretches
+	// toward the new tab and settles on a spring. Transforms only, sampled into keyframes.
+	const settle = springAt(0.15);
+	const edges = () => {
+		const c = capL!.offsetWidth;
+		return {
+			l: new DOMMatrix(getComputedStyle(capL!).transform).e,
+			r: new DOMMatrix(getComputedStyle(capR!).transform).e + c
+		};
+	};
+	const frame = (l: number, r: number, c: number) => ({
+		l: `translateX(${l}px)`,
+		m: `translateX(${l + c}px) scaleX(${Math.max(0, r - l - 2 * c)})`,
+		r: `translateX(${r - c}px)`
+	});
+
+	function placeFolder(t: HTMLElement, animate: boolean) {
+		if (!capL || !mid || !capR) return;
+		const c = capL.offsetWidth;
+		const from = edges();
+		const to = { l: t.offsetLeft, r: t.offsetLeft + t.offsetWidth };
+		for (const el of [capL, mid, capR]) for (const a of el.getAnimations()) a.cancel();
+		const end = frame(to.l, to.r, c);
+		capL.style.transform = end.l;
+		mid.style.transform = end.m;
+		capR.style.transform = end.r;
+
+		const moved = ready && (from.l !== to.l || from.r !== to.r);
+		ready = true;
+		if (!animate || !moved || reduced()) return;
+		const right = to.l > from.l;
+		const steps = Array.from({ length: 33 }, (_, i) => {
+			const t = i / 32;
+			const lead = settle(t);
+			const trail = settle(Math.max(0, (t - 0.14) / 0.86));
+			const l = from.l + (to.l - from.l) * (right ? trail : lead);
+			const r = from.r + (to.r - from.r) * (right ? lead : trail);
+			return frame(l, r, c);
+		});
+		const opts = { duration: 520, easing: 'linear' };
+		capL.animate(
+			steps.map((f) => ({ transform: f.l })),
+			opts
+		);
+		mid.animate(
+			steps.map((f) => ({ transform: f.m })),
+			opts
+		);
+		capR.animate(
+			steps.map((f) => ({ transform: f.r })),
+			opts
+		);
 	}
 
 	// A stale value (matches no tab) would leave the list unreachable by Tab key: fall back to the first.
@@ -102,7 +163,7 @@
 	aria-label={label}
 	aria-orientation={tabs.orientation}
 	data-ready={ready ? '' : undefined}
-	class={['list', className]}
+	class={['list', folder && 'folder', className]}
 	{...rest}
 	onpointerdown={(e) => {
 		fromPointer = true;
@@ -126,8 +187,14 @@
 >
 	<span bind:this={hover} class="hover" aria-hidden="true"></span>
 	{@render children()}
-	<!-- One underline that slides and resizes to the selected tab. -->
-	<span bind:this={bar} class="bar" aria-hidden="true"></span>
+	<!-- One underline (or, as a folder, one raised tab) that slides and resizes to the selected tab. -->
+	<span bind:this={bar} class="bar" aria-hidden="true">
+		{#if folder}
+			<span bind:this={capL} class="cap l"></span>
+			<span bind:this={mid} class="mid"></span>
+			<span bind:this={capR} class="cap r"></span>
+		{/if}
+	</span>
 </div>
 
 <style>
@@ -198,6 +265,67 @@
 	}
 	.list:not([data-ready]) > .bar {
 		display: none;
+	}
+	/* Folder: the chosen tab is a raised piece of the panel's fill, curving into it at the bottom. */
+	.folder {
+		--curve: 0.75rem;
+		isolation: isolate;
+		padding-inline: var(--curve);
+		box-shadow: none;
+	}
+	.folder > .hover {
+		display: none;
+	}
+	.folder > .bar {
+		inset: 0 auto 0 0;
+		inline-size: 0;
+		block-size: auto;
+		border-radius: 0;
+		background: none;
+		z-index: -1;
+	}
+	.cap,
+	.mid {
+		position: absolute;
+		inset-block: 0;
+		left: 0;
+		background: var(--ui-subtle);
+	}
+	.cap {
+		inline-size: var(--curve);
+	}
+	.mid {
+		inline-size: 1px;
+		transform-origin: 0 0;
+	}
+	.cap.l {
+		border-top-left-radius: var(--curve);
+	}
+	.cap.r {
+		border-top-right-radius: var(--curve);
+	}
+	.cap::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		inline-size: var(--curve);
+		block-size: var(--curve);
+	}
+	.cap.l::before {
+		right: 100%;
+		background: radial-gradient(
+			circle at 0 0,
+			transparent var(--curve),
+			var(--ui-subtle) calc(var(--curve) + 0.5px)
+		);
+	}
+	.cap.r::before {
+		left: 100%;
+		background: radial-gradient(
+			circle at 100% 0,
+			transparent var(--curve),
+			var(--ui-subtle) calc(var(--curve) + 0.5px)
+		);
 	}
 	@media (forced-colors: active) {
 		.bar {

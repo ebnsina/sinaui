@@ -4,7 +4,7 @@
 </script>
 
 <div class="row">
-	<Select label="Reading room" value="baghdad">
+	<Select label="Collection" value="baghdad">
 		<option value="baghdad">Bayt al-Hikma, Baghdad</option>
 		<option value="fez">Al-Qarawiyyin, Fez</option>
 	</Select>

@@ -110,6 +110,7 @@ import SignUp from '#lib/blocks/auth/SignUp.svelte';
 import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
+import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
@@ -2782,6 +2783,26 @@ describe('sinaui', () => {
 			Math.round(f.children[1].getBoundingClientRect().top)
 		);
 		expect(tops[0]).toBe(tops[1]);
+	});
+
+	it('tabs folder: the raised tab follows the choice, and shares the panel’s fill', async () => {
+		const r = mount(FolderTabs);
+		const caps = () => r.container.querySelectorAll<HTMLElement>('.cap');
+		await expect.poll(() => caps().length).toBe(2);
+		const x = (el: HTMLElement) => new DOMMatrix(getComputedStyle(el).transform).e;
+		const tab = (name: string) => page.getByRole('tab', { name }).element() as HTMLElement;
+		expect(x(caps()[0])).toBe(tab('Baghdad').offsetLeft);
+		await page.getByRole('tab', { name: 'Fez' }).click();
+		await expect.element(page.getByRole('tabpanel')).toHaveTextContent(/Al-Qarawiyyin/);
+		// Once the stretch settles, the left cap sits on Fez and the right cap ends where Fez ends.
+		await expect.poll(() => x(caps()[0]), { timeout: 2000 }).toBe(tab('Fez').offsetLeft);
+		await expect
+			.poll(() => x(caps()[1]) + caps()[1].offsetWidth, { timeout: 2000 })
+			.toBe(tab('Fez').offsetLeft + tab('Fez').offsetWidth);
+		const panel = page.getByRole('tabpanel').element();
+		expect(getComputedStyle(panel).backgroundColor).toBe(
+			getComputedStyle(caps()[0]).backgroundColor
+		);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

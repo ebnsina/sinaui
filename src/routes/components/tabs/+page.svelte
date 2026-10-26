@@ -61,6 +61,12 @@
 	description="The small size: smaller text and a tighter gap, for small panels such as dashboard cards."
 	{...ex('compact')}
 />
+<Example
+	id="folder"
+	title="Folder"
+	description="The chosen tab rises out of the panel like a folder tab. Switching stretches it toward the new tab, leading edge first, and it settles on a spring; with reduced motion it simply moves."
+	{...ex('folder')}
+/>
 
 <h2 id="props">Props</h2>
 <h3 id="props-root">Tabs.Root</h3>
@@ -82,6 +88,10 @@
 			></tr
 		>
 		<tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td></tr>
+		<tr
+			><td><code>variant</code></td><td><code>'line' | 'folder'</code> (folder: horizontal only)</td
+			><td><code>'line'</code></td></tr
+		>
 	</tbody>
 </table>
 <h3 id="props-parts">Tabs.List, Tabs.Tab, Tabs.Panel</h3>
