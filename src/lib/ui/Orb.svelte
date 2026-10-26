@@ -13,6 +13,8 @@
 		size?: 'sm' | 'md' | 'lg' | 'xl' | number;
 		/** The liquid's color: any CSS color. */
 		color?: string;
+		/** Beside a name already (a logo, say): hide it from screen readers so it isn't read as an assistant. */
+		decorative?: boolean;
 		class?: string;
 	}
 
@@ -22,6 +24,7 @@
 		label = 'Assistant',
 		size = 'lg',
 		color = 'var(--ui-accent)',
+		decorative = false,
 		class: className
 	}: Props = $props();
 
@@ -102,8 +105,9 @@
 	class={['orb', mode, className]}
 	style:--size="{px}px"
 	style:--c={color}
-	role="img"
-	aria-label="{label}, {words[mode]}"
+	role={decorative ? undefined : 'img'}
+	aria-label={decorative ? undefined : `${label}, ${words[mode]}`}
+	aria-hidden={decorative || undefined}
 >
 	<svg viewBox="0 0 100 100" aria-hidden="true">
 		<defs>

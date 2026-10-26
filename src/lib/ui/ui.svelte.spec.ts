@@ -109,6 +109,7 @@ import SignIn from '#lib/blocks/auth/SignIn.svelte';
 import SignUp from '#lib/blocks/auth/SignUp.svelte';
 import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
+import Orb from '#lib/ui/Orb.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -2747,6 +2748,16 @@ describe('sinaui', () => {
 		await userEvent.fill(box, 'Another');
 		await userEvent.keyboard('{Enter}');
 		await expect.poll(() => codes, { timeout: 5000 }).toEqual(['limit_reached']);
+	});
+
+	it('orb: decorative hides it from screen readers; otherwise it names itself and its state', async () => {
+		mount(Orb, { label: 'Librarian', mode: 'listening' });
+		await expect.element(page.getByRole('img', { name: 'Librarian, listening' })).toBeVisible();
+		const r = mount(Orb, { decorative: true, size: 24 });
+		const el = r.container.querySelector('.orb')!;
+		expect(el.getAttribute('aria-hidden')).toBe('true');
+		expect(el.hasAttribute('role')).toBe(false);
+		expect(el.hasAttribute('aria-label')).toBe(false);
 	});
 
 	it('assistant: attachments can be turned off', async () => {

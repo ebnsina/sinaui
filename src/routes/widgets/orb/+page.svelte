@@ -79,6 +79,11 @@
 			><td><code>'lg'</code></td></tr
 		>
 		<tr><td><code>color</code></td><td>any CSS color</td><td>the accent</td></tr>
+		<tr
+			><td><code>decorative</code></td><td
+				><code>boolean</code>: hides it from screen readers, for an orb beside a name (a logo)</td
+			><td><code>false</code></td></tr
+		>
 	</tbody>
 </table>
 
