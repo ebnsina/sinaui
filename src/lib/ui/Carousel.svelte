@@ -80,7 +80,7 @@
 	// The marker glides to the current indicator.
 	$effect(() => {
 		void current;
-		if (dots && marker) glide(marker, dots.children[current + 1] as HTMLElement, true, 250);
+		if (dots && marker) glide(marker, dots.children[current + 1] as HTMLElement, true, 180);
 	});
 
 	// Playing on its own pauses while hovered, focused or in a hidden tab (WCAG 2.2.2).

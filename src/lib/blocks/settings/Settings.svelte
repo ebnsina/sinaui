@@ -114,8 +114,10 @@
 	];
 
 	// Wide enough: the sections list runs down the side; narrower, it scrolls across the top.
-	let wide = $state(false);
+	// Server HTML assumes wide (the usual desktop case); in the browser it's measured before the first paint.
+	let wide = $state(true);
 	const measure = (node: HTMLElement) => {
+		wide = node.clientWidth >= 640;
 		const seen = new ResizeObserver(([e]) => (wide = e.contentRect.width >= 640));
 		seen.observe(node);
 		return () => seen.disconnect();

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { ease, reduced } from '../motion';
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import { getRadioGroup } from './context';
@@ -16,27 +15,10 @@
 	const uid = $props.id();
 	let { value, children, hint, id = uid, class: className, ...rest }: Props = $props();
 	const group = getRadioGroup();
-
-	let halo: HTMLSpanElement;
-
-	// Press feedback: a soft halo swells behind the ring and fades. Pointer only, never keyboard.
-	function press() {
-		if (group.disabled || rest.disabled) return;
-		if (reduced()) return;
-		halo.animate(
-			[
-				{ opacity: 0, transform: 'scale(0.5)' },
-				{ opacity: 1, transform: 'scale(1)', offset: 0.35 },
-				{ opacity: 0, transform: 'scale(1.08)' }
-			],
-			{ duration: 600, easing: ease.standard }
-		);
-	}
 </script>
 
 <div class={['radio', className]}>
 	<span class="control">
-		<span class="halo" aria-hidden="true" bind:this={halo}></span>
 		<input
 			type="radio"
 			{id}
@@ -48,10 +30,6 @@
 			data-invalid={group.invalid || undefined}
 			aria-describedby={hint ? `${id}-hint` : undefined}
 			{...rest}
-			onpointerdown={(e) => {
-				press();
-				rest.onpointerdown?.(e);
-			}}
 			onchange={(e) => {
 				group.select(value);
 				rest.onchange?.(e);
@@ -93,18 +71,6 @@
 		opacity: 0;
 		cursor: pointer;
 	}
-	.halo {
-		position: absolute;
-		inset: 50% auto auto 50%;
-		inline-size: 2.5rem;
-		block-size: 2.5rem;
-		/* Centered on a physical left: 50%, so the offset stays physical too. */
-		margin: -1.25rem 0 0 -1.25rem;
-		border-radius: 50%;
-		background: var(--ui-hover);
-		opacity: 0;
-		pointer-events: none;
-	}
 	/* Thick ring, a gap, then the dot. */
 	.circle {
 		/* Softer than --ui-control-line by request: 2.05:1 light / 2.5:1 dark, under WCAG's 3:1 for
@@ -120,7 +86,6 @@
 		background: var(--ui-surface);
 		transition: border-color var(--ui-dur) ease;
 	}
-	/* The ring's inner area clips the dot as it slides in and out. */
 	.well {
 		display: grid;
 		place-items: center;
@@ -133,6 +98,11 @@
 		border-radius: 50%;
 		background: var(--ui-accent);
 		opacity: 0;
+		/* Chosen: the dot grows in place, quickly. */
+		scale: 0.4;
+		transition:
+			opacity 120ms ease,
+			scale 120ms var(--ui-ease-out);
 	}
 	@media (hover: hover) and (pointer: fine) {
 		input:hover:not(:checked, :disabled) ~ .circle {
@@ -144,6 +114,7 @@
 	}
 	input:checked ~ .circle .dot {
 		opacity: 1;
+		scale: 1;
 	}
 	input:focus-visible ~ .circle {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
@@ -155,7 +126,6 @@
 	input[data-invalid]:focus-visible ~ .circle {
 		outline-color: var(--ui-danger);
 	}
-	/* Above the pouring drop (z-index 1): in a row it passes behind the words, never over them. */
 	.text {
 		position: relative;
 		z-index: 2;
@@ -176,7 +146,8 @@
 		cursor: not-allowed;
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.circle {
+		.circle,
+		.dot {
 			transition: none;
 		}
 	}

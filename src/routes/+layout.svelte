@@ -189,7 +189,7 @@
 		}
 		// The current-page marker glides from the old link to the new one (appears in place on first load).
 		const here = sideNav.querySelector<HTMLElement>('a[aria-current="page"]');
-		glide(navCurrent, here, true, 240);
+		glide(navCurrent, here, true, 180);
 		// On desktop the panel, not the window, scrolls: SvelteKit only resets the window, so reset it here.
 		// Back, forward and reload are left alone: the snapshot below puts them back where they were.
 		if (type !== 'popstate' && type !== 'enter') {

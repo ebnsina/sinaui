@@ -142,7 +142,7 @@ export function anchored(
 							{ opacity: 1, offset: 0.3 },
 							{ opacity: 1, translate: '0 0', scale: 1 }
 						],
-						{ duration: 480, easing: ease.spring, fill: 'both' }
+						{ duration: 220, easing: ease.standard, fill: 'both' }
 					);
 					// Decorative layers (a hover highlight) keep their own opacity.
 					contentAnims = rows(e).map((c, i) =>

@@ -65,7 +65,7 @@
 	// Folder: two caps (rounded top corner and the curve into the panel) and a middle strip that
 	// stretches between them. Edges move separately, the leading one first, so the shape stretches
 	// toward the new tab and settles on a spring. Transforms only, sampled into keyframes.
-	const settle = springAt(0.15);
+	const settle = springAt(0.02);
 	const edges = () => {
 		const c = capL!.offsetWidth;
 		return {
@@ -97,12 +97,12 @@
 		const steps = Array.from({ length: 33 }, (_, i) => {
 			const t = i / 32;
 			const lead = settle(t);
-			const trail = settle(Math.max(0, (t - 0.14) / 0.86));
+			const trail = settle(Math.max(0, (t - 0.05) / 0.95));
 			const l = from.l + (to.l - from.l) * (right ? trail : lead);
 			const r = from.r + (to.r - from.r) * (right ? lead : trail);
 			return frame(l, r, c);
 		});
-		const opts = { duration: 520, easing: 'linear' };
+		const opts = { duration: 300, easing: 'linear' };
 		capL.animate(
 			steps.map((f) => ({ transform: f.l })),
 			opts

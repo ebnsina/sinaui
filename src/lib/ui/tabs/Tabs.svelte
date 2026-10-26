@@ -59,9 +59,12 @@
 </div>
 
 <style>
+	/* The list, then every panel stacked in one cell: the area keeps the tallest panel's height,
+	   so switching tabs never moves what's below. */
 	.tabs {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		align-content: start;
 		gap: 1rem;
 		/* In a grid or flex parent, many tabs scroll sideways instead of widening the page. */
 		min-inline-size: 0;
@@ -77,6 +80,6 @@
 		font-size: 0.8125rem;
 	}
 	.tabs[data-orientation='vertical'] {
-		flex-direction: row;
+		grid-template-columns: auto minmax(0, 1fr);
 	}
 </style>

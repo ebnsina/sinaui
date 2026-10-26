@@ -31,7 +31,8 @@
 	// svelte-ignore state_referenced_locally
 	const def: PanelDef = { id, defaultSize, min: minSize, max: maxSize, collapsible };
 	$effect(() => group.register(def));
-	const size = $derived(group.size(id));
+	// Until the group lays it out (and in server-rendered HTML), its own starting size, so nothing jumps.
+	const size = $derived(group.has(id) ? group.size(id) : (defaultSize ?? 50));
 
 	// Focusable only while its content overflows, so keyboard users can scroll it (and nothing else).
 	let el: HTMLElement;

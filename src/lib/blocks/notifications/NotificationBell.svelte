@@ -53,14 +53,15 @@
 		display: inline-flex;
 	}
 	/* Solid, on the bell's corner, ringed in the page color so it reads over the icon. */
+	/* On the button's corner, half outside it, so it never covers the bell. */
 	.count {
 		position: absolute;
-		inset-block-start: 0.125rem;
-		inset-inline-end: 0.125rem;
+		inset-block-start: -0.3125rem;
+		inset-inline-end: -0.3125rem;
 		display: grid;
 		place-items: center;
-		min-inline-size: 1.125rem;
-		block-size: 1.125rem;
+		min-inline-size: 1rem;
+		block-size: 1rem;
 		padding-inline: 0.25rem;
 		box-sizing: border-box;
 		border-radius: 999px;

@@ -39,7 +39,7 @@
 			el.style.left = `${Math.max(0, Math.min(t.offsetLeft, room - el.offsetWidth))}px`;
 		}
 		// One card glides and resizes between panels; it appears (and leaves) with a fade.
-		glide(backdrop, el, !!was && !!el, 220);
+		glide(backdrop, el, !!was && !!el, 180);
 	}
 
 	setNavMenu({

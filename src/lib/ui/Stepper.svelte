@@ -145,11 +145,8 @@
 		font-size: 0.8125rem;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
-		transition:
-			background-color var(--ui-dur-overlay) ease,
-			border-color var(--ui-dur-overlay) ease,
-			color var(--ui-dur-overlay) ease,
-			transform var(--ui-dur-press) var(--ui-ease-out);
+		/* Fill and number switch at once; fading both leaves the number unreadable mid-way. */
+		transition: transform var(--ui-dur-press) var(--ui-ease-out);
 	}
 	.current .marker {
 		border-color: var(--ui-accent);

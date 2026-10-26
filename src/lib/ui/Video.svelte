@@ -87,7 +87,10 @@
 
 	const message = $derived(error ?? (failed ? 'This video couldn’t be played.' : undefined));
 	const hidden = $derived(started && !paused && idle && !menuOpen);
-	const played = $derived(duration ? (time / duration) * 100 : 0);
+	// While dragging, the thumb follows the pointer, not the time the video has reached so far.
+	let drag = $state<number | null>(null);
+	const at = $derived(drag ?? time);
+	const played = $derived(duration ? (at / duration) * 100 : 0);
 	const loaded = $derived.by(() => {
 		const range = buffered.find((r) => r.start <= time && time <= r.end);
 		return duration && range ? (range.end / duration) * 100 : played;
@@ -270,12 +273,16 @@
 			min="0"
 			max={duration || 0}
 			step="any"
-			value={time}
+			value={at}
 			aria-label="Seek"
-			aria-valuetext="{clock(time)} of {clock(duration)}"
+			aria-valuetext="{clock(at)} of {clock(duration)}"
 			style:--p="{played}%"
 			style:--b="{loaded}%"
-			oninput={(e) => seek(+e.currentTarget.value)}
+			oninput={(e) => {
+				drag = +e.currentTarget.value;
+				seek(drag);
+			}}
+			onchange={() => (drag = null)}
 			onkeydown={scrubKeys}
 		/>
 		<div class="row">
@@ -313,7 +320,7 @@
 					muted = volume === 0;
 				}}
 			/>
-			<span class="time"><span>{clock(time)}</span> / <span>{clock(duration)}</span></span>
+			<span class="time"><span>{clock(at)}</span> / <span>{clock(duration)}</span></span>
 			<span class="spacer"></span>
 			{@render controls?.()}
 			<Dropdown.Root bind:open={menuOpen}>
@@ -458,6 +465,7 @@
 	}
 	.ctl {
 		display: grid;
+		flex: none;
 		place-items: center;
 		inline-size: 2.25rem;
 		block-size: 2.25rem;
@@ -490,6 +498,10 @@
 		padding-inline: 0.5rem;
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
+		/* On a narrow player the time gives way, never the buttons (they'd fall under 24px). */
+		min-inline-size: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		direction: ltr;
 	}
 	.tick {

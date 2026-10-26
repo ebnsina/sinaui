@@ -13,6 +13,8 @@ export const [getGroup, setGroup] = createContext<{
 	readonly orientation: 'horizontal' | 'vertical';
 	register(panel: PanelDef): () => void;
 	size(id: string): number;
+	/** Whether the group has laid this panel out yet. */
+	has(id: string): boolean;
 	panel(id: string): PanelDef | undefined;
 	/** Moves the boundary between two neighboring panels by delta percent; snap lets a drag shut a panel. */
 	move(before: string, after: string, delta: number, snap?: boolean): void;

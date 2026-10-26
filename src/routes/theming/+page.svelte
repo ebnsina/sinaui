@@ -1,10 +1,19 @@
 <script lang="ts">
+	import { getLocalTimeZone, today } from '@internationalized/date';
+	import { barY, defineChart } from '@tanstack/charts';
+	import { scaleBand } from '@tanstack/charts/scales/band';
+	import { scaleLinear } from '@tanstack/charts/scales/linear';
+	import Avatar from '#lib/ui/Avatar.svelte';
 	import Badge from '#lib/ui/Badge.svelte';
 	import Button from '#lib/ui/Button.svelte';
+	import Calendar from '#lib/ui/Calendar.svelte';
+	import Card from '#lib/ui/Card.svelte';
+	import Chart from '#lib/ui/Chart.svelte';
 	import Code from '#lib/site/Code.svelte';
 	import Input from '#lib/ui/Input.svelte';
-	import Progress from '#lib/ui/Progress.svelte';
+	import { reduced } from '#lib/ui/motion.js';
 	import Segmented from '#lib/ui/Segmented.svelte';
+	import Select from '#lib/ui/Select.svelte';
 	import Slider from '#lib/ui/Slider.svelte';
 	import Switch from '#lib/ui/Switch.svelte';
 
@@ -15,32 +24,91 @@
 			accent: 'light-dark(#0f172a, #ededed)',
 			on: 'light-dark(#ffffff, #0a0a0a)'
 		},
-		emerald: {
-			label: 'Emerald',
-			accent: 'light-dark(#047857, #34d399)',
-			on: 'light-dark(#ffffff, #022c22)'
+		red: {
+			label: 'Red',
+			accent: 'light-dark(#dc2626, #fca5a5)',
+			on: 'light-dark(#ffffff, #2a0707)'
 		},
-		indigo: {
-			label: 'Indigo',
-			accent: 'light-dark(#4338ca, #a5b4fc)',
-			on: 'light-dark(#ffffff, #1e1b4b)'
-		},
-		rose: {
-			label: 'Rose',
-			accent: 'light-dark(#be123c, #fda4af)',
-			on: 'light-dark(#ffffff, #4c0519)'
-		},
-		sky: {
-			label: 'Sky',
-			accent: 'light-dark(#0369a1, #7dd3fc)',
-			on: 'light-dark(#ffffff, #082f49)'
+		orange: {
+			label: 'Orange',
+			accent: 'light-dark(#c2410c, #fb923c)',
+			on: 'light-dark(#ffffff, #2a1205)'
 		},
 		amber: {
 			label: 'Amber',
 			accent: 'light-dark(#b45309, #fbbf24)',
-			on: 'light-dark(#ffffff, #451a03)'
+			on: 'light-dark(#ffffff, #2a1a03)'
+		},
+		green: {
+			label: 'Green',
+			accent: 'light-dark(#15803d, #4ade80)',
+			on: 'light-dark(#ffffff, #052e16)'
+		},
+		cyan: {
+			label: 'Cyan',
+			accent: 'light-dark(#0e7490, #22d3ee)',
+			on: 'light-dark(#ffffff, #062a33)'
+		},
+		blue: {
+			label: 'Blue',
+			accent: 'light-dark(#2563eb, #60a5fa)',
+			on: 'light-dark(#ffffff, #0b1a33)'
+		},
+		violet: {
+			label: 'Violet',
+			accent: 'light-dark(#7c3aed, #a78bfa)',
+			on: 'light-dark(#ffffff, #1e1036)'
+		},
+		pink: {
+			label: 'Pink',
+			accent: 'light-dark(#db2777, #f472b6)',
+			on: 'light-dark(#ffffff, #2a0a1c)'
 		}
 	};
+
+	// Picking a color drops paint on the preview: a splash of it spreads from where you picked, then fades.
+	let stage: HTMLDivElement;
+	let splash: HTMLSpanElement;
+	function paint(e: Event) {
+		if (reduced()) return;
+		const from = (e.currentTarget as HTMLElement).getBoundingClientRect();
+		const box = stage.getBoundingClientRect();
+		const x = from.left + from.width / 2 - box.left;
+		const y = from.top + from.height / 2 - box.top;
+		const r = Math.hypot(Math.max(x, box.width - x), Math.max(y, box.height - y));
+		splash.animate(
+			[
+				{ clipPath: `circle(0 at ${x}px ${y}px)`, opacity: 0.35 },
+				{ clipPath: `circle(${r}px at ${x}px ${y}px)`, opacity: 0.18, offset: 0.6 },
+				{ clipPath: `circle(${r}px at ${x}px ${y}px)`, opacity: 0 }
+			],
+			{ duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+		);
+	}
+
+	let minutes = $state(45);
+	const loansByWeek = [
+		{ week: 'W1', loans: 212 },
+		{ week: 'W2', loans: 286 },
+		{ week: 'W3', loans: 248 },
+		{ week: 'W4', loans: 331 },
+		{ week: 'W5', loans: 297 },
+		{ week: 'W6', loans: 374 }
+	];
+	const loansChart = defineChart({
+		marks: [barY(loansByWeek, { x: 'week', y: 'loans', radius: 4 })],
+		scales: {
+			x: { scale: () => scaleBand<string>().padding(0.35), axis: false },
+			y: { scale: scaleLinear, nice: true, axis: false }
+		}
+	});
+	const now = today(getLocalTimeZone());
+	let stay = $state({ start: now.add({ days: 3 }), end: now.add({ days: 9 }) });
+	const team = [
+		{ name: 'Maryam al-Ijliya', email: 'maryam@hikma.org', role: 'owner' },
+		{ name: 'Ibn al-Haytham', email: 'alhazen@hikma.org', role: 'editor' },
+		{ name: 'Lubna of Córdoba', email: 'lubna@hikma.org', role: 'viewer' }
+	];
 	let accent = $state<keyof typeof accents>('mono');
 	// Corners in named steps; the last makes controls fully round (surfaces stop at 16px).
 	const corners = [
@@ -153,7 +221,7 @@
 				<div class="swatches">
 					{#each Object.entries(accents) as [key, a] (key)}
 						<label class="swatch" style:--c={a.accent} title={a.label}>
-							<input type="radio" name="accent" value={key} bind:group={accent} />
+							<input type="radio" name="accent" value={key} bind:group={accent} onclick={paint} />
 							<span class="sr-only">{a.label}</span>
 						</label>
 					{/each}
@@ -178,44 +246,79 @@
 
 		<!-- The preview takes the theme through the same variables your app would set. -->
 		<div
+			bind:this={stage}
 			class="stage"
 			style:color-scheme={mode}
 			style:--ui-accent={chosen.accent}
 			style:--ui-on-accent={chosen.on}
 			style:--ui-ring={chosen.accent}
+			style:--ui-chart-1={chosen.accent}
 			style:--ui-radius={surface}
 			style:--ui-radius-control={control}
 		>
-			<article class="book">
-				<header>
-					<div>
-						<p class="kicker">Manuscript · MS-1021</p>
-						<h3>Book of Optics</h3>
-					</div>
-					<Progress shape="circle" label="Read" value={64} size={48} showValue={false} />
-				</header>
-				<div class="tags">
-					<Badge tone="accent">Optics</Badge>
-					<Badge>Cairo</Badge>
-					<Badge tone="warning" dot>2 waiting</Badge>
+			<span class="splash" aria-hidden="true" bind:this={splash} style:background={chosen.accent}
+			></span>
+			<!-- Real components in real cards: the theme shows on charts, a calendar, menus and a form. -->
+			<div class="board">
+				<div class="col">
+					<Card title="Loans this month" description="Up from 1,057 in September">
+						{#snippet aside()}<Badge tone="accent">+18%</Badge>{/snippet}
+						<p class="big">1,248</p>
+						<Chart title="Loans per week" definition={loansChart} height={110} />
+					</Card>
+					<Card title="Team" description="Who can lend from this room">
+						<ul class="team">
+							{#each team as m (m.email)}
+								<li>
+									<Avatar name={m.name} size="sm" />
+									<span class="who"><strong>{m.name}</strong><span>{m.email}</span></span>
+									<Select label="Role for {m.name}" hideLabel value={m.role}>
+										<option value="owner">Owner</option>
+										<option value="editor">Editor</option>
+										<option value="viewer">Viewer</option>
+									</Select>
+								</li>
+							{/each}
+						</ul>
+					</Card>
+					<Card title="Borrow a copy">
+						<Input label="Reader's name" placeholder="Ibn Sina" />
+						<Segmented
+							label="For"
+							fill
+							options={[
+								{ value: '1w', label: '1 week' },
+								{ value: '2w', label: '2 weeks' },
+								{ value: '1m', label: 'A month' }
+							]}
+							bind:value={loan}
+						/>
+						{#snippet footer()}
+							<Button variant="ghost" size="sm">Details</Button>
+							<Button size="sm">Borrow</Button>
+						{/snippet}
+					</Card>
 				</div>
-				<Input label="Reader's name" placeholder="Ibn Sina" />
-				<Segmented
-					label="Borrow for"
-					options={[
-						{ value: '1w', label: '1 week' },
-						{ value: '2w', label: '2 weeks' },
-						{ value: '1m', label: 'A month' }
-					]}
-					bind:value={loan}
-				/>
-				<Switch bind:checked={notify}>Tell me when it's back</Switch>
-				<footer>
-					<Button variant="ghost">Details</Button>
-					<Button variant="secondary">Reserve</Button>
-					<Button>Borrow</Button>
-				</footer>
-			</article>
+				<div class="col">
+					<Card title="Reading room" description="Book a desk for your stay">
+						<Calendar
+							label="Your stay"
+							mode="range"
+							range={stay}
+							onrangechange={(r) => (stay = r)}
+							fill
+						/>
+					</Card>
+					<Card title="Daily reading goal">
+						<p class="big">{minutes} <span>min a day</span></p>
+						<Slider label="Minutes" min={10} max={120} step={5} bind:value={minutes} />
+						{#snippet footer()}
+							<Switch bind:checked={notify}>Remind me</Switch>
+							<Button size="sm">Set goal</Button>
+						{/snippet}
+					</Card>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -332,20 +435,48 @@
 		flex-wrap: wrap;
 		gap: 0.625rem;
 	}
-	/* A color dot per accent; the chosen one wears a ring in its own color. */
+	/* Paint drops: each accent is a drop of color; the chosen one shows a white center and lands with
+	   a little squash. */
 	.swatch {
 		position: relative;
 		display: block;
-		inline-size: 2rem;
-		block-size: 2rem;
-		border-radius: 50%;
-		background: var(--c);
-		box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+		inline-size: 1.75rem;
+		block-size: 1.75rem;
+		border-radius: 0 50% 50% 50%;
+		background:
+			radial-gradient(circle at 35% 35%, rgb(255 255 255 / 0.35), transparent 45%), var(--c);
+		box-shadow:
+			inset 0 0 0 1px rgb(0 0 0 / 0.08),
+			0 2px 4px -1px color-mix(in srgb, var(--c) 50%, transparent);
+		rotate: 45deg;
 		cursor: pointer;
-		transition: transform var(--ui-dur-press) var(--ui-ease-out);
+		transition: scale var(--ui-dur-press) var(--ui-ease-out);
 	}
-	.swatch:active {
-		transform: scale(0.92);
+	@media (hover: hover) {
+		.swatch:hover {
+			scale: 1.1;
+		}
+	}
+	.swatch:has(input:checked)::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		margin: auto;
+		inline-size: 0.5rem;
+		block-size: 0.5rem;
+		border-radius: 50%;
+		background: #fff;
+	}
+	.swatch:has(input:checked) {
+		animation: plop 360ms var(--ui-ease-out);
+	}
+	@keyframes plop {
+		30% {
+			scale: 1.2 0.8;
+		}
+		60% {
+			scale: 0.92 1.08;
+		}
 	}
 	.swatch input {
 		position: absolute;
@@ -354,13 +485,14 @@
 		opacity: 0;
 		cursor: pointer;
 	}
-	.swatch:has(input:checked) {
-		outline: 2px solid var(--c);
-		outline-offset: 3px;
-	}
 	.swatch:has(input:focus-visible) {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: 3px;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.swatch:has(input:checked) {
+			animation: none;
+		}
 	}
 	.sr-only {
 		position: absolute;
@@ -376,59 +508,82 @@
 		grid-template-columns: minmax(0, 1fr);
 		place-items: center;
 		/* Narrower sides on phones so the card's three buttons stay on one row. */
-		padding: 2rem clamp(0.75rem, 3vw, 1.25rem);
+		position: relative;
+		overflow: hidden;
+		container-type: inline-size;
+		padding: 1.5rem clamp(0.75rem, 3vw, 1.25rem);
 		border-radius: 1rem;
-		background: var(--ui-bg);
+		/* The tint over a solid page: alone, dark mode's translucent tint showed the light page through. */
+		background: linear-gradient(var(--ui-subtle), var(--ui-subtle)), var(--ui-bg);
 		color: var(--ui-fg);
 		transition: background-color var(--ui-dur-overlay) ease;
 	}
-	/* A card: its corners follow the surface radius, however round the controls get. */
-	.book {
+	.splash {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		opacity: 0;
+		pointer-events: none;
+	}
+	/* Two columns of cards, like a real screen; one column when narrow. */
+	.board {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: 1rem;
-		inline-size: min(22rem, 100%);
-		padding: 1.25rem;
-		box-sizing: border-box;
-		border-radius: calc(var(--ui-radius) * 1.5);
-		background: var(--ui-surface);
-		box-shadow: var(--ui-shadow-card);
-		transition: border-radius var(--ui-dur) var(--ui-ease-out);
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+		inline-size: 100%;
+		align-items: start;
 	}
-	.book header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
+	.col {
+		display: grid;
+		gap: 0.75rem;
 	}
-	.kicker {
+	.big {
 		margin: 0;
+		font-size: 1.75rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		font-variant-numeric: tabular-nums;
+	}
+	.big span {
 		color: var(--ui-muted);
+		font-size: 0.875rem;
+		font-weight: 400;
+		letter-spacing: 0;
+	}
+	.team {
+		display: grid;
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.team li {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) 6.5rem;
+		align-items: center;
+		gap: 0.625rem;
+	}
+	.who {
+		display: grid;
+		min-inline-size: 0;
 		font-size: 0.8125rem;
 	}
-	.book h3 {
-		margin: 0.125rem 0 0;
-		font-size: 1.125rem;
-	}
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.375rem;
-	}
-	.book footer {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-end;
-		gap: 0.5rem;
-		margin-block-start: 0.25rem;
-	}
-	/* middle, not baseline: the swatch otherwise makes color rows 2px taller. */
-	.token {
-		display: inline-flex;
-		align-items: center;
-		vertical-align: middle;
-		gap: 0.5rem;
+	.who strong {
+		overflow: hidden;
+		font-weight: 500;
+		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+	.who span {
+		overflow: hidden;
+		color: var(--ui-muted);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	@container (width < 40rem) {
+		.board {
+			grid-template-columns: minmax(0, 1fr);
+		}
 	}
 	/* Scoped to the table: a bare .swatch here also shrank the accent dots above to 1rem squares. */
 	.token .swatch {

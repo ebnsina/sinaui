@@ -197,5 +197,9 @@
 			block-size: 2.75rem;
 			margin: -0.625rem -0.875rem;
 		}
+		/* 24px tall, so a link beside the big "more" button still meets the minimum target size. */
+		a {
+			line-height: 1.5rem;
+		}
 	}
 </style>

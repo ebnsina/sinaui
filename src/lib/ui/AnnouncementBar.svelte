@@ -155,23 +155,7 @@
 				</div>
 
 				{#if messages.length > 1}
-					<button
-						type="button"
-						class="icon"
-						aria-label={paused ? 'Play announcements' : 'Pause announcements'}
-						onclick={() => (paused = !paused)}
-					>
-						<Icon icon={paused ? PlayIcon : PauseIcon} size={14} />
-					</button>
-				{/if}
-				{#if dismissible}
-					<button type="button" class="icon" aria-label="Dismiss" onclick={dismiss}>
-						<Icon icon={Cancel01Icon} size={16} />
-					</button>
-				{/if}
-
-				{#if messages.length > 1}
-					<!-- One segment per message along the bottom edge; the running one fills to the next. -->
+					<!-- A hairline per message along the bottom edge; the current one fills until the next. -->
 					<div class="steps" aria-hidden="true">
 						{#each messages as _, i (i)}
 							<span class={['step', i < current && 'past']}>
@@ -189,45 +173,63 @@
 						{/each}
 					</div>
 				{/if}
+				{#if messages.length > 1}
+					<button
+						type="button"
+						class="icon pause"
+						aria-label={paused ? 'Play announcements' : 'Pause announcements'}
+						onclick={() => (paused = !paused)}
+					>
+						<Icon icon={paused ? PlayIcon : PauseIcon} size={14} />
+					</button>
+				{/if}
+				{#if dismissible}
+					<button type="button" class="icon close" aria-label="Dismiss" onclick={dismiss}>
+						<Icon icon={Cancel01Icon} size={16} />
+					</button>
+				{/if}
 			</div>
 		</div>
 	</section>
 {/if}
 
 <style>
+	/* A slim strip across the top of the page: one centered line, a small button, close at the end. */
 	.announcement {
 		--bg: var(--ui-fg);
 		--fg: var(--ui-bg);
-		--muted: color-mix(in srgb, var(--ui-bg) 66%, transparent);
-		/* Text on a tag, which is filled with --fg. */
+		--muted: color-mix(in srgb, var(--ui-bg) 62%, transparent);
+		--edge: color-mix(in srgb, var(--ui-bg) 28%, transparent);
+		/* Text on the button, which is filled with --fg. */
 		--on-fg: var(--ui-fg);
 		display: grid;
 		grid-template-rows: 1fr;
 		color: var(--fg);
-		font: 0.875rem/1.4 var(--ui-font);
+		font: 0.8125rem/1.4 var(--ui-font);
 		transition:
 			grid-template-rows var(--ui-dur-overlay) var(--ui-ease-out) 80ms,
 			opacity var(--ui-dur-exit) ease;
 	}
 	.accent {
-		--bg: color-mix(in srgb, var(--ui-accent) 10%, var(--ui-surface));
+		--bg: color-mix(in srgb, var(--ui-accent) 8%, var(--ui-surface));
 		--fg: color-mix(in srgb, var(--ui-accent) 75%, var(--ui-fg));
-		--muted: color-mix(in srgb, var(--fg) 85%, transparent);
+		--muted: color-mix(in srgb, var(--fg) 75%, transparent);
 	}
 	.neutral {
 		--bg: var(--ui-subtle);
 		--fg: var(--ui-fg);
 		--muted: var(--ui-muted);
 	}
+	.warning {
+		--bg: color-mix(in srgb, var(--ui-warning) 10%, var(--ui-surface));
+		--fg: color-mix(in srgb, var(--ui-warning) 85%, var(--ui-fg));
+		--muted: color-mix(in srgb, var(--fg) 75%, transparent);
+	}
 	.accent,
 	.neutral,
 	.warning {
+		--edge: var(--ui-field-line);
 		--on-fg: var(--ui-surface);
-	}
-	.warning {
-		--bg: color-mix(in srgb, var(--ui-warning) 12%, var(--ui-surface));
-		--fg: color-mix(in srgb, var(--ui-warning) 85%, var(--ui-fg));
-		--muted: color-mix(in srgb, var(--fg) 85%, transparent);
 	}
 	.closing {
 		grid-template-rows: 0fr;
@@ -237,56 +239,34 @@
 		min-block-size: 0;
 		overflow: hidden;
 	}
+	/* Three columns, the outer two equal, so the message sits at the true center. */
 	.bar {
-		display: flex;
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(2rem, 1fr) minmax(0, auto) minmax(2rem, 1fr);
+		grid-template-areas: 'start center end';
 		align-items: center;
-		gap: 0.25rem;
-		min-block-size: 2.75rem;
-		padding: 0.375rem 0.5rem 0.375rem 0.875rem;
+		column-gap: 0.5rem;
+		min-block-size: 2.5rem;
+		padding: 0.25rem 0.5rem;
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border-block-end: 1px solid transparent;
 		background: var(--bg);
-		position: relative;
-		isolation: isolate;
-		overflow: hidden;
 	}
-	/* Room under the text for the progress segments. */
-	.bar:has(.steps) {
-		padding-block-end: 0.75rem;
+	.pause {
+		grid-area: start;
+		justify-self: start;
 	}
-	/* Now and then a soft band of light passes across the bar. */
-	.bar::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		background: linear-gradient(
-				100deg,
-				transparent 20%,
-				color-mix(in srgb, var(--fg) 9%, transparent) 50%,
-				transparent 80%
-			)
-			no-repeat;
-		background-size: 40% 100%;
-		background-position: -60% 0;
-		animation: sheen 8s ease-in-out infinite;
-		pointer-events: none;
-	}
-	@keyframes sheen {
-		0%,
-		65% {
-			background-position: -60% 0;
-		}
-		100% {
-			background-position: 160% 0;
-		}
+	.close {
+		grid-area: end;
+		justify-self: end;
 	}
 
-	/* Every message in one cell, so the bar keeps the tallest one's height and never jumps. The old
-	   one lifts away as the next rises from below, like a ticker. */
+	/* Every message in one cell, so the strip keeps the tallest one's height and never jumps. The
+	   old one lifts away as the next rises from below, like a ticker. */
 	.viewport {
 		display: grid;
-		flex: 1;
+		grid-area: center;
 		min-inline-size: 0;
 		overflow: hidden;
 	}
@@ -294,8 +274,9 @@
 		display: flex;
 		grid-area: 1 / 1;
 		align-items: center;
+		justify-content: center;
 		opacity: 0;
-		translate: 0 1.25rem;
+		translate: 0 1rem;
 		visibility: hidden;
 		transition:
 			opacity 180ms ease,
@@ -323,21 +304,21 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
-		gap: 0.125rem 0.75rem;
+		gap: 0.25rem 0.75rem;
 		margin: 0;
-		padding-block: 0.375rem;
-		text-wrap: balance;
+		padding-block: 0.25rem;
+		text-align: center;
 	}
 	.text {
 		min-inline-size: 0;
 	}
 	.tag {
-		padding: 0.0625rem 0.5rem;
+		padding: 0.0625rem 0.4375rem;
+		border: 1px solid var(--edge);
 		border-radius: 999px;
-		background: var(--fg);
-		color: var(--on-fg);
-		font-size: 0.75rem;
+		font-size: 0.6875rem;
 		font-weight: 600;
+		letter-spacing: 0.01em;
 	}
 	.countdown {
 		display: inline-flex;
@@ -368,27 +349,30 @@
 		display: inline-block;
 		inline-size: 0.4em;
 	}
+	/* The action: a small button in the strip's contrasting color. */
 	.cta {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
-		padding: 0.1875rem 0.5rem 0.1875rem 0.75rem;
+		padding: 0.1875rem 0.5rem 0.1875rem 0.625rem;
 		border: 0;
 		border-radius: 999px;
-		background: color-mix(in srgb, var(--fg) 12%, transparent);
-		transition: background-color var(--ui-dur-press) ease;
-		color: inherit;
+		background: var(--fg);
+		color: var(--on-fg);
 		font: inherit;
-		font-weight: 500;
+		font-size: 0.75rem;
+		font-weight: 600;
 		text-decoration: none;
+		white-space: nowrap;
 		cursor: pointer;
+		transition: opacity var(--ui-dur-press) ease;
 	}
 	.cta :global(svg) {
 		transition: translate var(--ui-dur-press) var(--ui-ease-out);
 	}
 	@media (hover: hover) {
 		.cta:hover {
-			background: color-mix(in srgb, var(--fg) 20%, transparent);
+			opacity: 0.88;
 		}
 		.cta:hover :global(svg) {
 			translate: 2px 0;
@@ -396,6 +380,41 @@
 	}
 	.cta:dir(rtl) :global(svg) {
 		scale: -1 1;
+	}
+
+	/* One hairline per message across the bottom edge; the current one fills until the next. */
+	.steps {
+		position: absolute;
+		inset: auto 0 0;
+		display: flex;
+		gap: 2px;
+	}
+	.step {
+		flex: 1;
+		block-size: 2px;
+		overflow: hidden;
+		background: color-mix(in srgb, var(--fg) 14%, transparent);
+	}
+	.past {
+		background: color-mix(in srgb, var(--fg) 40%, transparent);
+	}
+	/* Linear: it is the time left, so it must move at a steady pace. */
+	.run {
+		display: block;
+		block-size: 100%;
+		background: color-mix(in srgb, var(--fg) 70%, transparent);
+		transform-origin: left;
+		animation-name: run;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+	}
+	.run:dir(rtl) {
+		transform-origin: right;
+	}
+	@keyframes run {
+		from {
+			transform: scaleX(0);
+		}
 	}
 
 	.icon {
@@ -425,43 +444,6 @@
 	.icon:active {
 		scale: 0.94;
 	}
-	.steps {
-		position: absolute;
-		inset-block-end: 0.25rem;
-		inset-inline: 0;
-		display: flex;
-		gap: 0.25rem;
-		inline-size: min(7rem, 30%);
-		margin-inline: auto;
-	}
-	.step {
-		flex: 1;
-		block-size: 2px;
-		overflow: hidden;
-		border-radius: 1px;
-		background: color-mix(in srgb, var(--fg) 22%, transparent);
-	}
-	.past {
-		background: color-mix(in srgb, var(--fg) 60%, transparent);
-	}
-	/* Linear: it is the time left, so it must move at a steady pace. */
-	.run {
-		display: block;
-		block-size: 100%;
-		background: var(--fg);
-		transform-origin: left;
-		animation-name: run;
-		animation-timing-function: linear;
-		animation-fill-mode: forwards;
-	}
-	.run:dir(rtl) {
-		transform-origin: right;
-	}
-	@keyframes run {
-		from {
-			transform: scaleX(0);
-		}
-	}
 	:is(.cta, .icon):focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: 2px;
@@ -473,6 +455,12 @@
 		overflow: hidden;
 		clip-path: inset(50%);
 		white-space: nowrap;
+	}
+	/* Phones: the message takes the room, controls at either end. */
+	@media (width < 34rem) {
+		.bar {
+			grid-template-columns: auto minmax(0, 1fr) auto;
+		}
 	}
 	@media (pointer: coarse) {
 		.icon {
@@ -489,8 +477,11 @@
 		.announcement {
 			transition: opacity var(--ui-dur-exit) ease;
 		}
-		.bar::before {
-			animation: none;
+	}
+	@media (forced-colors: active) {
+		.run {
+			forced-color-adjust: none;
+			background: Highlight;
 		}
 	}
 </style>

@@ -207,7 +207,7 @@
 	}
 	.pitch > *,
 	.stage {
-		animation: mount 700ms var(--ui-ease-enter) both;
+		animation: mount 450ms var(--ui-ease-enter) both;
 	}
 	.pitch > :nth-child(2) {
 		animation-delay: 50ms;
@@ -308,14 +308,29 @@
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
 	}
+	/* A monochrome aurora: near-black glowing to soft white in one corner, with a fine grain. */
 	.stage {
+		position: relative;
+		isolation: isolate;
 		display: grid;
 		place-items: center;
+		overflow: hidden;
 		padding: clamp(1.5rem, 4vw, 3rem);
 		border-radius: calc(var(--ui-radius) * 2);
 		background:
-			radial-gradient(circle, var(--ui-field-line) 1px, transparent 1.5px) 0 0 / 1.25rem 1.25rem,
-			var(--ui-subtle);
+			radial-gradient(110% 85% at 100% 100%, #ececec 0%, #6b6b6b 26%, transparent 58%),
+			radial-gradient(70% 60% at 0% 0%, #161a1d 0%, transparent 70%),
+			linear-gradient(155deg, #0b090a 0%, #242423 55%, #3d3d3d 100%);
+	}
+	.stage::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+		opacity: 0.35;
+		mix-blend-mode: overlay;
+		pointer-events: none;
 	}
 	.card {
 		display: grid;

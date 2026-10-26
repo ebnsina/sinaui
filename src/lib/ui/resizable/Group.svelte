@@ -57,6 +57,7 @@
 				};
 			}),
 		size: (id) => sizes[id] ?? 0,
+		has: (id) => id in sizes,
 		panel: (id) => panels.find((p) => p.id === id),
 		move(a, b, delta, snap = false) {
 			const pa = panels.find((p) => p.id === a);
