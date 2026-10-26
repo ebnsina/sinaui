@@ -34,7 +34,7 @@
 	let viaPointer = false;
 
 	const place = (animate: boolean) =>
-		glide(thumb, track.querySelector<HTMLElement>('input:checked')?.closest('label'), animate, 240);
+		glide(thumb, track.querySelector<HTMLElement>('input:checked')?.closest('label'), animate, 180);
 
 	$effect(() => {
 		void value;

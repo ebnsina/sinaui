@@ -138,7 +138,7 @@
 		touch-action: pan-y;
 		translate: 0 100%;
 		transition-property: translate, overlay, display;
-		transition-duration: 400ms;
+		transition-duration: 320ms;
 		transition-timing-function: var(--ui-ease-drawer);
 		transition-behavior: allow-discrete;
 	}
@@ -162,7 +162,7 @@
 		background: var(--ui-backdrop);
 		opacity: 0;
 		transition-property: opacity, overlay, display;
-		transition-duration: 400ms;
+		transition-duration: 320ms;
 		transition-timing-function: var(--ui-ease-drawer);
 		transition-behavior: allow-discrete;
 	}

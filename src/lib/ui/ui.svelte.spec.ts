@@ -695,21 +695,22 @@ describe('sinaui', () => {
 		}
 	});
 
-	it('radio: the dot pours for pointer choices and snaps for keyboard ones', async () => {
+	it('radio: keyboard and pointer both choose, and only the chosen radio shows its dot', async () => {
 		render(RadioPage);
 		const group = page.getByRole('group', { name: 'Reading room' }).element();
-		// The drop: a head and five trailing droplets.
-		const dotAnimations = () =>
-			[...group.querySelectorAll('.drop > span')].flatMap((d) => d.getAnimations()).length;
+		const shown = () =>
+			[...group.querySelectorAll<HTMLElement>('.dot')].filter(
+				(d) => getComputedStyle(d).opacity === '1'
+			).length;
 
 		(page.getByRole('radio', { name: 'Bayt al-Hikma, Baghdad' }).element() as HTMLElement).focus();
 		await userEvent.keyboard('{ArrowDown}');
 		await expect.element(page.getByRole('radio', { name: 'Library of Córdoba' })).toBeChecked();
-		expect(dotAnimations()).toBe(0);
+		await expect.poll(shown).toBe(1);
 
 		await page.getByRole('radio', { name: 'Al-Qarawiyyin, Fez' }).click();
 		await expect.element(page.getByRole('radio', { name: 'Al-Qarawiyyin, Fez' })).toBeChecked();
-		expect(dotAnimations()).toBe(6);
+		await expect.poll(shown).toBe(1);
 	});
 
 	it('popover: focus moves in; Escape returns it; tabbing out closes', async () => {

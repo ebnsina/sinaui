@@ -9,7 +9,7 @@ export const ease = {
 	standard: 'cubic-bezier(0.22, 1, 0.36, 1)',
 	exit: 'cubic-bezier(0.7, 0, 0.84, 0)',
 	inOut: 'cubic-bezier(0.65, 0, 0.35, 1)',
-	spring: spring(0.12)
+	spring: spring(0.03)
 };
 
 /** People who ask their system for less motion get none. */

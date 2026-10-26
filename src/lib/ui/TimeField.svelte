@@ -550,9 +550,6 @@
 	.value {
 		padding: 0.0625rem 0.1875rem;
 		border-radius: calc(var(--ui-radius-control) * 0.5);
-		transition:
-			background-color var(--ui-dur-press) ease,
-			color var(--ui-dur-press) ease;
 	}
 	/* An unpadded hour ("8") sits against the colon, not centered in a two-digit slot. */
 	.hour {

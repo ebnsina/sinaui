@@ -42,7 +42,7 @@
 	$effect(() => {
 		// Re-run after the page (and so the marked item) changes.
 		void [page, items];
-		glide(highlight, list.querySelector<HTMLElement>('[aria-current="page"]'), animate, 240);
+		glide(highlight, list.querySelector<HTMLElement>('[aria-current="page"]'), animate, 180);
 		animate = true;
 	});
 
@@ -157,9 +157,10 @@
 		font: inherit;
 		text-decoration: none;
 		cursor: pointer;
+		/* The number turns light exactly as the highlight glides under it (glide's 180ms curve). */
 		transition:
 			background-color var(--ui-dur-press) ease,
-			color var(--ui-dur) ease,
+			color 180ms var(--ui-ease-out),
 			transform var(--ui-dur-press) var(--ui-ease-out);
 	}
 	@media (hover: hover) and (pointer: fine) {

@@ -81,7 +81,7 @@
 		const shift = before - main.getBoundingClientRect().left;
 		if (shift && !reduced())
 			main.animate([{ transform: `translateX(${shift}px)` }, { transform: 'none' }], {
-				duration: 300,
+				duration: 240,
 				easing: ease.standard
 			});
 	}
@@ -92,7 +92,7 @@
 		if (!nav || !currentPill) return;
 		const link = nav.querySelector<HTMLElement>('a[aria-current="page"]');
 		requestAnimationFrame(() => {
-			if (currentPill) glide(currentPill, link, settled, 300);
+			if (currentPill) glide(currentPill, link, settled, 180);
 			settled = true;
 		});
 	});
@@ -161,7 +161,7 @@
 <!-- The outer box is the container its own width is measured by; the grid sits inside it. -->
 <div class="shell">
 	<div class={['app', collapsed && 'collapsed']}>
-		<div class="sidebar">
+		<aside class="sidebar" aria-label={label}>
 			{#if header}<div class="head">{@render header(collapsed)}</div>{/if}
 			<nav
 				bind:this={nav}
@@ -188,7 +188,7 @@
 					</Tooltip>
 				{/if}
 			</div>
-		</div>
+		</aside>
 
 		<div bind:this={main} id="{id}-content" class="main" {@attach scrollEdges} data-fade>
 			<!-- Phones: the same navigation, one tap away. With a topbar, it shows on every screen. -->

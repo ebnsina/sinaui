@@ -34,7 +34,7 @@
 	// spring: a change part way through a morph carries on from where it is, never restarting.
 	let size = $state<{ w: number; h: number }>();
 	let ready = $state(false);
-	const EASE = spring(0.18);
+	const EASE = spring(0.08);
 	// Closing is quicker and nearly bounceless: a card settling back into a pill shouldn't wobble.
 	const CLOSE = spring(0.04);
 	let closing = $state(false);
@@ -72,7 +72,7 @@
 
 	// Content: in on a livelier spring, sharpening from a blur a beat after the shell starts to grow;
 	// out with a quick fade, unreachable while it goes.
-	const bouncy = springAt(0.3);
+	const bouncy = springAt(0.1);
 	function appear(_node: Element) {
 		if (reduced()) return { duration: 150, css: (t: number) => `opacity: ${t}` };
 		return {

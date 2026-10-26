@@ -123,10 +123,8 @@
 		font-variant-numeric: tabular-nums;
 		font-weight: 500;
 		cursor: pointer;
-		transition:
-			background var(--ui-dur) var(--ui-ease-out),
-			color var(--ui-dur) var(--ui-ease-out),
-			scale var(--ui-dur-press) var(--ui-ease-out);
+		/* Fill and text switch at once; fading both leaves the time unreadable mid-way. */
+		transition: scale var(--ui-dur-press) var(--ui-ease-out);
 	}
 	.slot:hover {
 		background: var(--ui-hover);

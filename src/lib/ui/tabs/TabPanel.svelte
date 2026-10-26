@@ -42,9 +42,18 @@
 
 <style>
 	.panel {
-		flex: 1;
+		grid-area: 2 / 1;
 		min-inline-size: 0;
 		border-radius: var(--ui-radius);
+	}
+	/* Stacked under the chosen one, not removed, so the area doesn't resize. Invisible is also
+	   out of the accessibility tree and the Tab order, like hidden. */
+	.panel[hidden] {
+		display: block;
+		visibility: hidden;
+	}
+	:global(.tabs[data-orientation='vertical']) > .panel {
+		grid-area: 1 / 2;
 	}
 	/* Beside a vertical list: the first line centers on the first tab (the control height). */
 	:global(.tabs[data-orientation='vertical']) > .panel {

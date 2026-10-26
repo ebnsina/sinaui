@@ -51,7 +51,7 @@
 		closing = wasOpen && !open;
 		wasOpen = open;
 	});
-	const EASE = spring(0.16);
+	const EASE = spring(0.03);
 	const CLOSE = spring(0.04);
 	// A pill when folded; open, the card's corners are concentric with the list's rows inside.
 	const radius = (h: number) => (open ? 16 : h / 2);
@@ -73,13 +73,13 @@
 		shell?.querySelector<HTMLElement>('.content:not([inert]) [aria-expanded]')?.focus();
 	}
 
-	const bouncy = springAt(0.25);
+	const settle = springAt(0.03);
 	function appear(_node: Element) {
 		if (reduced()) return { duration: 150, css: (t: number) => `opacity: ${t}` };
 		return {
 			delay: closing ? 200 : 60,
-			duration: 500,
-			easing: bouncy,
+			duration: 320,
+			easing: settle,
 			css: (t: number, u: number) =>
 				`opacity: ${Math.min(1, t * 1.6)}; transform: scale(${0.94 + 0.06 * t}); filter: blur(${u * 5}px)`
 		};
@@ -92,8 +92,8 @@
 	function arrive(_node: Element) {
 		if (reduced()) return { duration: 150, css: (t: number) => `opacity: ${t}` };
 		return {
-			duration: 450,
-			easing: bouncy,
+			duration: 300,
+			easing: settle,
 			css: (t: number) => `opacity: ${Math.min(1, t * 2)}; transform: scale(${0.6 + 0.4 * t})`
 		};
 	}

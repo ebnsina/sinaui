@@ -276,6 +276,12 @@
 	bind:this={root}
 	class={['calendar', fill && 'fill', anchor && 'choosing']}
 	style:--months={months}
+	{@attach (el) => {
+		// Leaving the calendar drops the hover preview, back to the day the range started on.
+		const clear = () => (hovered = undefined);
+		el.addEventListener('pointerleave', clear);
+		return () => el.removeEventListener('pointerleave', clear);
+	}}
 >
 	{#each shownMonths as m, mi (mi)}
 		<div class="month-block">
@@ -434,6 +440,7 @@
 	}
 	/* Every cell is a day tall, empty ones too: a month with an empty sixth row is the same height. */
 	td {
+		position: relative;
 		box-sizing: content-box;
 		block-size: calc(2.25rem + 2px);
 		padding: 1px;
@@ -460,10 +467,10 @@
 		color: inherit;
 		font: inherit;
 		cursor: pointer;
-		transition:
-			background-color var(--ui-dur-press) ease,
-			color var(--ui-dur-press) ease,
-			transform var(--ui-dur-press) var(--ui-ease-out);
+		/* Above the range band, whatever it's animating. States switch at once: fading the fill while
+		   the number turns white leaves it unreadable for a moment. */
+		z-index: 1;
+		transition: transform var(--ui-dur-press) var(--ui-ease-out);
 	}
 	@media (pointer: coarse) {
 		.day {
@@ -511,18 +518,18 @@
 		opacity: 0.55;
 		cursor: not-allowed;
 	}
-	/* Range: one band runs under the days, from the middle of the start day to the middle of the end. */
-	.day::before {
+	/* Range: one band runs under the days, from the middle of the start day to the middle of the end.
+	   It belongs to the cell, so a day animating can never paint it over itself. */
+	td::before {
 		content: '';
 		position: absolute;
-		z-index: -1;
-		/* Opaque and overlapping a little, so neighboring days join without a seam. */
-		inset: 0 -2px;
+		/* Neighboring cells' bands meet edge to edge, without a seam. */
+		inset: 1px 0;
 		background: color-mix(in srgb, var(--ui-accent) 14%, var(--ui-surface));
 		opacity: 0;
 		transition: opacity 120ms ease;
 	}
-	.in-band .day::before {
+	td.in-band::before {
 		opacity: 1;
 	}
 	/* Choosing: the band is a lighter preview until the end is picked. */
@@ -530,26 +537,26 @@
 	.choosing .selected:not(.anchor) {
 		animation: none;
 	}
-	.choosing .in-band .day::before {
+	.choosing td.in-band::before {
 		background: color-mix(in srgb, var(--ui-accent) 9%, var(--ui-surface));
 	}
-	.band-start .day::before {
+	td.band-start::before {
 		inset-inline-start: 50%;
 	}
-	.band-end .day::before {
+	td.band-end::before {
 		inset-inline-end: 50%;
 	}
-	.band-start.band-end .day::before {
+	td.band-start.band-end::before {
 		opacity: 0;
 	}
-	/* The band rounds off at the ends of each week row. */
-	td:first-child:not(.band-start) .day::before {
-		inset-inline-start: 0;
+	/* The band rounds off at the ends of each week row, flush with the day's edge. */
+	td:first-child:not(.band-start)::before {
+		inset-inline-start: 1px;
 		border-start-start-radius: var(--ui-radius);
 		border-end-start-radius: var(--ui-radius);
 	}
-	td:last-child:not(.band-end) .day::before {
-		inset-inline-end: 0;
+	td:last-child:not(.band-end)::before {
+		inset-inline-end: 1px;
 		border-start-end-radius: var(--ui-radius);
 		border-end-end-radius: var(--ui-radius);
 	}

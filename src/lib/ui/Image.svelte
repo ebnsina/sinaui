@@ -69,7 +69,10 @@
 		if (!big.complete) await big.decode().catch(() => {});
 		if (reduced()) return;
 		const t = flip(img.getBoundingClientRect(), big.getBoundingClientRect());
-		big.animate([{ transform: t }, { transform: 'none' }], { duration: 480, easing: ease.spring });
+		big.animate([{ transform: t }, { transform: 'none' }], {
+			duration: 300,
+			easing: ease.standard
+		});
 		viewer.animate([{ backgroundColor: 'transparent' }, {}], {
 			duration: 240,
 			easing: ease.standard

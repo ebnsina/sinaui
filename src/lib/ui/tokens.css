@@ -129,9 +129,9 @@
 	);
 	--ui-dur-exit: 130ms;
 	--ui-dur-press: 160ms;
-	--ui-dur: 240ms;
-	--ui-dur-overlay: 240ms;
-	--ui-dur-spring: 480ms;
+	--ui-dur: 200ms;
+	--ui-dur-overlay: 200ms;
+	--ui-dur-spring: 320ms;
 }
 
 /* With a mouse, controls are compact: 32px and 14px text. Touch keeps the sizes above. */

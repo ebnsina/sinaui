@@ -16,7 +16,6 @@
 
 <script lang="ts">
 	import Icon from './Icon.svelte';
-	import { glide } from './glide';
 
 	interface Props {
 		/** The question the cards answer. */
@@ -46,28 +45,6 @@
 		error,
 		class: className
 	}: Props = $props();
-
-	let cards: HTMLDivElement;
-	let selection: HTMLSpanElement;
-	// Pointer choices glide the selection over; keyboard ones and resizes snap, as the tabs do.
-	let viaPointer = false;
-
-	const place = (animate: boolean) =>
-		glide(
-			selection,
-			value ? cards?.querySelector<HTMLElement>(`[data-value="${CSS.escape(value)}"]`) : null,
-			animate,
-			280
-		);
-	$effect(() => {
-		void value;
-		place(viaPointer);
-	});
-	$effect(() => {
-		const seen = new ResizeObserver(() => place(false));
-		seen.observe(cards);
-		return () => seen.disconnect();
-	});
 </script>
 
 <!-- fieldset + legend + native radios: the question is announced, arrow keys and forms come free. -->
@@ -76,13 +53,10 @@
 	{disabled}
 	aria-describedby={[hint && `${uid}-hint`, error && `${uid}-error`].filter(Boolean).join(' ') ||
 		undefined}
-	onkeydowncapture={() => (viaPointer = false)}
-	onpointerdowncapture={() => (viaPointer = true)}
 >
 	<legend>{legend}</legend>
 	{#if hint}<p id="{uid}-hint" class="hint">{hint}</p>{/if}
-	<div class="cards" bind:this={cards}>
-		<span class="selection" aria-hidden="true" bind:this={selection}></span>
+	<div class="cards">
 		{#each options as o (o.value)}
 			<label class="card" data-value={o.value}>
 				<input
@@ -148,7 +122,7 @@
 	.list .cards {
 		grid-template-columns: minmax(0, 1fr);
 	}
-	/* Cards are tinted, not outlined; the chosen one gets the accent layer that glides between them. */
+	/* Cards are tinted; the chosen one lifts onto the surface with a soft edge, quickly and in place. */
 	.card {
 		position: relative;
 		display: grid;
@@ -161,7 +135,10 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		cursor: pointer;
-		transition: background-color var(--ui-dur-press) ease;
+		transition:
+			background-color 150ms ease,
+			border-color 150ms ease,
+			box-shadow 150ms ease;
 	}
 	.card:has(.icon) {
 		grid-template-columns: auto minmax(0, 1fr) auto;
@@ -182,7 +159,9 @@
 		}
 	}
 	.card:has(input:checked) {
-		background: transparent;
+		border-color: color-mix(in srgb, var(--ui-accent) 28%, var(--ui-field-line));
+		background: var(--ui-surface);
+		box-shadow: var(--ui-shadow-xs);
 	}
 	.card:has(input:focus-visible) {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
@@ -193,17 +172,6 @@
 	}
 	.card:has(input:disabled) :is(.label, .detail, .icon, .mark) {
 		opacity: 0.55;
-	}
-	.selection {
-		position: absolute;
-		top: 0;
-		left: 0;
-		transform-origin: 0 0;
-		border-radius: var(--ui-radius);
-		background: color-mix(in srgb, var(--ui-accent) 10%, var(--ui-surface));
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity var(--ui-dur) ease;
 	}
 	/* The native radio stays in the card for keyboard and forms, out of sight. */
 	input {

@@ -18,6 +18,9 @@
 	let failed = $state(false);
 	const clock = (s: number) =>
 		`${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+	// While dragging, the thumb follows the pointer, not the time the audio has reached so far.
+	let drag = $state<number | null>(null);
+	const at = $derived(drag ?? current);
 </script>
 
 <div class={['note', className]} role="group" aria-label={label}>
@@ -45,13 +48,18 @@
 			type="range"
 			min="0"
 			max={duration || 0}
-			step="0.1"
-			bind:value={current}
+			step="any"
+			value={at}
 			aria-label="Position"
-			aria-valuetext="{clock(current)} of {clock(duration || 0)}"
-			style:--at="{duration ? (current / duration) * 100 : 0}%"
+			aria-valuetext="{clock(at)} of {clock(duration || 0)}"
+			style:--at="{duration ? (at / duration) * 100 : 0}%"
+			oninput={(e) => {
+				drag = +e.currentTarget.value;
+				if (audio) audio.currentTime = drag;
+			}}
+			onchange={() => (drag = null)}
 		/>
-		<span class="time">{clock(paused && !current ? duration || 0 : current)}</span>
+		<span class="time">{clock(paused && !at ? duration || 0 : at)}</span>
 	{/if}
 </div>
 
