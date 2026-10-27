@@ -87,8 +87,8 @@
 		margin: 0;
 		color: var(--ui-muted);
 	}
-	/* Its own link style, so links still read as links under an app's CSS reset. */
-	.auth :global(a) {
+	/* Its own link style, so links still read as links under an app's CSS reset. Buttons that are links keep theirs. */
+	.auth :global(a:not(.btn)) {
 		color: color-mix(in srgb, var(--ui-accent) 80%, var(--ui-fg));
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
