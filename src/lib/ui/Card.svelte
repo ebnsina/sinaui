@@ -131,6 +131,12 @@
 		padding-block-start: 0;
 		margin-block-start: 1rem;
 		border-block-start: 1px solid var(--ui-line);
+		border-start-start-radius: 0;
+		border-start-end-radius: 0;
+	}
+	.flush:has(+ .footer) {
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
 	}
 	.flush {
 		gap: 0;

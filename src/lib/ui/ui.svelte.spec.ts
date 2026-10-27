@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
 import Input from './Input.svelte';
+import Card from './Card.svelte';
 import NumberField from './NumberField.svelte';
 import Select from './Select.svelte';
 import Carousel from './Carousel.svelte';
@@ -3188,6 +3189,15 @@ describe('sinaui', () => {
 		await expect.element(link).toHaveAttribute('href', '#linked');
 		await expect.element(page.getByRole('heading', { name: 'Al-Khwarizmi' })).toBeVisible();
 		expect(document.querySelectorAll('main article a').length).toBe(3);
+	});
+
+	it('card: a flush panel is square where it meets the title and the footer', async () => {
+		const children = createRawSnippet(() => ({ render: () => '<ul><li>Basra</li></ul>' }));
+		const footer = createRawSnippet(() => ({ render: () => '<button>More</button>' }));
+		const r = mount(Card, { title: 'Libraries', flush: true, children, footer });
+		const s = getComputedStyle(r.container.querySelector('.flush')!);
+		for (const c of ['TopLeft', 'TopRight', 'BottomLeft', 'BottomRight'] as const)
+			expect(s[`border${c}Radius`]).toBe('0px');
 	});
 
 	it('theme toggle: switches data-theme, remembers it, and reports it as pressed', async () => {
