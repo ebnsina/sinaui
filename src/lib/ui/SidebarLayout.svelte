@@ -426,8 +426,9 @@
 		font-variant-numeric: tabular-nums;
 		line-height: 1.25rem;
 	}
-	.collapsed .text,
-	.collapsed .badge,
+	/* Not in the rail's flyout, which sits inside the collapsed sidebar but shows names. */
+	.collapsed .text:not(:global(.flyout *)),
+	.collapsed .badge:not(:global(.flyout *)),
 	.collapsed .group {
 		opacity: 0;
 	}

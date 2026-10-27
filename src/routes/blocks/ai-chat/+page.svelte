@@ -55,7 +55,7 @@
 <Example
 	id="sheet"
 	title="In a side sheet"
-	description="fill makes the chat take its container's height instead of a fixed card, here a sheet widened with --ui-sheet-width."
+	description="fill makes the chat take its container's height, and bare drops its own card since the sheet is already one. The sheet is widened with --ui-sheet-width."
 	{...ex('sheet')}
 />
 <Example
@@ -179,6 +179,12 @@
 			><td><code>fill</code></td><td
 				><code>boolean</code>: fill the container's height, such as a side sheet, instead of a 34rem
 				card</td
+			><td><code>false</code>; <code>true</code> in <code>Assistant</code></td></tr
+		>
+		<tr
+			><td><code>bare</code></td><td
+				><code>boolean</code>: no card of its own (corners, background, shadow), inside something
+				that already provides the surface</td
 			><td><code>false</code>; <code>true</code> in <code>Assistant</code></td></tr
 		>
 	</tbody>

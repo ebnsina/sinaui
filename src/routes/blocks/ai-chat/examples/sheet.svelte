@@ -21,5 +21,6 @@
 		assistantName="Librarian"
 		suggestions={['What was the House of Wisdom?', 'Where does the word algebra come from?']}
 		fill
+		bare
 	/>
 </Dialog>
