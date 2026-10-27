@@ -5,7 +5,8 @@
 	type Props = {
 		/** link: looks like inline text link (for navigation that shouldn't look like a button). */
 		variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link';
-		size?: 'sm' | 'md' | 'lg';
+		/** xs: 24px with a mouse, for compact toolbars. */
+		size?: 'xs' | 'sm' | 'md' | 'lg';
 		/** Swaps the label for a spinner at the same width; stays focusable but blocks activation. */
 		loading?: boolean;
 		/** Square button for a lone icon. Give it an aria-label. */
@@ -72,7 +73,7 @@
 		justify-content: center;
 		gap: 0.5em;
 		min-block-size: var(--ui-control-h);
-		padding-inline: 0.75rem;
+		padding-inline: 0.625rem;
 		/* Invisible normally; becomes the button's outline in Windows High Contrast. */
 		border: 1px solid transparent;
 		border-radius: var(--ui-radius-control);
@@ -93,9 +94,14 @@
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);
 	}
+	.xs {
+		min-block-size: var(--ui-control-h-xs);
+		padding-inline: 0.5rem;
+		font-size: 0.75rem;
+	}
 	.sm {
 		min-block-size: var(--ui-control-h-sm);
-		padding-inline: 0.625rem;
+		padding-inline: 0.5rem;
 		font-size: 0.8125rem;
 	}
 	.lg {
@@ -132,7 +138,8 @@
 		color: var(--ui-on-danger);
 	}
 	.secondary {
-		background: var(--ui-subtle);
+		border-color: var(--ui-field-line);
+		background: var(--ui-surface);
 		color: var(--ui-fg);
 	}
 	.outline {
@@ -149,10 +156,12 @@
 		.danger:hover {
 			background-image: linear-gradient(rgb(0 0 0 / 0.1) 0 0);
 		}
-		.secondary:hover,
 		.outline:hover,
 		.ghost:hover {
 			background: var(--ui-hover);
+		}
+		.secondary:hover {
+			background: color-mix(in srgb, var(--ui-fg) 4%, var(--ui-surface));
 		}
 	}
 	.link {

@@ -22,6 +22,7 @@
 	import { ease, reduced } from './motion';
 	import { onMount, tick, type Snippet } from 'svelte';
 	import { ArrowDown01Icon, Menu01Icon, SidebarLeftIcon } from '@hugeicons/core-free-icons';
+	import Breadcrumb from './Breadcrumb.svelte';
 	import Dialog from './Dialog.svelte';
 	import Icon from './Icon.svelte';
 	import Popover from './Popover.svelte';
@@ -46,6 +47,10 @@
 		footer?: Snippet;
 		/** A bar above the page on every screen size; the collapse button moves into it. */
 		topbar?: Snippet;
+		/** Where the page sits, shown in the top bar; the last one is the current page. */
+		crumbs?: { label: string; href?: string }[];
+		/** The page sits in a rounded panel inset from the window; the sidebar shares the window's tint. */
+		inset?: boolean;
 		children: Snippet;
 	}
 
@@ -59,8 +64,12 @@
 		header,
 		footer,
 		topbar,
+		crumbs,
+		inset = false,
 		children
 	}: Props = $props();
+
+	const top = $derived(!!topbar || !!crumbs?.length);
 
 	const id = $props.id();
 	let nav = $state<HTMLElement>();
@@ -219,7 +228,7 @@
 
 <!-- The outer box is the container its own width is measured by; the grid sits inside it. -->
 <div class="shell">
-	<div class={['app', collapsed && 'collapsed']}>
+	<div class={['app', collapsed && 'collapsed', inset && 'inset']}>
 		<aside class="sidebar" aria-label={label}>
 			{#if header}<div class="head">{@render header(collapsed)}</div>{/if}
 			<nav
@@ -241,7 +250,7 @@
 			</nav>
 			<div class="foot">
 				{@render footer?.()}
-				{#if !topbar}
+				{#if !top}
 					<Tooltip text="{collapsed ? 'Expand' : 'Collapse'} sidebar" labels side="right">
 						{#snippet trigger(props)}{@render fold(props)}{/snippet}
 					</Tooltip>
@@ -252,9 +261,9 @@
 		<div bind:this={main} id="{id}-content" class="main" {@attach scrollEdges} data-fade>
 			<!-- Phones: the same navigation, one tap away. With a topbar, it shows on every screen. -->
 			<div
-				class={['bar', topbar && 'top']}
-				role={topbar ? undefined : 'navigation'}
-				aria-label={topbar ? undefined : label}
+				class={['bar', top && 'top']}
+				role={top ? undefined : 'navigation'}
+				aria-label={top ? undefined : label}
 			>
 				<button
 					type="button"
@@ -264,12 +273,15 @@
 				>
 					<Icon icon={Menu01Icon} size={20} />
 				</button>
-				{#if topbar}
+				{#if top}
 					<Tooltip text="{collapsed ? 'Expand' : 'Collapse'} sidebar" labels side="bottom">
 						{#snippet trigger(props)}{@render fold(props)}{/snippet}
 					</Tooltip>
 				{/if}
 				{#if header}<div class="bar-head">{@render header(false)}</div>{/if}
+				{#if crumbs?.length}<div class="crumbs">
+						<Breadcrumb items={crumbs} label="{label}: where you are" />
+					</div>{/if}
 				{#if topbar}<div class="bar-top">{@render topbar()}</div>{/if}
 			</div>
 			{@render children()}
@@ -298,20 +310,26 @@
 		font: var(--ui-sidebar-font)/1.4 var(--ui-font);
 	}
 	.app.collapsed {
-		grid-template-columns: 3.75rem minmax(0, 1fr);
+		grid-template-columns: 3.5rem minmax(0, 1fr);
 	}
 	.sidebar {
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
 		min-inline-size: 0;
-		padding: 0.75rem 0.5rem;
+		padding: 0.5rem 0.75rem 0.75rem;
 		overflow: hidden;
 		border-inline-end: 1px solid var(--ui-sidebar-line);
 		background: var(--ui-sidebar-bg);
 	}
 	.head {
-		padding: 0.25rem 0.375rem;
+		display: grid;
+		align-content: center;
+		min-block-size: 2.125rem;
+		/* Room for a field's focus ring inside the clip, given back by the margin. */
+		box-sizing: content-box;
+		margin-block: -0.25rem;
+		padding: 0.25rem 0.4375rem;
 		overflow: hidden;
 		white-space: nowrap;
 	}
@@ -323,9 +341,14 @@
 		overflow: auto;
 		scrollbar-width: none;
 	}
+	/* Reaches the sidebar's edge, so the current page's bar can sit there without being clipped. */
+	.sidebar > nav {
+		margin-inline: -0.75rem;
+		padding-inline: 0.75rem;
+	}
 	.group {
-		margin: 0.75rem 0 0.25rem;
-		padding-inline: 0.625rem;
+		margin: 1rem 0 0.25rem;
+		padding-inline: 0.4375rem;
 		overflow: hidden;
 		color: var(--ui-muted);
 		font-size: var(--ui-sidebar-title-font);
@@ -337,27 +360,32 @@
 	ul {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
-		gap: 0.125rem;
+		gap: 0.25rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+	/* A group without a title still stands apart from the one above. */
+	ul + ul {
+		margin-block-start: 1rem;
 	}
 	.item,
 	.fold {
 		position: relative;
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 0.625rem;
 		box-sizing: border-box;
 		inline-size: 100%;
 		min-block-size: var(--ui-sidebar-item-h);
 		margin: 0;
-		padding: 0 0.625rem;
+		padding: 0 0.4375rem;
 		border: 0;
-		border-radius: var(--ui-radius);
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-muted);
 		font: inherit;
+		font-weight: 400;
 		text-decoration: none;
 		white-space: nowrap;
 		cursor: pointer;
@@ -395,10 +423,10 @@
 		text-overflow: ellipsis;
 		transition: opacity 150ms ease;
 	}
-	/* Sub-pages line up under their parent's name: icon (18px) plus the gap (0.75rem). */
+	/* Sub-pages line up under their parent's name: icon (18px) plus the gap (0.625rem). */
 	.sub {
-		margin-block-start: 0.125rem;
-		padding-inline-start: calc(18px + 0.75rem);
+		margin-block-start: 0.25rem;
+		padding-inline-start: calc(18px + 0.625rem);
 	}
 	.sub[hidden] {
 		display: none;
@@ -442,14 +470,33 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: var(--ui-radius);
+		border-radius: var(--ui-radius-control);
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 120ms ease;
 	}
-	.pill.current {
+	.pill.current,
+	.sheet-nav .item[aria-current='page'] {
 		background: var(--ui-sidebar-current-bg);
-		box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+	}
+	/* A short ink bar on the sidebar's outer edge, rounded toward the link (as in the docs). */
+	.pill.current::before,
+	.sheet-nav .item[aria-current='page']::before {
+		content: '';
+		position: absolute;
+		inset-block: 0.5rem;
+		inset-inline-start: -0.75rem;
+		inline-size: 3px;
+		border-start-end-radius: 4px;
+		border-end-end-radius: 4px;
+		background: var(--ui-accent);
+	}
+	@media (forced-colors: active) {
+		.pill.current::before,
+		.sheet-nav .item[aria-current='page']::before {
+			forced-color-adjust: none;
+			background: Highlight;
+		}
 	}
 	.pill.hover {
 		background: var(--ui-hover);
@@ -470,10 +517,10 @@
 		z-index: 4;
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
-		min-block-size: 3.25rem;
+		gap: 0.5rem;
+		min-block-size: 3.125rem;
 		box-sizing: border-box;
-		padding: 0.25rem;
+		padding: 0.25rem 0.75rem;
 		border-block-end: 1px solid var(--ui-sidebar-line);
 		background: color-mix(in srgb, var(--ui-bg) 92%, transparent);
 		backdrop-filter: blur(12px);
@@ -484,14 +531,24 @@
 		display: none;
 	}
 	.bar .fold {
-		inline-size: 2.25rem;
+		inline-size: 2rem;
+		min-block-size: 2rem;
+		margin-inline-start: -0.4375rem;
 		padding: 0;
 		justify-content: center;
+	}
+	.crumbs {
+		flex: 1;
+		min-inline-size: 0;
+	}
+	.crumbs + .bar-top {
+		flex: none;
 	}
 	@media (pointer: coarse) {
 		.bar .fold {
 			inline-size: 2.75rem;
 			min-block-size: 2.75rem;
+			margin-inline-start: -0.5rem;
 		}
 	}
 	.bar-top {
@@ -523,7 +580,36 @@
 		margin-block-end: 0.5rem;
 	}
 	/* Narrow: no sidebar; a menu button opens the same links in a sheet. */
+	/* Inset: one tint behind everything, the page on its own panel. */
+	.inset {
+		--gap: 0.25rem;
+		background: var(--ui-sidebar-inset-bg);
+	}
+	.inset .sidebar {
+		padding-block-start: var(--gap);
+		border-inline-end: 0;
+		background: none;
+	}
+	/* Same height and offset as the page's top bar, so the brand lines up with the breadcrumb. */
+	.inset .head {
+		min-block-size: 3.125rem;
+	}
+	.inset .main {
+		margin: var(--gap) var(--gap) var(--gap) 0;
+		border-radius: var(--ui-radius);
+		background: var(--ui-bg);
+		box-shadow: 0 0 0 1px var(--ui-line);
+	}
+	.inset .bar {
+		border-start-start-radius: var(--ui-radius);
+		border-start-end-radius: var(--ui-radius);
+	}
 	@container (max-width: 40rem) {
+		.inset .main {
+			margin: 0;
+			border-radius: 0;
+			box-shadow: none;
+		}
 		.app,
 		.app.collapsed {
 			grid-template-columns: minmax(0, 1fr);
@@ -536,7 +622,8 @@
 			display: flex;
 		}
 		.bar {
-			block-size: 3.25rem;
+			min-block-size: 3.25rem;
+			padding-inline: 0.25rem 0.75rem;
 		}
 		.menu {
 			display: grid;

@@ -49,6 +49,19 @@
 	description="Switch the period: the numbers roll, the charts redraw and the badges say whether each change is good news. Overdue loans going up shows in red."
 	{...ex('library')}
 />
+<Example
+	id="studio"
+	title="A studio's usage page"
+	description="Sidebar with pinned tools, top bar with search and account, section tabs, and stat tabs that pick what the chart shows. Switch the period to redraw everything."
+	{...ex('studio')}
+/>
+<Example
+	id="studio-inset"
+	title="The same page, inset"
+	description="With inset, the page sits on its own rounded panel and the sidebar shares the window's tint."
+	{...ex('studio')}
+	props={{ inset: true, name: 'Dār al-ʿIlm' }}
+/>
 
 <h2 id="props">Props</h2>
 <table>

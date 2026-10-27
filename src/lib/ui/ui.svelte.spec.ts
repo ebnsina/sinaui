@@ -118,6 +118,9 @@ import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
 import PillTabs from '../../routes/components/tabs/examples/pill.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
+import StatTabs from '#lib/ui/StatTabs.svelte';
+import AccountMenu from '#lib/ui/AccountMenu.svelte';
+import StatTabsPage from '../../routes/components/stat-tabs/+page.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -172,6 +175,7 @@ const pages = {
 	HoverCardPage,
 	CarouselPage,
 	SidebarPage,
+	StatTabsPage,
 	PasswordInputPage,
 	SearchFieldPage,
 	EmptyStatePage,
@@ -224,7 +228,12 @@ async function expectNoAxeViolations() {
 	const { violations } = await axe.run(document, {
 		runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']
 	});
-	expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(' | ')}`)).toEqual([]);
+	expect(
+		violations.map(
+			(v) =>
+				`${v.id}: ${v.nodes.map((n) => n.target + ' ' + n.any.map((a) => a.message).join(';')).join(' | ')}`
+		)
+	).toEqual([]);
 }
 
 const focused = () => document.activeElement;
@@ -2556,7 +2565,7 @@ describe('sinaui', () => {
 		const stats = page.getByRole('list', { name: 'Key numbers' });
 		const loans = () => stats.element().querySelector('li .value .sr-only')?.textContent;
 		await expect.poll(loans).toBe('1,806');
-		await page.getByRole('radio', { name: '7 days' }).click();
+		await page.getByRole('radio', { name: '7 days' }).first().click();
 		await expect.poll(loans).toBe('420');
 		// Overdue rose, and falling is its good direction: its badge is the danger tone.
 		const overdue = [...stats.element().querySelectorAll('li')].find((li) =>
@@ -2851,17 +2860,62 @@ describe('sinaui', () => {
 		expect(el.hasAttribute('aria-label')).toBe(false);
 	});
 
-	it('table: striped by default; striped={false} leaves every row on the plain background', async () => {
+	it('account menu: names the person, ticks the current org, switches and signs out', async () => {
+		const chosen: string[] = [];
+		let signedOut = false;
+		mount(AccountMenu, {
+			user: { name: 'Fatima al-Fihri', email: 'fatima@example.com' },
+			orgs: [
+				{ id: 'fez', name: 'Fez' },
+				{ id: 'cordoba', name: 'Córdoba' }
+			],
+			org: 'fez',
+			onorg: (o: { id: string }) => chosen.push(o.id),
+			onsignout: () => (signedOut = true)
+		});
+		const button = page.getByRole('button', { name: 'Account: Fatima al-Fihri' });
+		await button.click();
+		await expect
+			.element(page.getByRole('menuitem', { name: 'Fez' }))
+			.toHaveAttribute('aria-current', 'true');
+		await page.getByRole('menuitem', { name: 'Córdoba' }).click();
+		expect(chosen).toEqual(['cordoba']);
+		await button.click();
+		await page.getByRole('menuitem', { name: 'Sign out' }).click();
+		expect(signedOut).toBe(true);
+	});
+
+	it('stat tabs: first is chosen by default; arrows choose; the name reads label and number', async () => {
+		const items = [
+			{ value: 'loans', label: 'Loans', display: '3,242' },
+			{ value: 'visits', label: 'Visits', display: '13,706' },
+			{ value: 'overdue', label: 'Overdue', display: '95' }
+		];
+		mount(StatTabs, { label: 'Chart metric', items });
+		const group = page.getByRole('radiogroup', { name: 'Chart metric' });
+		await expect.element(group).toBeVisible();
+		const loans = page.getByRole('radio', { name: 'Loans 3,242' });
+		await expect.element(loans).toBeChecked();
+		// Safari doesn't focus a radio on click; the keyboard path starts from focus.
+		(loans.element() as HTMLElement).focus();
+		await userEvent.keyboard('{ArrowRight}');
+		await expect.element(page.getByRole('radio', { name: 'Visits 13,706' })).toBeChecked();
+		await userEvent.keyboard('{ArrowLeft}');
+		await expect.element(loans).toBeChecked();
+	});
+
+	it('table: plain rows split by hairlines by default; striped tints every other row', async () => {
 		const body = createRawSnippet(() => ({
 			render: () => '<tbody><tr><td>Optics</td></tr><tr><td>Algebra</td></tr></tbody>'
 		}));
-		const tint = (r: ReturnType<typeof mount>) =>
-			getComputedStyle(r.container.querySelector('td')!).backgroundColor;
-		const on = mount(Table, { caption: 'Books', children: body });
-		expect(tint(on)).not.toBe('rgba(0, 0, 0, 0)');
-		on.unmount();
-		const off = mount(Table, { caption: 'Books', children: body, striped: false });
-		expect(tint(off)).toBe('rgba(0, 0, 0, 0)');
+		const first = (r: ReturnType<typeof mount>) =>
+			getComputedStyle(r.container.querySelector('td')!);
+		const plain = mount(Table, { caption: 'Books', children: body });
+		expect(first(plain).backgroundColor).toBe('rgba(0, 0, 0, 0)');
+		expect(first(plain).borderBottomWidth).toBe('1px');
+		plain.unmount();
+		const on = mount(Table, { caption: 'Books', children: body, striped: true });
+		expect(first(on).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
 	});
 
 	it('fields side by side: a hint under one does not push the other’s control down', async () => {
@@ -2943,7 +2997,7 @@ describe('sinaui', () => {
 			);
 		// The compact sizes a mouse gets by default.
 		expect(sizes()).toEqual([28, 32, 40]);
-		expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('14px');
+		expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('13px');
 		const root = document.documentElement.style;
 		const set = {
 			'--ui-control-h-sm': '1.75rem',
@@ -2951,10 +3005,10 @@ describe('sinaui', () => {
 			'--ui-control-h-lg': '2.25rem'
 		};
 		for (const [k, v] of Object.entries(set)) root.setProperty(k, v);
-		root.setProperty('--ui-button-font', '0.8125rem');
+		root.setProperty('--ui-button-font', '0.875rem');
 		try {
 			await expect.poll(sizes).toEqual([28, 32, 36]);
-			expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('13px');
+			expect(getComputedStyle(btn('Borrow manuscript')).fontSize).toBe('14px');
 		} finally {
 			for (const k of [...Object.keys(set), '--ui-button-font']) root.removeProperty(k);
 		}
@@ -3018,7 +3072,8 @@ describe('sinaui', () => {
 		try {
 			const sidebar = document.querySelector<HTMLElement>('.sidebar')!;
 			expect(getComputedStyle(sidebar).backgroundColor).toBe('rgb(1, 2, 3)');
-			expect(getComputedStyle(sidebar).borderInlineEndColor).toBe('rgba(0, 0, 0, 0)');
+			// A hairline between sidebar and page, by default.
+			expect(getComputedStyle(sidebar).borderInlineEndColor).not.toBe('rgba(0, 0, 0, 0)');
 			expect(getComputedStyle(sidebar.querySelector('.pill.current')!).backgroundColor).toBe(
 				'rgb(4, 5, 6)'
 			);
@@ -3030,7 +3085,7 @@ describe('sinaui', () => {
 				root.removeProperty(k);
 		}
 		// The top bar example: its collapse button sits in the bar, named by its tooltip, not in the footer.
-		const top = page.getByRole('navigation', { name: 'Reading room' });
+		const top = page.getByRole('navigation', { name: 'Reading room', exact: true });
 		await expect.element(top).toBeVisible();
 		const bar = document.querySelector<HTMLElement>('.bar.top')!;
 		expect(getComputedStyle(bar).display).toBe('flex');

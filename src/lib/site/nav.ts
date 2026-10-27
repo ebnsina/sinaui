@@ -229,6 +229,11 @@ export const nav: {
 				href: '/components/drawer',
 				keywords: ['bottom sheet', 'sheet', 'swipe', 'panel', 'mobile']
 			},
+			{
+				title: 'Account menu',
+				href: '/components/account-menu',
+				keywords: ['user menu', 'avatar', 'profile', 'organization switcher', 'sign out']
+			},
 			{ title: 'Dropdown', href: '/components/dropdown', keywords: ['menu', 'actions', 'more'] },
 			{
 				title: 'Hover card',
@@ -415,6 +420,11 @@ export const nav: {
 				title: 'Sidebar layout',
 				href: '/components/sidebar',
 				keywords: ['app shell', 'navigation', 'rail', 'collapse', 'layout']
+			},
+			{
+				title: 'Stat tabs',
+				href: '/components/stat-tabs',
+				keywords: ['metrics', 'kpi', 'chart switcher', 'stats', 'numbers']
 			},
 			{
 				title: 'Stepper',

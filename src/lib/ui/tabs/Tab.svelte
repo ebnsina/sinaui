@@ -42,10 +42,10 @@
 		position: relative;
 		flex: none;
 		min-block-size: var(--ui-control-h);
-		padding: 0 0.875rem;
+		padding: 0.25rem 0.625rem;
 		/* Invisible normally; outlines the tab in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: var(--ui-radius);
+		border-radius: calc(var(--ui-radius-control) + 0.125rem);
 		background: transparent;
 		color: var(--ui-muted);
 		font: inherit;
@@ -57,6 +57,12 @@
 		cursor: pointer;
 		-webkit-tap-highlight-color: transparent;
 		transition: color var(--ui-dur-press) ease;
+	}
+	/* Line tabs: 30px with a mouse; the chosen one is outlined above the underline. */
+	@media (pointer: fine) {
+		:global(.tabs:not(.folder, .pill)) .tab {
+			min-block-size: 1.875rem;
+		}
 	}
 	@media (pointer: coarse) {
 		.tab {
@@ -75,6 +81,9 @@
 	}
 	.tab[aria-selected='true'] {
 		color: var(--ui-accent);
+	}
+	:global(.tabs:not(.folder, .pill)) .tab[aria-selected='true'] {
+		border-color: var(--ui-field-line);
 	}
 	:global(.tabs.folder) .tab[aria-selected='true'] {
 		color: var(--ui-fg);
@@ -95,9 +104,8 @@
 		> .tab[aria-selected='true']::after {
 		content: '';
 		position: absolute;
-		inset: auto -1px -1px;
-		block-size: 3px;
-		border-radius: 3px 3px 0 0;
+		inset: auto -1px calc(-1px - var(--tab-gap, 0px));
+		block-size: 1.5px;
 		background: var(--ui-accent);
 	}
 	/* Folder, before hydration: the tab draws its own fill until the sliding shape is measured. */
@@ -113,11 +121,8 @@
 	:global([role='tablist'][aria-orientation='vertical']:not([data-ready]))
 		> .tab[aria-selected='true']::after {
 		inset-block: -1px;
-		inset-inline: auto -1px;
-		inline-size: 3px;
+		inset-inline: auto calc(-1px - var(--tab-gap, 0px));
+		inline-size: 1.5px;
 		block-size: auto;
-		border-radius: 0;
-		border-start-start-radius: 3px;
-		border-end-start-radius: 3px;
 	}
 </style>

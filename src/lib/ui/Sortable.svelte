@@ -338,6 +338,9 @@
 	.row {
 		flex-direction: row;
 		flex-wrap: nowrap;
+		/* Room for focus rings inside the scroll area, given back by the margin. */
+		margin: calc(-1 * calc(var(--ui-ring-width) + var(--ui-ring-offset)));
+		padding: calc(var(--ui-ring-width) + var(--ui-ring-offset));
 		overflow-x: auto;
 	}
 	.grid {

@@ -9,7 +9,7 @@
 		hideCaption?: boolean;
 		/** Your <thead>, <tbody> and <tfoot>. Mark number cells class="num" to right-align them. */
 		children: Snippet;
-		/** Tint every other row. Off: rows sit on the plain background and still light up under the pointer. */
+		/** Tint every other row too. Rows are always split by hairlines and light up under the pointer. */
 		striped?: boolean;
 		class?: string;
 	}
@@ -18,7 +18,7 @@
 		caption,
 		hideCaption = false,
 		children,
-		striped = true,
+		striped = false,
 		class: className
 	}: Props = $props();
 	const id = $props.id();
@@ -70,10 +70,17 @@
 		clip-path: inset(50%);
 		white-space: nowrap;
 	}
+	/* 40px rows split by hairlines. */
 	.frame :global(:is(th, td)) {
+		block-size: 2.5rem;
+		box-sizing: border-box;
 		padding: 0.5rem 0.75rem;
+		border-block-end: 1px solid var(--ui-line);
 		text-align: start;
-		vertical-align: top;
+		vertical-align: middle;
+	}
+	.frame :global(tbody tr:last-child > *) {
+		border-block-end: 0;
 	}
 	.frame :global(thead th) {
 		color: var(--ui-muted);
@@ -91,7 +98,7 @@
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
 	}
-	/* Rows told apart by tint, not rules; the one under the pointer is easier to follow across. */
+	/* The row under the pointer is easier to follow across. */
 	.frame.striped :global(tbody tr:nth-child(odd) > *) {
 		background: var(--ui-subtle);
 	}
@@ -103,17 +110,10 @@
 			background: var(--ui-hover);
 		}
 	}
-	.frame :global(tbody tr > :first-child) {
-		border-start-start-radius: calc(var(--ui-radius) - 0.125rem);
-		border-end-start-radius: calc(var(--ui-radius) - 0.125rem);
-	}
-	.frame :global(tbody tr > :last-child) {
-		border-start-end-radius: calc(var(--ui-radius) - 0.125rem);
-		border-end-end-radius: calc(var(--ui-radius) - 0.125rem);
-	}
-	/* Totals: set apart by weight and a little space, still no rule. */
+	/* Totals: set apart by weight and the rule above them. */
 	.frame :global(tfoot :is(th, td)) {
-		padding-block-start: 0.75rem;
+		border-block: 1px solid var(--ui-line);
+		border-block-end: 0;
 		font-weight: 600;
 	}
 </style>
