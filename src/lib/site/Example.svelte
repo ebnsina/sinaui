@@ -8,7 +8,8 @@
 		description,
 		component: Preview,
 		code,
-		stack = false
+		stack = false,
+		props = {}
 	}: {
 		id: string;
 		title: string;
@@ -18,6 +19,8 @@
 		code?: string;
 		/** Stack the preview vertically (forms, tabs) instead of wrapping in a row. */
 		stack?: boolean;
+		/** Passed to the preview, for two versions of one example (say, inset or not). */
+		props?: Record<string, unknown>;
 	} = $props();
 
 	// The code starts folded to a few lines under a "View code" button; short code shows whole.
@@ -46,7 +49,7 @@
 <div class="example">
 	<h3 {id}>{title}</h3>
 	{#if description}<p class="desc">{description}</p>{/if}
-	<div class={['preview', stack && 'stack']}><Preview /></div>
+	<div class={['preview', stack && 'stack']}><Preview {...props} /></div>
 	{#if code}
 		<div
 			class={['source', tall && 'tall', open && 'open']}

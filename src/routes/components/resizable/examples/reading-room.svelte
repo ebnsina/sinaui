@@ -39,9 +39,9 @@
 	.frame {
 		inline-size: 100%;
 		block-size: 16rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: calc(var(--ui-radius) + 0.25rem);
 		background: var(--ui-surface);
-		box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+		border: 1px solid var(--ui-field-line);
 		overflow: hidden;
 	}
 	.pane {

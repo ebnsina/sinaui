@@ -88,9 +88,11 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.25rem;
-		padding: 0.25rem;
-		border-radius: calc(var(--ui-radius) + 0.25rem);
-		background: var(--ui-subtle);
+		box-sizing: border-box;
+		min-block-size: var(--ui-control-h);
+		padding: 0.25rem 0.375rem;
+		border-radius: calc(var(--ui-radius-control) + 0.125rem);
+		background: var(--ui-faint);
 	}
 	.toolbar:focus {
 		outline: none;

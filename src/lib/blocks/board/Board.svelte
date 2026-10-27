@@ -551,8 +551,9 @@
 		flex-direction: column;
 		gap: 0.5rem;
 		min-block-size: 2.5rem;
-		margin: 0;
-		padding: 2px;
+		/* Room for a card's focus ring inside the scroll area, given back by the margin. */
+		margin: calc(-1 * calc(var(--ui-ring-width) + var(--ui-ring-offset)));
+		padding: calc(var(--ui-ring-width) + var(--ui-ring-offset));
 		overflow-y: auto;
 		overscroll-behavior: contain;
 		list-style: none;

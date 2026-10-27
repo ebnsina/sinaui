@@ -2,32 +2,34 @@
 :root {
 	color-scheme: light dark;
 
-	/* Slate neutrals (light) / onyx neutrals (dark, no blue), monochrome: the accent is the text ink. */
-	--ui-bg: light-dark(#ffffff, #0a0a0a);
-	--ui-surface: light-dark(#ffffff, #141414);
+	/* Neutral grays, monochrome: the accent is the text ink. */
+	--ui-bg: light-dark(#ffffff, #0e0e0f);
+	--ui-surface: light-dark(#ffffff, #161617);
 	/* Menus, popovers, dialogs, toasts: a step lighter in dark mode, where shadows don't show. */
-	--ui-surface-overlay: light-dark(#ffffff, #1f1f1f);
-	--ui-fg: light-dark(#0f172a, #ededed);
-	--ui-muted: light-dark(#475569, #a3a3a3);
+	--ui-surface-overlay: light-dark(#ffffff, #1f1f21);
+	--ui-fg: light-dark(#0f0f10, #f2f2f2);
+	/* 6.7:1 on white and 4.7:1 on a tinted alert (light); 6.7:1 on the dark surface. */
+	--ui-muted: light-dark(#5c5c5c, #9d9da1);
 	/* Fills and lines are translucent ink, not solid grays: always a step darker (lighter in dark mode)
 	   than whatever they sit on, so components fit white, gray, tinted or photo backgrounds alike. */
-	--ui-subtle: light-dark(rgb(15 23 42 / 0.05), rgb(255 255 255 / 0.06));
-	--ui-hover: light-dark(rgb(15 23 42 / 0.09), rgb(255 255 255 / 0.11));
+	--ui-faint: light-dark(rgb(0 0 0 / 0.02), rgb(255 255 255 / 0.03));
+	--ui-subtle: light-dark(rgb(0 0 0 / 0.043), rgb(255 255 255 / 0.06));
+	--ui-hover: light-dark(rgb(0 0 0 / 0.07), rgb(255 255 255 / 0.1));
 	/* Decorative hairline. Controls must not rely on it alone to be identifiable (WCAG 1.4.11). */
-	--ui-line: light-dark(rgb(15 23 42 / 0.08), rgb(255 255 255 / 0.09));
-	/* Borders: ~slate-200 on white, same at rest and on focus; the ring carries focus.
-	   Deliberate trade: ~1.2:1 against the page, below WCAG 1.4.11's 3:1. Use #64748b to pass. */
-	--ui-field-line: light-dark(rgb(15 23 42 / 0.12), rgb(255 255 255 / 0.14));
+	--ui-line: light-dark(rgb(0 0 0 / 0.075), rgb(255 255 255 / 0.09));
+	/* Field, button and panel borders, same at rest and on focus; the ring carries focus.
+	   Deliberate trade: ~1.2:1 against the page, below WCAG 1.4.11's 3:1. Use #767676 to pass. */
+	--ui-field-line: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.14));
 	/* Checkbox/radio outlines: an empty box has nothing else to show it's there, so these keep 3:1+
 	   (3.41:1 on white, 3.34:1 on slate-100, 4.46:1 dark) where text-field borders stay light. */
-	--ui-control-line: light-dark(rgb(15 23 42 / 0.5), rgb(255 255 255 / 0.45));
-	--ui-accent: light-dark(#0f172a, #ededed);
-	--ui-on-accent: light-dark(#ffffff, #0a0a0a);
+	--ui-control-line: light-dark(rgb(0 0 0 / 0.5), rgb(255 255 255 / 0.45));
+	--ui-accent: light-dark(#0f0f10, #f2f2f2);
+	--ui-on-accent: light-dark(#ffffff, #0e0e0f);
 	--ui-danger: light-dark(#b42318, #ff8a7a);
 	/* Amber: 4.55:1 as text on its own 10% tint (light), 8.29:1 (dark). */
 	--ui-warning: light-dark(#a15c07, #fbbf24);
 	--ui-on-danger: light-dark(#ffffff, #2a0703);
-	--ui-backdrop: light-dark(rgb(15 23 42 / 0.4), rgb(0 0 0 / 0.6));
+	--ui-backdrop: light-dark(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.6));
 	/* Focus: 2px ring in the brand color, 2px gap. */
 	--ui-ring: var(--ui-accent);
 	--ui-ring-width: 2px;
@@ -45,8 +47,8 @@
 		0 16px 40px -12px rgb(0 0 0 / 0.22);
 	/* Small floating things that sit on the page (the island): barely lifted. */
 	--ui-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.06), 0 2px 6px -2px rgb(0 0 0 / 0.08);
-	/* Resting cards (Card, widgets, blocks): lifted a little off the page. */
-	--ui-shadow-card: 0 1px 2px rgb(0 0 0 / 0.05), 0 6px 20px -8px rgb(0 0 0 / 0.14);
+	/* Resting cards (widgets, blocks) are flat: a 1px edge drawn as a ring, no drop shadow. */
+	--ui-shadow-card: 0 0 0 1px var(--ui-field-line);
 
 	--ui-font:
 		'Inter', 'IBM Plex Sans Arabic', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
@@ -55,13 +57,14 @@
 	/* Surfaces (cards, menus, dialogs) round with --ui-radius. Controls (buttons, fields, tags) have
 	   their own, so they can go fully pill while surfaces stay sensible. */
 	--ui-radius: 0.75rem;
-	--ui-radius-control: 0.625rem;
+	--ui-radius-control: 0.5rem;
 	/* Fields, selects, medium buttons and tabs share this height and text size. These are the
 	   pen and touch sizes (text under 16px makes iOS Safari zoom into a field); see the mouse sizes below. */
 	--ui-control-h: 2.5rem;
 	--ui-control-font: max(1rem, 16px);
 	--ui-control-h-sm: 2rem;
 	--ui-control-h-lg: 3rem;
+	--ui-control-h-xs: 2rem;
 	/* Every control's height on touch screens. Keep it at 2.75rem (44px) or more. */
 	--ui-control-h-touch: 2.75rem;
 	--ui-button-font: 0.9375rem;
@@ -70,15 +73,17 @@
 	--ui-item-h: 2.25rem;
 
 	/* SidebarLayout: its panel, its edges (sidebar and top bar), and the current page's highlight. */
-	--ui-sidebar-bg: var(--ui-subtle);
-	--ui-sidebar-line: transparent;
-	--ui-sidebar-current-bg: var(--ui-surface);
+	--ui-sidebar-bg: var(--ui-bg);
+	--ui-sidebar-line: var(--ui-line);
+	--ui-sidebar-current-bg: var(--ui-hover);
 	--ui-sidebar-current-fg: var(--ui-fg);
+	/* Behind an inset layout's sidebar and page panel. */
+	--ui-sidebar-inset-bg: light-dark(#f7f7f7, #0a0a0b);
 	/* Its size: open width, row height, row text and group titles. */
-	--ui-sidebar-w: 15rem;
+	--ui-sidebar-w: 16rem;
 	--ui-sidebar-item-h: 2.25rem;
 	--ui-sidebar-font: 0.875rem;
-	--ui-sidebar-title-font: 0.75rem;
+	--ui-sidebar-title-font: 0.875rem;
 	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
 	--ui-sheet-width: 20rem;
 
@@ -135,16 +140,18 @@
 	--ui-dur-spring: 320ms;
 }
 
-/* With a mouse, controls are compact: 32px and 14px text. Touch keeps the sizes above. */
+/* With a mouse, controls are compact: 32px, 13px button text. Touch keeps the sizes above. */
 @media (pointer: fine) {
 	:root {
 		--ui-control-h: 2rem;
 		--ui-control-font: 0.875rem;
 		--ui-control-h-sm: 1.75rem;
+		--ui-control-h-xs: 1.5rem;
 		--ui-control-h-lg: 2.5rem;
-		--ui-button-font: 0.875rem;
+		--ui-button-font: 0.8125rem;
 		--ui-font-size: 0.875rem;
 		--ui-item-h: 2rem;
+		--ui-sidebar-item-h: 2rem;
 	}
 }
 

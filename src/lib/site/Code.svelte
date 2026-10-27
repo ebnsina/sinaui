@@ -67,9 +67,10 @@
 		overflow-x: auto;
 		border-radius: inherit;
 	}
+	/* Inside: the folded code panel clips anything drawn outside it. */
 	.scroll:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
-		outline-offset: var(--ui-ring-offset);
+		outline-offset: calc(-1 * var(--ui-ring-width));
 	}
 	.scroll :global(pre) {
 		margin: 0;

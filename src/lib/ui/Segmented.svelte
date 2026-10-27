@@ -116,9 +116,7 @@
 		transform-origin: 0 0;
 		border-radius: calc(var(--ui-radius-control) - 0.1875rem);
 		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
-		box-shadow:
-			0 1px 2px rgb(0 0 0 / 0.08),
-			0 1px 1px rgb(0 0 0 / 0.04);
+		box-shadow: 0 0 0 1px var(--ui-field-line);
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 150ms ease;
@@ -156,7 +154,7 @@
 	/* Before hydration the thumb isn't placed yet, so the chosen segment raises itself. */
 	.track:not([data-ready]) .segment:has(input:checked) {
 		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
-		box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+		box-shadow: 0 0 0 1px var(--ui-field-line);
 	}
 	/* The input covers its segment: clicks, touch and screen-reader focus land on the real control. */
 	input {

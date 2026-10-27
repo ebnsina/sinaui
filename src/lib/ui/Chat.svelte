@@ -1013,6 +1013,8 @@
 		/* We hold the position ourselves when history loads above; the browser's anchoring would double it. */
 		overflow-anchor: none;
 		scrollbar-width: thin;
+		/* A message focused at the edge scrolls in with its focus ring showing. */
+		scroll-padding-block: 0.5rem;
 	}
 	.log:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
@@ -1360,6 +1362,10 @@
 		max-block-size: 16rem;
 		border-radius: 0.75rem;
 		overflow: hidden;
+	}
+	/* The crop above would cut an outside ring, so it sits inside the picture. */
+	.files :global(.pic .zoomable:focus-visible) {
+		outline-offset: calc(-1 * var(--ui-ring-width));
 	}
 	.file {
 		display: flex;

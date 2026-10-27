@@ -65,7 +65,7 @@
 		>
 		<tr
 			><td><code>striped</code></td><td><code>boolean</code>: tint every other row</td><td
-				><code>true</code></td
+				><code>false</code></td
 			></tr
 		>
 		<tr

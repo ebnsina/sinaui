@@ -200,10 +200,12 @@
 
 <style>
 	.list {
+		--tab-gap: 0.375rem;
 		position: relative;
 		display: flex;
 		gap: 0.25rem;
-		box-shadow: inset 0 -1px var(--ui-field-line);
+		padding-block-end: var(--tab-gap);
+		box-shadow: inset 0 -1px var(--ui-line);
 		/* Narrow screens scroll instead of wrapping; focus() scrolls the active tab into view. */
 		overflow-x: auto;
 		scrollbar-width: none;
@@ -211,11 +213,13 @@
 	.list[aria-orientation='vertical'] {
 		flex-direction: column;
 		flex: none;
-		box-shadow: inset -1px 0 var(--ui-field-line);
+		padding-block-end: 0;
+		padding-inline-end: var(--tab-gap);
+		box-shadow: inset -1px 0 var(--ui-line);
 		overflow: visible;
 	}
 	.list[aria-orientation='vertical']:dir(rtl) {
-		box-shadow: inset 1px 0 var(--ui-field-line);
+		box-shadow: inset 1px 0 var(--ui-line);
 	}
 
 	/* Hover: the same underline as the selected tab, in a neutral gray, gliding between tabs. */
@@ -231,27 +235,22 @@
 	.hover::after {
 		content: '';
 		position: absolute;
-		inset: auto 0 0;
-		block-size: 3px;
-		border-radius: 3px 3px 0 0;
+		inset: auto 0 calc(-1 * var(--tab-gap));
+		block-size: 1.5px;
 		background: color-mix(in srgb, var(--ui-muted) 45%, transparent);
 	}
 	/* Vertical: on the inline-end edge, like the selected bar, so both mirror right to left. */
 	[aria-orientation='vertical'] > .hover::after {
 		inset-block: 0;
-		inset-inline: auto 0;
-		inline-size: 3px;
+		inset-inline: auto calc(-1 * var(--tab-gap));
+		inline-size: 1.5px;
 		block-size: auto;
-		border-radius: 0;
-		border-start-start-radius: 3px;
-		border-end-start-radius: 3px;
 	}
 	.bar {
 		position: absolute;
 		inset-block-end: 0;
 		left: 0;
-		block-size: 3px;
-		border-radius: 3px 3px 0 0;
+		block-size: 1.5px;
 		background: var(--ui-accent);
 		transform-origin: 0 0;
 		pointer-events: none;
@@ -259,10 +258,7 @@
 	[aria-orientation='vertical'] > .bar {
 		inset-block: 0 auto;
 		inset-inline: auto 0;
-		inline-size: 3px;
-		border-radius: 0;
-		border-start-start-radius: 3px;
-		border-end-start-radius: 3px;
+		inline-size: 1.5px;
 	}
 	.list:not([data-ready]) > .bar {
 		display: none;
@@ -273,6 +269,7 @@
 		isolation: isolate;
 		/* The outer curves land on the panel's straight top edge, past its rounded corners. */
 		padding-inline: calc(var(--ui-radius) + var(--curve));
+		padding-block-end: 0;
 		box-shadow: none;
 	}
 	.folder > .hover {

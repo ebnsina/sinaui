@@ -1019,6 +1019,10 @@
 			font-weight: 600;
 			text-decoration: none;
 		}
+		/* Inside: the sidebar clips anything drawn outside it. */
+		.side-brand:focus-visible {
+			outline-offset: calc(-1 * var(--ui-ring-width));
+		}
 		:global(html[data-sidebar='collapsed']) .side-brand {
 			justify-content: center;
 			padding-inline: 0.5rem;

@@ -15,33 +15,33 @@
 </script>
 
 <div class="frame">
-	<SidebarLayout label="Reading room" {groups} {current} onselect={(item) => (current = item.href)}>
+	<SidebarLayout
+		label="Reading room"
+		{groups}
+		{current}
+		crumbs={[
+			{ label: 'Reading room', href: '#top-home' },
+			{ label: current === '#top-home' ? 'Home' : 'Catalog' }
+		]}
+		onselect={(item) => (current = item.href)}
+	>
 		{#snippet topbar()}
-			<div class="top">
-				<strong>Reading room</strong>
-				<Button size="sm" variant="outline">Reserve a seat</Button>
-			</div>
+			<Button variant="secondary">Reserve a seat</Button>
 		{/snippet}
-		<p class="page">The collapse button sits in the top bar, beside your own controls.</p>
+		<p class="page">
+			The collapse button and the breadcrumb sit in the top bar, your actions at its end.
+		</p>
 	</SidebarLayout>
 </div>
 
 <style>
 	.frame {
-		--ui-sidebar-line: var(--ui-line);
 		inline-size: 100%;
 		block-size: 20rem;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: calc(var(--ui-radius) + 0.25rem);
 		background: var(--ui-surface);
-		box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
-	}
-	.top {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.5rem;
-		padding-inline: 0.5rem 0.25rem;
+		border: 1px solid var(--ui-field-line);
 	}
 	.page {
 		margin: 0;

@@ -241,11 +241,18 @@
 		font-weight: 600;
 		text-align: start;
 	}
+	/* 40px rows split by hairlines, like Table. */
 	th,
 	td {
+		box-sizing: border-box;
+		block-size: 2.5rem;
 		padding: 0.5rem 0.75rem;
+		border-block-end: 1px solid var(--ui-line);
 		text-align: start;
 		white-space: nowrap;
+	}
+	tbody tr:last-child td {
+		border-block-end: 0;
 	}
 	th {
 		color: var(--ui-muted);
@@ -255,18 +262,6 @@
 	.end {
 		text-align: end;
 		font-variant-numeric: tabular-nums;
-	}
-	/* Rows told apart by tint, not rules. */
-	tbody tr:nth-child(odd) td {
-		background: var(--ui-subtle);
-	}
-	td:first-child {
-		border-start-start-radius: calc(var(--ui-radius) - 0.125rem);
-		border-end-start-radius: calc(var(--ui-radius) - 0.125rem);
-	}
-	td:last-child {
-		border-start-end-radius: calc(var(--ui-radius) - 0.125rem);
-		border-end-end-radius: calc(var(--ui-radius) - 0.125rem);
 	}
 	td.empty {
 		padding-block: 2rem;

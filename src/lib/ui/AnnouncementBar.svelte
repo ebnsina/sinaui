@@ -268,6 +268,9 @@
 		display: grid;
 		grid-area: center;
 		min-inline-size: 0;
+		/* Room for the link's focus ring inside the clip, given back by the margin. */
+		margin: calc(-1 * calc(var(--ui-ring-width) + var(--ui-ring-offset)));
+		padding: calc(var(--ui-ring-width) + var(--ui-ring-offset));
 		overflow: hidden;
 	}
 	.face {

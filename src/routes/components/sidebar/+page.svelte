@@ -49,6 +49,12 @@
 	{...ex('basic')}
 />
 <Example
+	id="inset"
+	title="Inset"
+	description="inset sets the page on its own rounded panel, a little in from the window, with the sidebar on the window's tint."
+	{...ex('inset')}
+/>
+<Example
 	id="nested"
 	title="Pages under pages"
 	description="An item with children opens an indented list; it's open while one of its pages is current, and the parent is marked current while it's closed. Children's icons are optional."
@@ -57,13 +63,13 @@
 <Example
 	id="topbar"
 	title="With a top bar"
-	description="A topbar snippet adds a bar above the page on every screen, and the collapse button moves into it. Here --ui-sidebar-line draws the edges."
+	description="crumbs puts a breadcrumb in a bar above the page, and the topbar snippet adds your actions at its end. The collapse button moves into the bar."
 	{...ex('topbar')}
 />
 <Example
 	id="studio"
 	title="Studio dashboard"
-	description="A full app shell: a search that narrows the menu, titled groups, a product switcher at the foot and a top bar with actions. The size tokens set a wider sidebar with 32px rows and larger type."
+	description="A full app shell: a search that narrows the menu, titled groups, a product switcher at the foot and a top bar with a breadcrumb and actions."
 	{...ex('studio')}
 />
 
@@ -100,6 +106,18 @@
 				><code>Snippet</code>: a bar above the page; holds the collapse button</td
 			><td></td></tr
 		>
+		<tr
+			><td><code>crumbs</code></td><td
+				><code>{'{'} label, href? }[]</code>: a breadcrumb in the top bar, the last item being the
+				current page</td
+			><td></td></tr
+		>
+		<tr
+			><td><code>inset</code></td><td
+				><code>boolean</code>: the page on a rounded panel inset from the window, the sidebar on the
+				window's tint</td
+			><td><code>false</code></td></tr
+		>
 	</tbody>
 </table>
 
@@ -120,7 +138,7 @@
 
 <h2 id="theming">Theming</h2>
 <p>
-	<code>--ui-sidebar-bg</code> colors the sidebar and <code>--ui-sidebar-line</code> its edges
-	(transparent by default). <code>--ui-sidebar-current-bg</code> and
+	<code>--ui-sidebar-bg</code> colors the sidebar and <code>--ui-sidebar-line</code> its edges (a
+	hairline by default). <code>--ui-sidebar-current-bg</code> and
 	<code>--ui-sidebar-current-fg</code> color the current page's highlight.
 </p>

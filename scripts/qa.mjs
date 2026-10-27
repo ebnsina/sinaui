@@ -2,6 +2,7 @@
 //   node scripts/qa.mjs freeze  [paths…]   long main-thread tasks, unresponsive pages, update loops
 //   node scripts/qa.mjs clip    [paths…]   text cut off by a container that hides overflow
 //   node scripts/qa.mjs cover   [paths…]   text with something else drawn on top of it
+//   node scripts/qa.mjs ring    [paths…]   focus rings cut off by a container that clips
 //   node scripts/qa.mjs monkey  [paths…]   ~15 random clicks, inputs and keys per page; must stay alive
 // With no paths it checks "/" and every page in the docs nav. SITE=http://… overrides the address.
 import { chromium } from 'playwright';
@@ -122,6 +123,51 @@ function clipped() {
 	return [...new Set(hits)].slice(0, 6);
 }
 
+// A control that fits its clipping container while its focus ring doesn't.
+function ringClipped() {
+	const hits = [];
+	const sel = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+	for (const el of document.querySelectorAll(sel)) {
+		if (el.disabled || el.closest('[aria-hidden="true"], [inert]')) continue;
+		if (el.getBoundingClientRect().width < 2 || +getComputedStyle(el).opacity === 0) continue;
+		el.focus({ focusVisible: true, preventScroll: true });
+		// Fields draw the ring on a wrapper (.control:has(input:focus-visible)), so look up two levels.
+		const t = [el, el.parentElement, el.parentElement?.parentElement].find(
+			(n) => n && getComputedStyle(n).outlineStyle !== 'none'
+		);
+		const cs = t && getComputedStyle(t);
+		const ring = t ? parseFloat(cs.outlineWidth) + parseFloat(cs.outlineOffset) : 0;
+		el.blur();
+		if (!t || ring < 1) continue;
+		const r = t.getBoundingClientRect();
+		if (r.width < 2 || r.height < 2) continue;
+		for (let a = t.parentElement; a && a !== document.body; a = a.parentElement) {
+			const o = getComputedStyle(a);
+			if (![o.overflowX, o.overflowY].some((v) => v !== 'visible')) continue;
+			// A scroller that really scrolls cuts things only where it's scrolled to; that's fine.
+			if (a.scrollHeight > a.clientHeight + 1 || a.scrollWidth > a.clientWidth + 1) break;
+			const c = a.getBoundingClientRect();
+			const inside =
+				r.left >= c.left - 1 &&
+				r.right <= c.right + 1 &&
+				r.top >= c.top - 1 &&
+				r.bottom <= c.bottom + 1;
+			const cut = Math.max(
+				c.left - (r.left - ring),
+				r.right + ring - c.right,
+				c.top - (r.top - ring),
+				r.bottom + ring - c.bottom
+			);
+			if (inside && cut > 1)
+				hits.push(
+					`${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || el.placeholder || '').trim().slice(0, 30)}" ring cut ${Math.round(cut)}px by ${a.tagName.toLowerCase()}.${String(a.className).split(' ')[0]}`
+				);
+			break;
+		}
+	}
+	return [...new Set(hits)].slice(0, 8);
+}
+
 // Text with an unrelated opaque element on top of it (a panel or bar covering content).
 function covered() {
 	const hits = [];
@@ -221,10 +267,11 @@ async function monkey() {
 
 if (mode === 'freeze') await freeze();
 else if (mode === 'clip') await scan([1280, 390], clipped);
+else if (mode === 'ring') await scan([1280], ringClipped);
 else if (mode === 'cover') await scan([1280, 1024, 390], covered);
 else if (mode === 'monkey') await monkey();
 else {
-	console.error('Usage: node scripts/qa.mjs freeze|clip|cover|monkey [paths…]');
+	console.error('Usage: node scripts/qa.mjs freeze|clip|cover|ring|monkey [paths…]');
 	process.exit(1);
 }
 console.log(JSON.stringify(out, null, 1));

@@ -61,9 +61,9 @@
 		inline-size: 100%;
 		block-size: 28rem;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: calc(var(--ui-radius) + 0.25rem);
 		background: var(--ui-surface);
-		box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+		border: 1px solid var(--ui-field-line);
 	}
 	.brand {
 		display: flex;
