@@ -6,7 +6,7 @@
 	import '#lib/ui/tokens.css';
 	import './docs.css';
 	import favicon from '#lib/assets/favicon.svg';
-	import { flushSync, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { afterNavigate, goto, snapshot } from '$app/navigation';
 	import { page } from '$app/state';
 	import Button from '#lib/ui/Button.svelte';
@@ -20,7 +20,8 @@
 	import { nav, type PageId } from '#lib/site/nav.js';
 	import Badge from '#lib/ui/Badge.svelte';
 	import { search } from '#lib/site/search.svelte.js';
-	import { isDark, setTheme } from '#lib/site/theme.js';
+	import { setTheme } from '#lib/ui/theme.js';
+	import ThemeToggle from '#lib/ui/ThemeToggle.svelte';
 	import {
 		ArrowUp01Icon,
 		Menu01Icon,
@@ -62,7 +63,6 @@
 	);
 	const ogImage = $derived(`${page.url.origin}${asset(`og/${ogSlug}.png` as AssetPath)}`);
 
-	let dark = $state(false);
 	let menuOpen = $state(false);
 	// Desktop sidebar collapsed to a rail. The attribute on <html> is set before paint (app.html) and
 	// drives the CSS; this mirrors it for labels.
@@ -97,7 +97,7 @@
 			group: 'Theme',
 			keywords: ['appearance', 'color', 'mode'],
 			icon: toDark ? Moon02Icon : Sun03Icon,
-			onselect: () => setTheme(toDark, null, () => flushSync(() => (dark = toDark)))
+			onselect: () => setTheme(toDark)
 		}))
 	];
 	let toc = $state<{ id: string; text: string; sub: boolean }[]>([]);
@@ -131,7 +131,6 @@
 
 	// Mirror what the head script / system already applied, instead of overriding it after paint.
 	onMount(() => {
-		dark = isDark();
 		collapsed = document.documentElement.dataset.sidebar === 'collapsed';
 		if (!isApple()) modKey = 'Ctrl ';
 		// Tells the page checks the app is live, so they don't wait on a fixed network lull.
@@ -313,22 +312,6 @@
 
 {#if !bare}<a class="skip" href="#content">Skip to content</a>{/if}
 
-{#snippet themeToggle(size: 'sm' | 'md')}
-	<Button
-		variant="ghost"
-		{size}
-		square
-		aria-label="Dark theme"
-		aria-pressed={dark}
-		onclick={(e: MouseEvent) => {
-			const next = !dark;
-			setTheme(next, e.currentTarget as Element, () => flushSync(() => (dark = next)));
-		}}
-	>
-		<Icon icon={dark ? Sun03Icon : Moon02Icon} />
-	</Button>
-{/snippet}
-
 {#if bare}
 	{@render children()}
 {:else if landing}
@@ -359,7 +342,7 @@
 			>
 				<Icon icon={Search01Icon} size={16} />
 			</Button>
-			{@render themeToggle('sm')}
+			<ThemeToggle size="sm" />
 			<Button size="sm" href={resolve('/docs')} class="bar-cta">Get started</Button>
 			<Button
 				variant="ghost"
@@ -390,7 +373,7 @@
 		>
 			<Icon icon={Search01Icon} />
 		</Button>
-		{@render themeToggle('md')}
+		<ThemeToggle />
 	</header>
 
 	<div class={['shell', tocOpen && 'toc-open']}>
@@ -422,7 +405,7 @@
 			</nav>
 			<!-- One row at the bottom: theme, search (⌘K) and the collapse toggle. -->
 			<div class="side-foot">
-				{@render themeToggle('sm')}
+				<ThemeToggle size="sm" />
 				<button
 					type="button"
 					class="side-search"

@@ -52,6 +52,11 @@ export const nav: {
 				title: 'Split button',
 				href: '/components/split-button',
 				keywords: ['menu button', 'dropdown button', 'more actions']
+			},
+			{
+				title: 'Theme toggle',
+				href: '/components/theme-toggle',
+				keywords: ['dark mode', 'light mode', 'appearance', 'color scheme']
 			}
 		]
 	},
