@@ -234,7 +234,7 @@
 	}
 	mark {
 		border-radius: 0.1875rem;
-		background: color-mix(in srgb, var(--ui-warning) 35%, transparent);
+		background: color-mix(in srgb, var(--ui-accent) 18%, transparent);
 		color: var(--ui-fg);
 	}
 </style>

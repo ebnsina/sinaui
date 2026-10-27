@@ -271,7 +271,7 @@
 	/>
 	<link
 		rel="preload"
-		href={asset('fonts/plex/IBMPlexMono-Regular-Latin1.woff2')}
+		href={asset('fonts/geist-mono/geist-mono-latin-wght-normal.woff2')}
 		as="font"
 		type="font/woff2"
 		crossorigin="anonymous"

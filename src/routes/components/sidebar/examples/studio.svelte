@@ -156,7 +156,7 @@
 		inline-size: 1rem;
 		block-size: 1rem;
 		border-radius: 0.25rem;
-		background: linear-gradient(135deg, #2f6f4f, #6aa6c8);
+		background: var(--ui-fg);
 	}
 	.name {
 		flex: 1;

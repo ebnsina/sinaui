@@ -98,6 +98,8 @@
 		position: absolute;
 		inset: 8% calc(var(--w) * 0.05) 0;
 		border-radius: calc(var(--w) * 0.08);
+		/* Square under the tab: a rounded corner there dips below the tab's straight bottom edge. */
+		border-start-start-radius: 0;
 		background: color-mix(in oklab, var(--c) 78%, #000);
 	}
 	/* The tab, joined to the back with a soft slope. */

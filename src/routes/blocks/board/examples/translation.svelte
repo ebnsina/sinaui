@@ -4,9 +4,9 @@
 
 	const labels: BoardLabel[] = [
 		{ id: 'greek', name: 'Greek', color: 'var(--ui-accent)' },
-		{ id: 'persian', name: 'Persian', color: 'var(--ui-warning)' },
+		{ id: 'persian', name: 'Persian', color: 'var(--ui-muted)' },
 		{ id: 'urgent', name: 'Urgent', color: 'var(--ui-danger)' },
-		{ id: 'review', name: 'Review', color: 'light-dark(#0369a1, #38bdf8)' }
+		{ id: 'review', name: 'Review', color: 'var(--ui-fg)' }
 	];
 	const sample = (): BoardColumn[] => [
 		{

@@ -53,10 +53,10 @@
 	// Branch colors when a first-level topic doesn't set its own.
 	const palette = [
 		'var(--ui-accent)',
-		'light-dark(#0369a1, #38bdf8)',
-		'light-dark(#be123c, #fb7185)',
-		'light-dark(#6d28d9, #a78bfa)',
-		'var(--ui-warning)'
+		'color-mix(in oklab, var(--ui-fg) 70%, var(--ui-bg))',
+		'color-mix(in oklab, var(--ui-fg) 52%, var(--ui-bg))',
+		'color-mix(in oklab, var(--ui-fg) 38%, var(--ui-bg))',
+		'var(--ui-muted)'
 	];
 	const percent = new Intl.NumberFormat('en-US', { style: 'percent' });
 

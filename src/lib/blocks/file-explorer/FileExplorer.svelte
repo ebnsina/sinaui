@@ -185,14 +185,14 @@
 		new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' })
 	);
 	const kinds: Record<FileKind, { icon: typeof File02Icon; color: string; label: string }> = {
-		pdf: { icon: Pdf01Icon, color: '#dc2626', label: 'PDF' },
-		image: { icon: Image01Icon, color: '#0891b2', label: 'Image' },
-		doc: { icon: File02Icon, color: '#2563eb', label: 'Document' },
-		sheet: { icon: Table01Icon, color: '#16a34a', label: 'Spreadsheet' },
-		audio: { icon: MusicNote01Icon, color: '#9333ea', label: 'Audio' },
-		video: { icon: Video01Icon, color: '#ea580c', label: 'Video' },
-		code: { icon: SourceCodeIcon, color: '#475569', label: 'Code' },
-		other: { icon: File02Icon, color: '#64748b', label: 'File' }
+		pdf: { icon: Pdf01Icon, color: 'var(--ui-fg)', label: 'PDF' },
+		image: { icon: Image01Icon, color: 'var(--ui-fg)', label: 'Image' },
+		doc: { icon: File02Icon, color: 'var(--ui-fg)', label: 'Document' },
+		sheet: { icon: Table01Icon, color: 'var(--ui-fg)', label: 'Spreadsheet' },
+		audio: { icon: MusicNote01Icon, color: 'var(--ui-fg)', label: 'Audio' },
+		video: { icon: Video01Icon, color: 'var(--ui-fg)', label: 'Video' },
+		code: { icon: SourceCodeIcon, color: 'var(--ui-fg)', label: 'Code' },
+		other: { icon: File02Icon, color: 'var(--ui-fg)', label: 'File' }
 	};
 	const kindOf = (i: ExplorerItem) =>
 		i.folder
@@ -1329,7 +1329,7 @@
 		position: absolute;
 		inset-block-end: 0.75rem;
 		inset-inline-end: 0.75rem;
-		color: var(--ui-warning);
+		color: var(--ui-fg);
 	}
 	.details {
 		position: sticky;

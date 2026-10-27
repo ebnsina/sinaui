@@ -1,5 +1,5 @@
-/* Inter (UI and headings), IBM Plex Mono (code) and IBM Plex Sans Arabic, self-hosted, all SIL OFL.
-   Inter is one variable file per script (weight and optical size); Plex files are IBM's own, unmodified.
+/* Inter (UI and headings), Geist Mono (code) and IBM Plex Sans Arabic, self-hosted, all SIL OFL.
+   Inter and Geist Mono are one variable file per script; Plex Arabic files are IBM's own, unmodified.
    Each face loads only for the characters it covers, so Arabic downloads only on pages with Arabic. */
 @font-face {
 	font-family: 'Inter';
@@ -23,39 +23,6 @@
 		U+A720-A7FF;
 }
 @font-face {
-	font-family: 'IBM Plex Mono';
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: url('/fonts/plex/IBMPlexMono-Regular-Latin1.woff2') format('woff2');
-	unicode-range:
-		U+0000, U+000D, U+0020-007E, U+00A0-00A3, U+00A4-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
-		U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044,
-		U+2074, U+20AC, U+2122, U+2212, U+FB01-FB02;
-}
-@font-face {
-	font-family: 'IBM Plex Mono';
-	font-style: normal;
-	font-weight: 500;
-	font-display: swap;
-	src: url('/fonts/plex/IBMPlexMono-Medium-Latin1.woff2') format('woff2');
-	unicode-range:
-		U+0000, U+000D, U+0020-007E, U+00A0-00A3, U+00A4-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
-		U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044,
-		U+2074, U+20AC, U+2122, U+2212, U+FB01-FB02;
-}
-@font-face {
-	font-family: 'IBM Plex Mono';
-	font-style: italic;
-	font-weight: 400;
-	font-display: swap;
-	src: url('/fonts/plex/IBMPlexMono-Italic-Latin1.woff2') format('woff2');
-	unicode-range:
-		U+0000, U+000D, U+0020-007E, U+00A0-00A3, U+00A4-00FF, U+0131, U+0152-0153, U+02C6, U+02DA,
-		U+02DC, U+2013-2014, U+2018-201A, U+201C-201E, U+2020-2022, U+2026, U+2030, U+2039-203A, U+2044,
-		U+2074, U+20AC, U+2122, U+2212, U+FB01-FB02;
-}
-@font-face {
 	font-family: 'IBM Plex Sans Arabic';
 	font-style: normal;
 	font-weight: 400;
@@ -74,7 +41,29 @@
 		U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E;
 }
 
-/* Local fallbacks reshaped to the real fonts' metrics: Inter against Arial, code against Menlo.
+@font-face {
+	font-family: 'Geist Mono';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('/fonts/geist-mono/geist-mono-latin-wght-normal.woff2') format('woff2-variations');
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+	font-family: 'Geist Mono';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('/fonts/geist-mono/geist-mono-latin-ext-wght-normal.woff2') format('woff2-variations');
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+		U+A720-A7FF;
+}
+
+/* Local fallbacks reshaped to the real fonts' metrics: Inter against Arial; code falls back to Menlo.
    swap + these: the real font always arrives, and the swap barely moves text. */
 @font-face {
 	font-family: 'Inter Fallback';
@@ -82,14 +71,5 @@
 	size-adjust: 107.12%;
 	ascent-override: 90.44%;
 	descent-override: 22.52%;
-	line-gap-override: 0%;
-}
-@font-face {
-	font-family: 'IBM Plex Mono Fallback';
-	/* Menlo (macOS/iOS), then Consolas (Windows): real coding fonts, not Courier. Tuned to Menlo. */
-	src: local('Menlo'), local('Menlo-Regular'), local('Consolas'), local('DejaVu Sans Mono');
-	size-adjust: 99.66%;
-	ascent-override: 102.85%;
-	descent-override: 27.59%;
 	line-gap-override: 0%;
 }

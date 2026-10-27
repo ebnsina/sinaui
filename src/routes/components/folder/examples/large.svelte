@@ -2,4 +2,4 @@
 	import Folder from '#lib/ui/Folder.svelte';
 </script>
 
-<Folder name="Translations" size="lg" count={91} color="#f59e0b" />
+<Folder name="Translations" size="lg" count={91} />

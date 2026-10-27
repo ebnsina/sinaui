@@ -427,7 +427,7 @@
 		color: var(--ui-muted);
 	}
 	.row[aria-expanded] .icon {
-		color: color-mix(in srgb, var(--ui-warning) 80%, var(--ui-fg));
+		color: var(--ui-muted);
 	}
 	.name {
 		overflow: hidden;

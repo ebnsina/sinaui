@@ -63,9 +63,10 @@ export async function importIn(layout, line) {
 	return true;
 }
 
-/** Names of the registry items with at least one file already in the project. */
+/** Names of the registry items whose files are all already in the project. Shared files (tokens,
+ *  helpers) come with nearly every item, so one file present doesn't mean the item was added. */
 export function installed(items, exists) {
-	return items.filter((i) => i.files.some((f) => exists(f.path))).map((i) => i.name);
+	return items.filter((i) => i.files.every((f) => exists(f.path))).map((i) => i.name);
 }
 
 async function get(registry, name) {
