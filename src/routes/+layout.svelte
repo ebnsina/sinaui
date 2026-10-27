@@ -253,7 +253,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content={ogImage} />
 	<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-	<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a" />
+	<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1d1e" />
 	<link
 		rel="alternate"
 		type="text/plain"
