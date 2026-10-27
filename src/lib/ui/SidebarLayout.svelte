@@ -3,10 +3,14 @@
 
 	export interface SidebarItem {
 		label: string;
+		/** With children, it only identifies the item: choosing it opens them instead. */
 		href: string;
-		icon: typeof Home01Icon;
+		/** Needed at the top level, where the collapsed rail shows only icons. */
+		icon?: typeof Home01Icon;
 		/** A count beside the name, such as items waiting; hidden at 0. */
 		badge?: number;
+		/** Pages under this one, in an indented list it opens and closes; open while one is current. */
+		children?: SidebarItem[];
 	}
 	export interface SidebarGroup {
 		title?: string;
@@ -17,9 +21,10 @@
 <script lang="ts">
 	import { ease, reduced } from './motion';
 	import { onMount, tick, type Snippet } from 'svelte';
-	import { Menu01Icon, SidebarLeftIcon } from '@hugeicons/core-free-icons';
+	import { ArrowDown01Icon, Menu01Icon, SidebarLeftIcon } from '@hugeicons/core-free-icons';
 	import Dialog from './Dialog.svelte';
 	import Icon from './Icon.svelte';
+	import Popover from './Popover.svelte';
 	import Tooltip from './Tooltip.svelte';
 	import { glide } from './glide';
 	import { scrollEdges } from './scroll-edges';
@@ -64,6 +69,14 @@
 	let currentPill = $state<HTMLSpanElement>();
 	let drawer = $state(false);
 	let settled = false;
+	// Opened or closed by hand, by href; otherwise a parent is open while one of its pages is current.
+	let opened = $state<Record<string, boolean>>({});
+	// The rail's open flyout, by its parent's href.
+	let flyout = $state<string>();
+
+	const holds = (item: SidebarItem): boolean =>
+		!!item.children?.some((c) => c.href === current || holds(c));
+	const isOpen = (item: SidebarItem) => opened[item.href] ?? holds(item);
 
 	onMount(() => {
 		if (persist) collapsed = load(persist, false);
@@ -88,9 +101,13 @@
 
 	// The current page's pill glides when the page changes or the sidebar resizes; it snaps the first time.
 	$effect(() => {
-		void [current, collapsed];
+		void [current, collapsed, JSON.stringify(opened)];
 		if (!nav || !currentPill) return;
-		const link = nav.querySelector<HTMLElement>('a[aria-current="page"]');
+		// The current page, or its parent while the page is folded away (or in the rail's flyout).
+		const marked = [...nav.querySelectorAll<HTMLElement>('.item[aria-current]')].filter(
+			(el) => el.checkVisibility() && !el.closest('.flyout')
+		);
+		const link = marked.find((el) => el.ariaCurrent === 'page') ?? marked[0];
 		requestAnimationFrame(() => {
 			if (currentPill) glide(currentPill, link, settled, 180);
 			settled = true;
@@ -115,13 +132,68 @@
 		{...extra}
 		onclick={() => {
 			drawer = false;
+			flyout = undefined;
 			onselect?.(item);
 		}}
 	>
-		<Icon icon={item.icon} size={18} />
+		{#if item.icon}<Icon icon={item.icon} size={18} />{/if}
 		<span class="text">{item.label}</span>
 		{#if item.badge}<span class="badge">{item.badge}</span>{/if}
 	</a>
+{/snippet}
+
+{#snippet entries(items: SidebarItem[], asRail: boolean, key: string)}
+	{#each items as item, i (item.href)}
+		<li>
+			{#if item.children && asRail}
+				<!-- Icons only: a parent opens its pages in a flyout beside the rail. -->
+				<Popover
+					title={item.label}
+					side="right"
+					class="flyout"
+					bind:open={() => flyout === item.href, (v) => (flyout = v ? item.href : undefined)}
+				>
+					{#snippet trigger(props)}
+						<button
+							type="button"
+							class="item"
+							aria-label={item.label}
+							aria-current={holds(item) ? 'true' : undefined}
+							{...props}
+						>
+							{#if item.icon}<Icon icon={item.icon} size={18} />{/if}
+						</button>
+					{/snippet}
+					<ul class="sub">{@render entries(item.children, false, `${key}-${i}`)}</ul>
+				</Popover>
+			{:else if item.children}
+				<button
+					type="button"
+					class="item"
+					aria-expanded={isOpen(item)}
+					aria-controls="{key}-{i}"
+					aria-current={holds(item) && !isOpen(item) ? 'true' : undefined}
+					onclick={() => (opened[item.href] = !isOpen(item))}
+				>
+					{#if item.icon}<Icon icon={item.icon} size={18} />{/if}
+					<span class="text">{item.label}</span>
+					<span class={['chev', isOpen(item) && 'open']}
+						><Icon icon={ArrowDown01Icon} size={16} /></span
+					>
+				</button>
+				<ul id="{key}-{i}" class="sub" hidden={!isOpen(item)}>
+					{@render entries(item.children, false, `${key}-${i}`)}
+				</ul>
+			{:else if asRail}
+				<!-- Icons only: the tooltip shows the name and is the link's name for screen readers. -->
+				<Tooltip text={item.label} labels side="right">
+					{#snippet trigger(props)}{@render link(item, props)}{/snippet}
+				</Tooltip>
+			{:else}
+				{@render link(item)}
+			{/if}
+		</li>
+	{/each}
 {/snippet}
 
 {#snippet fold(extra: object = {})}
@@ -138,23 +210,10 @@
 	</button>
 {/snippet}
 
-{#snippet list(asRail: boolean)}
+{#snippet list(asRail: boolean, where: string)}
 	{#each groups as group, g (g)}
 		{#if group.title}<p class="group">{group.title}</p>{/if}
-		<ul>
-			{#each group.items as item (item.href)}
-				<li>
-					{#if asRail}
-						<!-- Icons only: the tooltip shows the name and is the link's name for screen readers. -->
-						<Tooltip text={item.label} labels side="right">
-							{#snippet trigger(props)}{@render link(item, props)}{/snippet}
-						</Tooltip>
-					{:else}
-						{@render link(item)}
-					{/if}
-				</li>
-			{/each}
-		</ul>
+		<ul>{@render entries(group.items, asRail, `${id}-${where}${g}`)}</ul>
 	{/each}
 {/snippet}
 
@@ -171,14 +230,14 @@
 				onpointerover={(e) => {
 					if (e.pointerType === 'touch' || !hoverPill) return;
 					// The current page already has its own fill; hovering it adds nothing.
-					const a = (e.target as Element).closest<HTMLElement>('a.item');
+					const a = (e.target as Element).closest<HTMLElement>('.item:not(.flyout *)');
 					glide(hoverPill, a?.hasAttribute('aria-current') ? null : a, true);
 				}}
 				onpointerleave={() => hoverPill && glide(hoverPill, null, false)}
 			>
 				<span class="pill current" aria-hidden="true" bind:this={currentPill}></span>
 				<span class="pill hover" aria-hidden="true" bind:this={hoverPill}></span>
-				{@render list(collapsed)}
+				{@render list(collapsed, 'n')}
 			</nav>
 			<div class="foot">
 				{@render footer?.()}
@@ -220,7 +279,7 @@
 
 <!-- Narrow screens: the same navigation in a sheet from the start edge. -->
 <Dialog bind:open={drawer} side="start" title={label}>
-	<nav class="sheet-nav" aria-label={label}>{@render list(false)}</nav>
+	<nav class="sheet-nav" aria-label={label}>{@render list(false, 's')}</nav>
 	<!-- The sidebar's footer too (a folder tree, storage), so nothing is desktop-only. -->
 	{#if footer}<div class="sheet-foot">{@render footer()}</div>{/if}
 </Dialog>
@@ -318,7 +377,7 @@
 	.fold:hover {
 		color: var(--ui-fg);
 	}
-	.item[aria-current='page'] {
+	.item[aria-current] {
 		color: var(--ui-sidebar-current-fg);
 		font-weight: 500;
 	}
@@ -335,6 +394,26 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		transition: opacity 150ms ease;
+	}
+	/* Sub-pages line up under their parent's name: icon (18px) plus the gap (0.75rem). */
+	.sub {
+		margin-block-start: 0.125rem;
+		padding-inline-start: calc(18px + 0.75rem);
+	}
+	.sub[hidden] {
+		display: none;
+	}
+	:global(.flyout) .sub {
+		margin: 0;
+		padding: 0;
+	}
+	.chev {
+		display: flex;
+		margin-inline-start: auto;
+		transition: rotate var(--ui-dur) var(--ui-ease-out);
+	}
+	.chev.open {
+		rotate: 180deg;
 	}
 	.badge {
 		margin-inline-start: auto;
@@ -467,7 +546,8 @@
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.text,
-		.group {
+		.group,
+		.chev {
 			transition: none;
 		}
 	}
