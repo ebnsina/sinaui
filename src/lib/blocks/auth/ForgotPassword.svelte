@@ -73,6 +73,7 @@
 				name="email"
 				type="email"
 				autocomplete="username"
+				placeholder="you@example.com"
 				required
 				error={form.errors.email}
 			/>

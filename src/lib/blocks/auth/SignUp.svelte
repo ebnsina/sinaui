@@ -84,18 +84,27 @@
 			<Alert tone="danger" title="Couldn’t create the account" live>{form.errors.form}</Alert>
 		{/if}
 		{#if done}<Alert tone="success" title="Account created" live />{/if}
-		<Input label="Name" name="name" autocomplete="name" required error={form.errors.name} />
+		<Input
+			label="Name"
+			name="name"
+			autocomplete="name"
+			placeholder="Your full name"
+			required
+			error={form.errors.name}
+		/>
 		<Input
 			label="Email"
 			name="email"
 			type="email"
 			autocomplete="email"
+			placeholder="you@example.com"
 			required
 			error={form.errors.email}
 		/>
 		<PasswordInput
 			label="Password"
 			name="password"
+			placeholder="Choose a password"
 			isNew
 			required
 			minlength={minLength || undefined}

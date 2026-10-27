@@ -70,6 +70,7 @@
 			<PasswordInput
 				label="New password"
 				name="password"
+				placeholder="Choose a new password"
 				isNew
 				required
 				minlength={minLength || undefined}
@@ -79,6 +80,7 @@
 			<PasswordInput
 				label="Type it again"
 				name="confirm"
+				placeholder="The same password again"
 				autocomplete="new-password"
 				required
 				error={form.errors.confirm}

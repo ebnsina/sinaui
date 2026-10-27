@@ -81,11 +81,18 @@
 			name="email"
 			type="email"
 			autocomplete="username"
+			placeholder="you@example.com"
 			required
 			error={form.errors.email}
 		/>
 		<div class="password">
-			<PasswordInput label="Password" name="password" required error={form.errors.password} />
+			<PasswordInput
+				label="Password"
+				name="password"
+				placeholder="Your password"
+				required
+				error={form.errors.password}
+			/>
 			{#if forgotHref}<a class="forgot" href={forgotHref}>Forgot password?</a>{/if}
 		</div>
 		{#if remember}<Checkbox name="remember">Keep me signed in</Checkbox>{/if}
