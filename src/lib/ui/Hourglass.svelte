@@ -187,10 +187,10 @@
 			aria-label={top > 0 ? `${label}, ${shown} left` : `${label}, all the sand has fallen`}
 		>
 			<defs>
-				<!-- Sand: lighter where the light catches the top, deeper below, with a fine grain. -->
+				<!-- Sand in ink: lighter where the light catches the top, deeper below, with a fine grain. -->
 				<linearGradient id="{uid}-sand" x1="0" y1="0" x2="0" y2="1">
-					<stop offset="0" stop-color="#e7bd6a" />
-					<stop offset="1" stop-color="#c9933a" />
+					<stop offset="0" style:stop-color="color-mix(in oklab, var(--ui-fg) 55%, var(--ui-bg))" />
+					<stop offset="1" style:stop-color="var(--ui-fg)" />
 				</linearGradient>
 				<filter id="{uid}-grain" x="0" y="0" width="100%" height="100%">
 					<feTurbulence
@@ -341,12 +341,12 @@
 		stroke-width: 1.2;
 	}
 	.stream {
-		stroke: #d6a24b;
+		stroke: var(--ui-fg);
 		stroke-width: 0.7;
 		opacity: 0.55;
 	}
 	.grains circle {
-		fill: #d19a45;
+		fill: var(--ui-fg);
 	}
 	.readout {
 		margin: 0;

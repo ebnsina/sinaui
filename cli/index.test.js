@@ -37,15 +37,16 @@ test('the tokens import goes into the layout once, and a missing layout is creat
 	assert.match(await readFile(existing, 'utf8'), /^<script lang="ts">\n\timport/);
 });
 
-test('upgrade picks the items with any file already in the project', () => {
+test('upgrade picks only the items whose files are all in the project', () => {
 	const items = [
-		{ name: 'button', files: [{ path: 'ui/Button.svelte' }] },
+		{ name: 'button', files: [{ path: 'ui/Button.svelte' }, { path: 'ui/tokens.css' }] },
 		{ name: 'tabs', files: [{ path: 'ui/tabs/Tabs.svelte' }, { path: 'ui/tabs/Tab.svelte' }] },
-		{ name: 'chart', files: [{ path: 'ui/Chart.svelte' }] }
+		// Shares tokens.css with button, but its own file isn't here: not installed.
+		{ name: 'chart', files: [{ path: 'ui/Chart.svelte' }, { path: 'ui/tokens.css' }] }
 	];
-	const have = new Set(['ui/Button.svelte', 'ui/tabs/Tab.svelte']);
+	const have = new Set(['ui/Button.svelte', 'ui/tokens.css', 'ui/tabs/Tab.svelte']);
 	assert.deepEqual(
 		installed(items, (p) => have.has(p)),
-		['button', 'tabs']
+		['button']
 	);
 });

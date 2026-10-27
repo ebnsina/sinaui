@@ -1151,7 +1151,7 @@
 		font-weight: 600;
 	}
 	.mention.me {
-		background: color-mix(in srgb, var(--ui-warning) 30%, transparent);
+		background: color-mix(in srgb, var(--ui-accent) 28%, transparent);
 	}
 	.edited {
 		color: var(--ui-muted);

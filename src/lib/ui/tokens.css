@@ -34,10 +34,10 @@
 	--ui-ring-offset: 2px;
 	/* Chart series, in order. Set these to recolor every chart. */
 	--ui-chart-1: var(--ui-accent);
-	--ui-chart-2: var(--ui-warning);
-	--ui-chart-3: light-dark(#0369a1, #38bdf8);
-	--ui-chart-4: light-dark(#be123c, #fb7185);
-	--ui-chart-5: light-dark(#6d28d9, #a78bfa);
+	--ui-chart-2: color-mix(in oklab, var(--ui-fg) 68%, var(--ui-bg));
+	--ui-chart-3: color-mix(in oklab, var(--ui-fg) 48%, var(--ui-bg));
+	--ui-chart-4: color-mix(in oklab, var(--ui-fg) 32%, var(--ui-bg));
+	--ui-chart-5: color-mix(in oklab, var(--ui-fg) 20%, var(--ui-bg));
 	--ui-chart-6: var(--ui-muted);
 	/* Overlays separate by shadow alone, no outline (by request). In dark mode --ui-surface-overlay does it. */
 	--ui-shadow-overlay:
@@ -50,8 +50,7 @@
 
 	--ui-font:
 		'Inter', 'IBM Plex Sans Arabic', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
-	--ui-font-mono:
-		'IBM Plex Mono', 'IBM Plex Mono Fallback', ui-monospace, SFMono-Regular, Menlo, monospace;
+	--ui-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 	/* --ui-font-heading: titles' font (dialogs, cards, alerts...). Unset, they follow the text around them. */
 	/* Surfaces (cards, menus, dialogs) round with --ui-radius. Controls (buttons, fields, tags) have
 	   their own, so they can go fully pill while surfaces stay sensible. */

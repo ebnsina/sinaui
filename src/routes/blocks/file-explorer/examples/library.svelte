@@ -11,32 +11,28 @@
 			name: 'Star tables',
 			folder: true,
 			parent: null,
-			modified: day(4),
-			color: '#3b82f6'
+			modified: day(4)
 		},
 		{
 			id: 'tr',
 			name: 'Translations',
 			folder: true,
 			parent: null,
-			modified: day(6),
-			color: '#f59e0b'
+			modified: day(6)
 		},
 		{
 			id: 'letters',
 			name: 'Letters',
 			folder: true,
 			parent: null,
-			modified: day(9),
-			color: '#f43f5e'
+			modified: day(9)
 		},
 		{
 			id: 'greek',
 			name: 'From Greek',
 			folder: true,
 			parent: 'tr',
-			modified: day(7),
-			color: '#f59e0b'
+			modified: day(7)
 		},
 		{
 			id: 'f1',
@@ -111,8 +107,7 @@
 			name: 'Book of Fixed Stars',
 			folder: true,
 			parent: 'stars',
-			modified: day(3),
-			color: '#6366f1'
+			modified: day(3)
 		},
 		// Al-Sufi's catalog, one file per star: a folder big enough to draw a page at a time.
 		...Array.from({ length: 1018 }, (_, n) => ({
