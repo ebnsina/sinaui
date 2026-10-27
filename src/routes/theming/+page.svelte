@@ -48,6 +48,7 @@
 		['--ui-sidebar-item-h', 'Sidebar layout: the height of each page row', false],
 		['--ui-sidebar-font', 'Sidebar layout: the page rows’ text size', false],
 		['--ui-sidebar-title-font', 'Sidebar layout: the group titles’ text size', false],
+		['--ui-sheet-width', 'Dialog: a side sheet’s width', false],
 		['--ui-ease-out', 'Things arriving', false],
 		['--ui-ease-in-out', 'Things moving on screen', false],
 		['--ui-ease-drawer', 'Sheets and drawers', false],

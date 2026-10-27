@@ -57,6 +57,8 @@
 		onfinish?: (message: UIMessage) => void;
 		/** Called when a reply fails, with the error your server sent (its `code` included): to choose `failure`. */
 		onerror?: (error: Error) => void;
+		/** Fill the container's height (a full-height sheet, a split pane) instead of a 34rem card. */
+		fill?: boolean;
 		class?: string;
 	}
 
@@ -78,6 +80,7 @@
 		tool,
 		onfinish,
 		onerror,
+		fill = false,
 		class: className
 	}: Props = $props();
 
@@ -211,7 +214,7 @@
 
 <!-- Files dropped anywhere on the chat are attached (pointer only; the attach button does the same). -->
 <section
-	class={['chat', dropping && 'dropping', className]}
+	class={['chat', fill && 'fill', dropping && 'dropping', className]}
 	aria-label={title}
 	ondragover={(e) => {
 		if (!attachments || !e.dataTransfer?.types.includes('Files')) return;
@@ -445,6 +448,10 @@
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
 		font: 0.9375rem/1.55 var(--ui-font);
+	}
+	.fill {
+		block-size: 100%;
+		max-block-size: none;
 	}
 	header {
 		display: flex;

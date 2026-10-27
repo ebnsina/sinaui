@@ -231,6 +231,7 @@
 			title={current?.title ?? 'New chat'}
 			onsend={sent}
 			onnew={start}
+			fill
 		>
 			{#snippet header(newChat, busy)}
 				<div class="bar">
@@ -316,8 +317,6 @@
 	}
 	/* Doubled class: beats the chat's own card styles regardless of stylesheet order. */
 	.assistant :global(.chat.chat) {
-		block-size: 100%;
-		max-block-size: none;
 		border-radius: 0;
 		background: none;
 		box-shadow: none;

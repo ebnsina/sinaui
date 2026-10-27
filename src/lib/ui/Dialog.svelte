@@ -236,7 +236,7 @@
 		--from: -100%;
 		margin: 0;
 		margin-inline-end: auto;
-		inline-size: min(20rem, 100vw - 3rem);
+		inline-size: min(var(--ui-sheet-width), 100vw - 3rem);
 		block-size: 100dvh;
 		max-block-size: 100dvh;
 		border-radius: 0;
