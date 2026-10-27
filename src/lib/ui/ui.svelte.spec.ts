@@ -384,6 +384,13 @@ describe('sinaui', () => {
 		const room = content.clientHeight - parseFloat(paddingTop) - parseFloat(paddingBottom);
 		const chat = page.getByRole('region', { name: 'Ask the librarian' }).element();
 		expect(Math.round(chat.getBoundingClientRect().height)).toBe(Math.round(room));
+		// bare: no card of its own inside the sheet.
+		const card = getComputedStyle(chat);
+		expect([card.boxShadow, card.backgroundColor, card.borderTopLeftRadius]).toEqual([
+			'none',
+			'rgba(0, 0, 0, 0)',
+			'0px'
+		]);
 	});
 
 	it('dialog: Escape closes and focus returns to the trigger', async () => {
@@ -1830,6 +1837,10 @@ describe('sinaui', () => {
 		await nav.getByRole('button', { name: 'Collections' }).click();
 		const flyout = page.getByRole('dialog', { name: 'Collections' });
 		await expect.element(flyout).toBeVisible();
+		// Its rows show their names, though the rail around it hides its own.
+		const name = flyout.getByRole('link', { name: 'Star charts' }).element();
+		await expect.poll(() => getComputedStyle(name.querySelector('.text')!).opacity).toBe('1');
+		await expect.poll(() => getComputedStyle(name.querySelector('.badge')!).opacity).toBe('1');
 		const panel = flyout.element();
 		await flyout.getByRole('link', { name: 'Manuscripts' }).click();
 		await expect.poll(() => panel.matches(':popover-open')).toBe(false);

@@ -232,6 +232,7 @@
 			onsend={sent}
 			onnew={start}
 			fill
+			bare
 		>
 			{#snippet header(newChat, busy)}
 				<div class="bar">
@@ -314,12 +315,6 @@
 	}
 	.search :global(.field) {
 		min-inline-size: 0;
-	}
-	/* Doubled class: beats the chat's own card styles regardless of stylesheet order. */
-	.assistant :global(.chat.chat) {
-		border-radius: 0;
-		background: none;
-		box-shadow: none;
 	}
 	/* No hairline under the header: it would stop at the rail and leave the card lopsided. */
 	.assistant :global(.chat.chat > header) {

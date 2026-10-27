@@ -59,6 +59,8 @@
 		onerror?: (error: Error) => void;
 		/** Fill the container's height (a full-height sheet, a split pane) instead of a 34rem card. */
 		fill?: boolean;
+		/** No card of its own (corners, background, shadow), inside something that already is one. */
+		bare?: boolean;
 		class?: string;
 	}
 
@@ -81,6 +83,7 @@
 		onfinish,
 		onerror,
 		fill = false,
+		bare = false,
 		class: className
 	}: Props = $props();
 
@@ -214,7 +217,7 @@
 
 <!-- Files dropped anywhere on the chat are attached (pointer only; the attach button does the same). -->
 <section
-	class={['chat', fill && 'fill', dropping && 'dropping', className]}
+	class={['chat', fill && 'fill', bare && 'bare', dropping && 'dropping', className]}
 	aria-label={title}
 	ondragover={(e) => {
 		if (!attachments || !e.dataTransfer?.types.includes('Files')) return;
@@ -452,6 +455,11 @@
 	.fill {
 		block-size: 100%;
 		max-block-size: none;
+	}
+	.bare {
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
 	}
 	header {
 		display: flex;
