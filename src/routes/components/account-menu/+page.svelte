@@ -78,8 +78,12 @@
 			></td></tr
 		>
 		<tr
+			><td><code>theme</code></td><td><code>boolean</code>: a light/dark switch under the name</td
+			><td><code>false</code></td></tr
+		>
+		<tr
 			><td><code>labels</code></td><td
-				><code>{'{'} account, organizations, newOrg, signOut }</code></td
+				><code>{'{'} account, organizations, newOrg, signOut, darkTheme, lightTheme }</code></td
 			><td>English</td></tr
 		>
 	</tbody>

@@ -1,9 +1,16 @@
 <script lang="ts">
-	import { Add01Icon, Logout01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
-	import type { Snippet } from 'svelte';
+	import {
+		Add01Icon,
+		Logout01Icon,
+		Moon02Icon,
+		Sun03Icon,
+		Tick02Icon
+	} from '@hugeicons/core-free-icons';
+	import { flushSync, onMount, type Snippet } from 'svelte';
 	import Avatar from './Avatar.svelte';
 	import Icon from './Icon.svelte';
 	import * as Dropdown from './dropdown/index.js';
+	import { isDark, setTheme } from './theme.js';
 
 	interface Org {
 		id: string;
@@ -24,8 +31,17 @@
 		children?: Snippet;
 		/** Shows "Sign out" when given. */
 		onsignout?: () => void;
+		/** Shows a light/dark switch under the person's name. */
+		theme?: boolean;
 		/** Translate these for non-English UIs. */
-		labels?: { account?: string; organizations?: string; newOrg?: string; signOut?: string };
+		labels?: {
+			account?: string;
+			organizations?: string;
+			newOrg?: string;
+			signOut?: string;
+			darkTheme?: string;
+			lightTheme?: string;
+		};
 		class?: string;
 	}
 
@@ -37,6 +53,7 @@
 		onneworg,
 		children,
 		onsignout,
+		theme = false,
 		labels = {},
 		class: className
 	}: Props = $props();
@@ -45,7 +62,25 @@
 		organizations: 'Organizations',
 		newOrg: 'New organization',
 		signOut: 'Sign out',
+		darkTheme: 'Dark theme',
+		lightTheme: 'Light theme',
 		...labels
+	});
+
+	// Follows the theme wherever it changes (a toggle elsewhere, the system setting).
+	let dark = $state(false);
+	onMount(() => {
+		if (!theme) return;
+		const sync = () => (dark = isDark());
+		sync();
+		const observer = new MutationObserver(sync);
+		observer.observe(document.documentElement, { attributeFilter: ['data-theme'] });
+		const system = matchMedia('(prefers-color-scheme: dark)');
+		system.addEventListener('change', sync);
+		return () => {
+			observer.disconnect();
+			system.removeEventListener('change', sync);
+		};
 	});
 </script>
 
@@ -59,6 +94,19 @@
 		<span class="name">{user.name}</span>
 		{#if user.email}<span class="email">{user.email}</span>{/if}
 	</div>
+	{#if theme}
+		<!-- Stays open, so the change is seen where it was made. -->
+		<Dropdown.Item
+			onselect={(e) => {
+				e.preventDefault();
+				const next = !dark;
+				setTheme(next, e.currentTarget as Element, () => flushSync(() => (dark = next)));
+			}}
+		>
+			<Icon icon={dark ? Sun03Icon : Moon02Icon} />
+			{dark ? t.lightTheme : t.darkTheme}
+		</Dropdown.Item>
+	{/if}
 	{#if orgs.length || onneworg}
 		<Dropdown.Separator />
 		<div class="section" role="none">{t.organizations}</div>

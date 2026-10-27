@@ -17,6 +17,8 @@
 		flush?: boolean;
 		/** Chosen from a set of cards. */
 		selected?: boolean;
+		/** danger: a red edge and title, for actions that can't be undone (a "Danger zone"). */
+		tone?: 'danger';
 	}
 
 	let {
@@ -29,6 +31,7 @@
 		footer,
 		flush = false,
 		selected = false,
+		tone,
 		class: className,
 		...rest
 	}: Props = $props();
@@ -36,7 +39,16 @@
 
 <!-- A flat bordered panel: title, content and actions inside it.
      With href, the title's link stretches over the whole card, so screen readers hear one name. -->
-<article class={['card', href && 'linked', selected && 'selected', className]} {...rest}>
+<article
+	class={[
+		'card',
+		href && 'linked',
+		selected && 'selected',
+		tone === 'danger' && 'danger',
+		className
+	]}
+	{...rest}
+>
 	{#if title || aside}
 		<div class="head">
 			{#if title}
@@ -66,6 +78,12 @@
 		background: var(--ui-surface);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.5 var(--ui-font);
+	}
+	.danger {
+		border-color: color-mix(in oklab, var(--ui-danger) 45%, var(--ui-field-line));
+	}
+	.danger .title {
+		color: var(--ui-danger);
 	}
 	.selected {
 		border-color: var(--ui-fg);
