@@ -45,6 +45,13 @@
 	description="The title’s link stretches over the whole card, so it is one link with one name, and buttons inside still work."
 	{...ex('linked')}
 />
+<Example
+	id="danger"
+	title="Danger zone"
+	stack
+	description="tone=&quot;danger&quot; gives a red edge and title. Each action is a row: what it does on the left, a normal-sized button on the right."
+	{...ex('danger')}
+/>
 
 <h2 id="props">Props</h2>
 <table>
@@ -67,6 +74,11 @@
 			><td><code>flush</code></td><td
 				><code>boolean</code>: the panel's content runs edge to edge</td
 			><td><code>false</code></td></tr
+		>
+		<tr
+			><td><code>tone</code></td><td
+				><code>'danger'</code>: a red edge and title, for actions that can't be undone</td
+			><td></td></tr
 		>
 		<tr
 			><td><code>selected</code></td><td><code>boolean</code>: chosen from a set of cards</td><td

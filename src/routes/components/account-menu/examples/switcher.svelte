@@ -23,6 +23,7 @@
 	}}
 	onneworg={() => toast('A new organization would be created here.')}
 	onsignout={() => toast('Signed out.')}
+	theme
 >
 	<Dropdown.Item onselect={() => toast('Account settings would open here.')}>
 		<Icon icon={Settings01Icon} /> Account settings

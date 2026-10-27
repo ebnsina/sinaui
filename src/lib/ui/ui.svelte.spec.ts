@@ -2864,6 +2864,27 @@ describe('sinaui', () => {
 		expect(el.hasAttribute('aria-label')).toBe(false);
 	});
 
+	it('account menu: the theme item switches light and dark and says which comes next', async () => {
+		document.documentElement.dataset.theme = 'light';
+		mount(AccountMenu, { user: { name: 'Fatima al-Fihri' }, theme: true });
+		await page.getByRole('button', { name: 'Account: Fatima al-Fihri' }).click();
+		await page.getByRole('menuitem', { name: 'Dark theme' }).click();
+		await expect.poll(() => document.documentElement.dataset.theme).toBe('dark');
+		await expect.element(page.getByRole('menuitem', { name: 'Light theme' })).toBeVisible();
+		delete document.documentElement.dataset.theme;
+		localStorage.removeItem('theme');
+	});
+
+	it('card: the danger tone colors the edge and the title', async () => {
+		const r = mount(Card, { title: 'Danger zone', tone: 'danger' });
+		const card = r.container.querySelector('.card')!;
+		const plain = mount(Card, { title: 'Details' }).container.querySelector('.card')!;
+		expect(getComputedStyle(card).borderTopColor).not.toBe(getComputedStyle(plain).borderTopColor);
+		expect(getComputedStyle(card.querySelector('.title')!).color).not.toBe(
+			getComputedStyle(plain.querySelector('.title')!).color
+		);
+	});
+
 	it('sparkline: an image named by its label; a line for two or more values, a hairline otherwise', async () => {
 		const r = mount(Sparkline, { values: [3, 5, 4, 8], label: 'Visits, last 4 days: rising' });
 		await expect
