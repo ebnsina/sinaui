@@ -5,7 +5,7 @@ html {
 }
 /* The site frame is gray; content sits on a white panel. Components keep --ui-bg / --ui-surface. */
 :root {
-	--page: light-dark(#f3f5f8, #0a0a0a);
+	--page: light-dark(#f3f5f8, #17191a);
 	--code-bg: light-dark(#f3f3f4, #222222);
 }
 body {
