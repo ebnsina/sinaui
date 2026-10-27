@@ -111,6 +111,7 @@ import ServerWords from '../../routes/blocks/auth/examples/server-words.svelte';
 import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
 import SizeRow from '../../routes/theming/examples/size.svelte';
+import ChatSheet from '../../routes/blocks/ai-chat/examples/sheet.svelte';
 import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
 import PillTabs from '../../routes/components/tabs/examples/pill.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
@@ -363,6 +364,25 @@ describe('sinaui', () => {
 			dialog.close();
 			r.unmount();
 		}
+	});
+
+	it('sheet width: 20rem by default, --ui-sheet-width widens it; a fill chat takes the full height', async () => {
+		const cap = (px: number) => Math.min(px, window.innerWidth - 48);
+		const r = mount(Dialog, { open: true, title: 'Catalog', side: 'end' });
+		const plain = document.querySelector<HTMLDialogElement>('dialog[open]')!;
+		expect(plain.getBoundingClientRect().width).toBe(cap(320));
+		plain.close();
+		r.unmount();
+
+		mount(ChatSheet);
+		await page.getByRole('button', { name: 'Ask the librarian' }).click();
+		const sheet = page.getByRole('dialog', { name: 'Librarian' }).element();
+		await expect.poll(() => sheet.getBoundingClientRect().width).toBe(cap(448));
+		const content = sheet.querySelector<HTMLElement>('.content')!;
+		const { paddingTop, paddingBottom } = getComputedStyle(content);
+		const room = content.clientHeight - parseFloat(paddingTop) - parseFloat(paddingBottom);
+		const chat = page.getByRole('region', { name: 'Ask the librarian' }).element();
+		expect(Math.round(chat.getBoundingClientRect().height)).toBe(Math.round(room));
 	});
 
 	it('dialog: Escape closes and focus returns to the trigger', async () => {

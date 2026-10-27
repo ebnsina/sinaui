@@ -53,6 +53,12 @@
 	{...ex('failure')}
 />
 <Example
+	id="sheet"
+	title="In a side sheet"
+	description="fill makes the chat take its container's height instead of a fixed card, here a sheet widened with --ui-sheet-width."
+	{...ex('sheet')}
+/>
+<Example
 	id="terminal"
 	title="Terminal agent"
 	description="An agent in a terminal: it thinks, calls tools and shows what each returned, then answers. Try “How did Ibn al-Haytham explain sight?”, then /help. Escape interrupts a run; Up brings back what you sent."
@@ -167,6 +173,12 @@
 		>
 		<tr
 			><td><code>attachments</code></td><td><code>boolean</code>: the paperclip, drop and paste</td
+			><td><code>false</code>; <code>true</code> in <code>Assistant</code></td></tr
+		>
+		<tr
+			><td><code>fill</code></td><td
+				><code>boolean</code>: fill the container's height, such as a side sheet, instead of a 34rem
+				card</td
 			><td><code>false</code>; <code>true</code> in <code>Assistant</code></td></tr
 		>
 	</tbody>

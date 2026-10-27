@@ -79,6 +79,8 @@
 	--ui-sidebar-item-h: 2.25rem;
 	--ui-sidebar-font: 0.875rem;
 	--ui-sidebar-title-font: 0.75rem;
+	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
+	--ui-sheet-width: 20rem;
 
 	/* Motion: enter fast and settle, exit quicker than you came. --ui-ease-out is the everyday curve. */
 	--ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);

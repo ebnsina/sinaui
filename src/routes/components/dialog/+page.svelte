@@ -54,7 +54,7 @@
 <Example
 	id="sheet"
 	title="Side sheet"
-	description="side=&quot;start&quot; slides in from the reading-start edge, and from the right in right-to-left pages. The docs' mobile navigation uses it."
+	description="side=&quot;start&quot; slides in from the reading-start edge, and from the right in right-to-left pages; side=&quot;end&quot; from the other. The docs' mobile navigation uses it. Set --ui-sheet-width (20rem by default) to make it wider."
 	{...ex('sheet')}
 />
 
@@ -69,7 +69,7 @@
 		<tr><td><code>title</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr><td><code>description</code></td><td><code>string</code></td><td></td></tr>
 		<tr
-			><td><code>side</code></td><td><code>'center' | 'start'</code></td><td
+			><td><code>side</code></td><td><code>'center' | 'start' | 'end'</code></td><td
 				><code>'center'</code></td
 			></tr
 		>
