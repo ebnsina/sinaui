@@ -79,7 +79,7 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		gap: 1rem;
-		padding: 0.5rem calc(1rem + 1px) 0.25rem;
+		padding: 0.375rem calc(0.75rem + 1px) 0.25rem;
 	}
 	.heading {
 		min-inline-size: 0;
@@ -130,7 +130,7 @@
 		display: grid;
 		gap: 0.75rem;
 		min-inline-size: 0;
-		padding: 1rem;
+		padding: 0.75rem;
 		border: 1px solid var(--ui-line);
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface);

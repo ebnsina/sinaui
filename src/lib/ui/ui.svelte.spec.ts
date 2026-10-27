@@ -11,6 +11,7 @@ import Dialog from './Dialog.svelte';
 import Textarea from './Textarea.svelte';
 import Progress from './Progress.svelte';
 import Combobox from './Combobox.svelte';
+import ThemeToggle from './ThemeToggle.svelte';
 import axe from 'axe-core';
 import '#lib/ui/tokens.css';
 import '../../routes/docs.css';
@@ -3132,6 +3133,24 @@ describe('sinaui', () => {
 		await expect.element(link).toHaveAttribute('href', '#linked');
 		await expect.element(page.getByRole('heading', { name: 'Al-Khwarizmi' })).toBeVisible();
 		expect(document.querySelectorAll('main article a').length).toBe(3);
+	});
+
+	it('theme toggle: switches data-theme, remembers it, and reports it as pressed', async () => {
+		localStorage.setItem('theme', 'light');
+		document.documentElement.dataset.theme = 'light';
+		render(ThemeToggle);
+		const toggle = page.getByRole('button', { name: 'Dark theme' });
+		await expect.element(toggle).toHaveAttribute('aria-pressed', 'false');
+		await toggle.click();
+		await expect.element(toggle).toHaveAttribute('aria-pressed', 'true');
+		await expect.poll(() => document.documentElement.dataset.theme).toBe('dark');
+		expect(localStorage.getItem('theme')).toBe('dark');
+		await toggle.click();
+		await expect.element(toggle).toHaveAttribute('aria-pressed', 'false');
+		await expect.poll(() => document.documentElement.dataset.theme).toBe('light');
+		expect(localStorage.getItem('theme')).toBe('light');
+		localStorage.removeItem('theme');
+		delete document.documentElement.dataset.theme;
 	});
 
 	it('skeleton: hidden from screen readers while its region reports busy', async () => {
