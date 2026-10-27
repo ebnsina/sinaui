@@ -121,7 +121,9 @@ import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
 import StatTabs from '#lib/ui/StatTabs.svelte';
 import AccountMenu from '#lib/ui/AccountMenu.svelte';
+import Sparkline from '#lib/ui/Sparkline.svelte';
 import StatTabsPage from '../../routes/components/stat-tabs/+page.svelte';
+import SparklinePage from '../../routes/components/sparkline/+page.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -177,6 +179,7 @@ const pages = {
 	CarouselPage,
 	SidebarPage,
 	StatTabsPage,
+	SparklinePage,
 	PasswordInputPage,
 	SearchFieldPage,
 	EmptyStatePage,
@@ -2859,6 +2862,20 @@ describe('sinaui', () => {
 		expect(el.getAttribute('aria-hidden')).toBe('true');
 		expect(el.hasAttribute('role')).toBe(false);
 		expect(el.hasAttribute('aria-label')).toBe(false);
+	});
+
+	it('sparkline: an image named by its label; a line for two or more values, a hairline otherwise', async () => {
+		const r = mount(Sparkline, { values: [3, 5, 4, 8], label: 'Visits, last 4 days: rising' });
+		await expect
+			.element(page.getByRole('img', { name: 'Visits, last 4 days: rising' }))
+			.toBeVisible();
+		expect(r.container.querySelector('path.line')?.getAttribute('d')).toMatch(
+			/^M0\.00 .* L100\.00 /
+		);
+		r.unmount();
+		const flat = mount(Sparkline, { values: [7], label: 'One day' });
+		expect(flat.container.querySelector('path.line')).toBeNull();
+		expect(flat.container.querySelector('line.flat')).not.toBeNull();
 	});
 
 	it('account menu: names the person, ticks the current org, switches and signs out', async () => {
