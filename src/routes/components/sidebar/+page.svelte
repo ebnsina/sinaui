@@ -35,7 +35,8 @@
 <Install names="sidebar-layout">
 	<p>
 		Copy <code>src/lib/ui/SidebarLayout.svelte</code>, <code>Dialog.svelte</code>,
-		<code>Tooltip.svelte</code>, <code>floating.ts</code>, <code>glide.ts</code>,
+		<code>Tooltip.svelte</code>, <code>Popover.svelte</code>, <code>floating.ts</code>,
+		<code>glide.ts</code>,
 		<code>Icon.svelte</code> and <code>tokens.css</code>. No other dependencies.
 	</p>
 </Install>
@@ -46,6 +47,12 @@
 	title="Library app"
 	description="Collapse to an icon rail with the button or ⌘B; the icons name themselves in tooltips. The highlight glides to the page you choose."
 	{...ex('basic')}
+/>
+<Example
+	id="nested"
+	title="Pages under pages"
+	description="An item with children opens an indented list; it's open while one of its pages is current, and the parent is marked current while it's closed. Children's icons are optional."
+	{...ex('nested')}
 />
 <Example
 	id="topbar"
@@ -67,7 +74,10 @@
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr
 			><td><code>groups</code></td><td
-				><code>{'{'} title?, items: {'{'} label, href, icon }[] }[]</code></td
+				><code>{'{'} title?, items: {'{'} label, href, icon?, badge?, children? }[] }[]</code>:
+				<code>children</code>
+				are items too, opened from their parent; <code>icon</code> is needed at the top level for the
+				rail</td
 			><td></td></tr
 		>
 		<tr
@@ -99,6 +109,11 @@
 		A labeled navigation landmark; the current page carries <code>aria-current="page"</code>.
 	</li>
 	<li>Collapsed, each icon's tooltip is its name, for sighted people and screen readers alike.</li>
+	<li>
+		A parent is a button that says whether its pages are shown (<code>aria-expanded</code>), and
+		carries <code>aria-current</code> while it holds the current page out of sight. In the rail it opens
+		its pages in a flyout: Escape closes it and returns focus.
+	</li>
 	<li>The collapse button says whether the sidebar is open, and its shortcut is announced.</li>
 	<li>On narrow screens the same links open in a modal sheet with a close button.</li>
 </ul>

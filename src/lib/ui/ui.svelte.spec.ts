@@ -61,6 +61,7 @@ import ContextMenuPage from '../../routes/components/context-menu/+page.svelte';
 import HoverCardPage from '../../routes/components/hover-card/+page.svelte';
 import CarouselPage from '../../routes/components/carousel/+page.svelte';
 import SidebarPage from '../../routes/components/sidebar/+page.svelte';
+import SidebarNested from '../../routes/components/sidebar/examples/nested.svelte';
 import PasswordInputPage from '../../routes/components/password-input/+page.svelte';
 import SearchFieldPage from '../../routes/components/search-field/+page.svelte';
 import EmptyStatePage from '../../routes/components/empty-state/+page.svelte';
@@ -1792,6 +1793,49 @@ describe('sinaui', () => {
 		await expect
 			.element(page.getByRole('button', { name: /Collapse sidebar/ }).first())
 			.toHaveAttribute('aria-expanded', 'true');
+		await page.viewport(414, 896);
+	});
+
+	it('sidebar layout: nested pages open and close, mark their parent current, and fly out of the rail', async () => {
+		await page.viewport(1280, 900);
+		render(SidebarNested);
+		const nav = page.getByRole('navigation', { name: 'Archive' });
+		const collections = nav.getByRole('button', { name: 'Collections' });
+		const rooms = nav.getByRole('button', { name: 'Reading rooms' });
+		// Open by itself: its Maps page is current.
+		await expect.element(collections).toHaveAttribute('aria-expanded', 'true');
+		await expect
+			.element(nav.getByRole('link', { name: 'Maps' }))
+			.toHaveAttribute('aria-current', 'page');
+		await expect.element(rooms).toHaveAttribute('aria-expanded', 'false');
+		await expect.element(nav.getByRole('link', { name: 'Baghdad' })).not.toBeInTheDocument();
+
+		// Closed, the parent stands in for the page it holds.
+		await collections.click();
+		await expect.element(collections).toHaveAttribute('aria-expanded', 'false');
+		await expect.element(collections).toHaveAttribute('aria-current', 'true');
+		await expect.element(nav.getByRole('link', { name: 'Maps' })).not.toBeInTheDocument();
+		// Safari doesn't focus a button on click.
+		(collections.element() as HTMLElement).focus();
+		await userEvent.keyboard('{Enter}');
+		await expect.element(collections).toHaveAttribute('aria-expanded', 'true');
+		await rooms.click();
+		await nav.getByRole('link', { name: 'Baghdad' }).click();
+		await expect
+			.element(nav.getByRole('link', { name: 'Baghdad' }))
+			.toHaveAttribute('aria-current', 'page');
+
+		// The rail: a parent opens its pages in a flyout; choosing one closes it.
+		await userEvent.keyboard('{Control>}b{/Control}');
+		await nav.getByRole('button', { name: 'Collections' }).click();
+		const flyout = page.getByRole('dialog', { name: 'Collections' });
+		await expect.element(flyout).toBeVisible();
+		const panel = flyout.element();
+		await flyout.getByRole('link', { name: 'Manuscripts' }).click();
+		await expect.poll(() => panel.matches(':popover-open')).toBe(false);
+		await expect
+			.element(nav.getByRole('button', { name: 'Collections' }))
+			.toHaveAttribute('aria-current', 'true');
 		await page.viewport(414, 896);
 	});
 
