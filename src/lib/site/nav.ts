@@ -304,6 +304,11 @@ export const nav: {
 				keywords: ['graph', 'bar', 'line', 'pie', 'donut', 'radar', 'area', 'plot']
 			},
 			{
+				title: 'Sparkline',
+				href: '/components/sparkline',
+				keywords: ['trend', 'mini chart', 'tiny chart', 'inline chart']
+			},
+			{
 				title: 'Chat',
 				href: '/components/chat',
 				keywords: ['messages', 'conversation', 'thread', 'messenger', 'inbox', 'dm']

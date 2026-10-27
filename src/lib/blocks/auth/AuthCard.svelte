@@ -62,7 +62,7 @@
 		display: grid;
 		gap: 1.25rem;
 		box-sizing: border-box;
-		inline-size: min(26rem, 100%);
+		inline-size: min(24rem, 100%);
 		padding: 2rem 1.75rem;
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border: 1px solid transparent;
