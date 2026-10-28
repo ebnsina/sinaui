@@ -3229,6 +3229,14 @@ describe('sinaui', () => {
 		expect(document.querySelectorAll('main article a').length).toBe(3);
 	});
 
+	it('card: in a row of cards, every footer sits on the bottom edge', async () => {
+		const footer = createRawSnippet(() => ({ render: () => '<button>Install</button>' }));
+		const r = mount(Card, { title: 'Gitea', description: 'Short.', footer, style: 'block-size: 20rem' });
+		const card = r.container.querySelector<HTMLElement>('.card')!;
+		const foot = card.querySelector<HTMLElement>('.footer')!;
+		expect(Math.round(card.getBoundingClientRect().bottom - foot.getBoundingClientRect().bottom)).toBeLessThanOrEqual(1);
+	});
+
 	it('card: a flush panel is square where it meets the title and the footer', async () => {
 		const children = createRawSnippet(() => ({ render: () => '<ul><li>Basra</li></ul>' }));
 		const footer = createRawSnippet(() => ({ render: () => '<button>More</button>' }));
