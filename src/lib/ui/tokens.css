@@ -68,6 +68,8 @@
 	/* Every control's height on touch screens. Keep it at 2.75rem (44px) or more. */
 	--ui-control-h-touch: 2.75rem;
 	--ui-button-font: 0.9375rem;
+	/* a large button's side padding; raise it with a pill radius for hero buttons */
+	--ui-button-pad-lg: 1rem;
 	/* Everyday UI text (labels, menus, lists) and the height of a menu or list row. */
 	--ui-font-size: 0.9375rem;
 	--ui-item-h: 2.25rem;
