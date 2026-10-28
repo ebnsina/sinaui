@@ -84,6 +84,9 @@
 	--ui-sidebar-item-h: 2.25rem;
 	--ui-sidebar-font: 0.875rem;
 	--ui-sidebar-title-font: 0.875rem;
+	/* group titles: set uppercase with a little tracking for small-caps style labels */
+	--ui-sidebar-title-case: none;
+	--ui-sidebar-title-tracking: normal;
 	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
 	--ui-sheet-width: 20rem;
 

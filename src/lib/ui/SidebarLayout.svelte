@@ -353,6 +353,8 @@
 		color: var(--ui-muted);
 		font-size: var(--ui-sidebar-title-font);
 		font-weight: 500;
+		text-transform: var(--ui-sidebar-title-case);
+		letter-spacing: var(--ui-sidebar-title-tracking);
 		white-space: nowrap;
 		transition: opacity 150ms ease;
 	}
