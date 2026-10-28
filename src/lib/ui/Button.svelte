@@ -106,7 +106,7 @@
 	}
 	.lg {
 		min-block-size: var(--ui-control-h-lg);
-		padding-inline: 1rem;
+		padding-inline: var(--ui-button-pad-lg);
 		font-size: 0.9375rem;
 	}
 	@media (pointer: coarse) {
