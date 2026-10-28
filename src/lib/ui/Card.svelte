@@ -70,8 +70,9 @@
 	.card {
 		position: relative;
 		box-sizing: border-box;
-		display: grid;
-		align-content: start;
+		/* a column, so a card stretched to its row's height keeps its footer on the bottom edge */
+		display: flex;
+		flex-direction: column;
 		min-inline-size: 0;
 		border: 1px solid var(--ui-field-line);
 		border-radius: calc(var(--ui-radius) + 0.25rem);
@@ -164,6 +165,7 @@
 	}
 	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog. */
 	.footer {
+		margin-block-start: auto;
 		display: flex;
 		flex-wrap: wrap-reverse;
 		align-items: center;
