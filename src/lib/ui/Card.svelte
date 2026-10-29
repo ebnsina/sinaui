@@ -1,10 +1,14 @@
 <script lang="ts">
+	import type { Home01Icon } from '@hugeicons/core-free-icons';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
+	import Icon from './Icon.svelte';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
 		title?: string;
 		description?: string;
+		/** Beside the title, to tell sections apart at a glance (settings, reports). Decorative. */
+		icon?: typeof Home01Icon;
 		/** Heading level for the title, to fit the page's outline. */
 		level?: 2 | 3 | 4;
 		/** Makes the whole card a link; the title becomes the link text screen readers announce. */
@@ -24,6 +28,7 @@
 	let {
 		title,
 		description,
+		icon,
 		level = 3,
 		href,
 		aside,
@@ -52,7 +57,8 @@
 	{#if title || aside}
 		<div class="head">
 			{#if title}
-				<div class="heading">
+				<div class={['heading', icon && 'with-icon']}>
+					{#if icon}<span class="icon"><Icon {icon} size={18} /></span>{/if}
 					<svelte:element this={`h${level}`} class="title">
 						{#if href}<a {href}>{title}</a>{:else}{title}{/if}
 					</svelte:element>
@@ -99,6 +105,21 @@
 	}
 	.heading {
 		min-inline-size: 0;
+	}
+	/* The icon sits on the title's line; the description lines up under the title, not the icon. */
+	.with-icon {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: 0.5rem;
+	}
+	.with-icon > :not(.icon) {
+		grid-column: 2;
+	}
+	.icon {
+		display: flex;
+		align-items: center;
+		block-size: calc(var(--ui-font-size) * 1.5);
+		color: var(--ui-muted);
 	}
 	.title {
 		margin: 0;

@@ -39,6 +39,13 @@
 <h2 id="examples">Examples</h2>
 <Example id="basic" title="With actions" stack {...ex('basic')} />
 <Example
+	id="icon"
+	title="With an icon"
+	description="A small icon beside the title tells sections apart at a glance, as on a settings page. It's decoration: the title still names the card."
+	stack
+	{...ex('icon')}
+/>
+<Example
 	id="linked"
 	title="As a link"
 	stack
@@ -59,6 +66,8 @@
 	<tbody>
 		<tr><td><code>title</code></td><td><code>string</code></td><td></td></tr>
 		<tr><td><code>description</code></td><td><code>string</code></td><td></td></tr>
+		<tr><td><code>icon</code></td><td>Hugeicons icon: beside the title, decorative</td><td></td></tr
+		>
 		<tr
 			><td><code>level</code></td><td><code>2 | 3 | 4</code>: heading level</td><td
 				><code>3</code></td

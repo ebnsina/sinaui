@@ -2,6 +2,7 @@ import { page, userEvent } from 'vitest/browser';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
+import { UserGroupIcon } from '@hugeicons/core-free-icons';
 import Input from './Input.svelte';
 import Card from './Card.svelte';
 import NumberField from './NumberField.svelte';
@@ -3282,6 +3283,21 @@ describe('sinaui', () => {
 		await expect.element(link).toHaveAttribute('href', '#linked');
 		await expect.element(page.getByRole('heading', { name: 'Al-Khwarizmi' })).toBeVisible();
 		expect(document.querySelectorAll('main article a').length).toBe(3);
+	});
+
+	it('card: an icon sits beside the title, hidden from screen readers; the description lines up under the title', async () => {
+		const r = mount(Card, {
+			title: 'Readers',
+			description: 'Who can borrow.',
+			icon: UserGroupIcon
+		});
+		await expect.element(page.getByRole('heading', { name: 'Readers' })).toBeVisible();
+		const svg = r.container.querySelector('.card .icon svg')!;
+		expect(svg.getAttribute('aria-hidden')).toBe('true');
+		const left = (s: string) =>
+			Math.round(r.container.querySelector(s)!.getBoundingClientRect().left);
+		expect(left('.title')).toBe(left('.description'));
+		expect(left('.icon')).toBeLessThan(left('.title'));
 	});
 
 	it('card: in a row of cards, every footer sits on the bottom edge', async () => {
