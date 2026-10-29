@@ -2953,6 +2953,26 @@ describe('sinaui', () => {
 		await expect.element(loans).toBeChecked();
 	});
 
+	it('stat tabs: a change reads after the number, with its arrow hidden from screen readers', async () => {
+		const items = [
+			{
+				value: 'loans',
+				label: 'Loans',
+				display: '3,242',
+				change: '+12% on last week',
+				trend: 'up'
+			},
+			{ value: 'visits', label: 'Visits', display: '13,706' }
+		] as const;
+		const r = mount(StatTabs, { label: 'Chart metric', items: [...items] });
+		await expect
+			.element(page.getByRole('radio', { name: 'Loans 3,242 +12% on last week' }))
+			.toBeChecked();
+		await expect.element(page.getByRole('radio', { name: 'Visits 13,706' })).toBeInTheDocument();
+		expect(r.container.querySelectorAll('.change svg')).toHaveLength(1);
+		expect(r.container.querySelector('.change svg')!.getAttribute('aria-hidden')).toBe('true');
+	});
+
 	it('table: plain rows split by hairlines by default; striped tints every other row', async () => {
 		const body = createRawSnippet(() => ({
 			render: () => '<tbody><tr><td>Optics</td></tr><tr><td>Algebra</td></tr></tbody>'

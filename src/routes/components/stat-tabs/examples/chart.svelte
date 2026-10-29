@@ -15,11 +15,17 @@
 		overdue: { label: 'Overdue', points: [16, 15, 14, 14, 12, 13, 11] }
 	};
 	const count = new Intl.NumberFormat('en-US');
-	const items = Object.entries(series).map(([value, s]) => ({
-		value,
-		label: s.label,
-		display: count.format(s.points.reduce((a, b) => a + b, 0))
-	}));
+	const pct = new Intl.NumberFormat('en-US', { style: 'percent', signDisplay: 'exceptZero' });
+	const items = Object.entries(series).map(([value, s]) => {
+		const moved = s.points[6] / s.points[0] - 1;
+		return {
+			value,
+			label: s.label,
+			display: count.format(s.points.reduce((a, b) => a + b, 0)),
+			change: `${pct.format(moved)} since Saturday`,
+			trend: moved > 0 ? 'up' : moved < 0 ? 'down' : 'flat'
+		} as const;
+	});
 
 	let metric = $state('loans');
 	const chosen = $derived(series[metric]);
