@@ -251,6 +251,7 @@
 			type="text"
 			role="combobox"
 			autocomplete="off"
+			autocapitalize="off"
 			spellcheck="false"
 			aria-autocomplete="list"
 			aria-expanded={open}
