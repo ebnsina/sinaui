@@ -3,7 +3,12 @@
 import pkg from '../../../package.json';
 
 const sources = import.meta.glob<string>(
-	['/src/lib/ui/**/*.{svelte,ts,css}', '/src/lib/blocks/**/*.{svelte,ts}', '!**/*.{spec,test}.ts'],
+	[
+		'/src/lib/ui/**/*.{svelte,ts,css}',
+		'/src/lib/blocks/**/*.{svelte,ts}',
+		'/src/lib/pro/**/*.{svelte,ts}',
+		'!**/*.{spec,test}.ts'
+	],
 	{ eager: true, query: '?raw', import: 'default' }
 );
 
@@ -24,7 +29,10 @@ const framework = (spec: string) =>
 
 const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 const importsOf = (code: string) =>
-	[...code.matchAll(/(?:from\s*|import\s*\(?\s*)['"]([^'"]+)['"]/g)].map((m) => m[1].split('?')[0]);
+	// a module name never has spaces, so `'from' | 'label'` in a type isn't one
+	[...code.matchAll(/(?:from\s*|import\s*\(?\s*)['"]([^'"\s]+)['"]/g)].map(
+		(m) => m[1].split('?')[0]
+	);
 
 function resolve(from: string, spec: string): string | undefined {
 	const base = spec.startsWith('#lib/')
@@ -85,9 +93,18 @@ for (const index of paths.filter((p) => /^\/src\/lib\/ui\/[^/]+\/index\.ts$/.tes
 }
 registry['form'] = () => build('form', ['/src/lib/ui/form.svelte.ts']);
 registry['tokens'] = () => build('tokens', ['/src/lib/ui/tokens.css']);
-for (const dir of new Set(
-	paths.filter((p) => p.startsWith('/src/lib/blocks/')).map((p) => p.split('/')[4])
-)) {
+const folders = (root: string) =>
+	new Set(paths.filter((p) => p.startsWith(`/src/lib/${root}/`)).map((p) => p.split('/')[4]));
+for (const dir of folders('blocks')) {
 	const name = `blocks/${dir}`;
 	registry[name] = () => build(name, within(`/src/lib/blocks/${dir}/`));
 }
+
+/** Pro blocks ("pro/mail"), from the private checkout when there is one. Only a registry started with
+ *  SINAUI_PRO=1 serves them, so a build that's published never does. */
+export const pro: Record<string, () => RegistryItem> = {};
+for (const dir of folders('pro')) {
+	const name = `pro/${dir}`;
+	pro[name] = () => build(name, within(`/src/lib/pro/${dir}/`));
+}
+if (typeof process !== 'undefined' && process.env.SINAUI_PRO === '1') Object.assign(registry, pro);
