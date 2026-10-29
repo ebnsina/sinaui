@@ -3196,6 +3196,15 @@ describe('sinaui', () => {
 		await expect.element(loan).toHaveAccessibleDescription(/Arrow keys move one day/);
 	});
 
+	it('slider: the value lines up with the end of the track', async () => {
+		render(SliderPage);
+		const loan = page.getByRole('slider', { name: 'Loan length' }).element();
+		const field = loan.closest('.field')!;
+		const value = field.querySelector('output')!.getBoundingClientRect();
+		const track = field.querySelector('.track')!.getBoundingClientRect();
+		expect(Math.abs(value.right - track.right)).toBeLessThanOrEqual(1);
+	});
+
 	it('progress: labeled, with value and custom value text; indeterminate has no value', async () => {
 		render(ProgressPage);
 		const t = page.getByRole('progressbar', { name: 'Transcription' });
