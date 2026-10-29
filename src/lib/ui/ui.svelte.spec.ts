@@ -3138,6 +3138,21 @@ describe('sinaui', () => {
 		}
 	});
 
+	it('sidebar layout: on a phone the top bar breadcrumb stays on one line', async () => {
+		await page.viewport(375, 800);
+		render(SidebarPage);
+		await new Promise((r) => requestAnimationFrame(r));
+		const trails = [...document.querySelectorAll<HTMLElement>('.bar.top .crumbs nav')];
+		expect(trails.length).toBeGreaterThan(0);
+		for (const nav of trails) {
+			const shown = [...nav.querySelectorAll('li')].filter((li) => li.getClientRects().length);
+			expect(new Set(shown.map((li) => Math.round(li.getBoundingClientRect().top))).size).toBe(1);
+			expect(nav.scrollWidth).toBeLessThanOrEqual(nav.clientWidth + 1);
+			expect(nav.querySelector('[aria-current="page"]')!.getClientRects().length).toBe(1);
+		}
+		await page.viewport(414, 896);
+	});
+
 	it('breadcrumb: links show no underline until hovered', () => {
 		render(BreadcrumbPage);
 		const link = page
