@@ -178,4 +178,12 @@ SINAUI_REGISTRY=http://localhost:4173 node cli/index.js add dropdown
 node --test cli/index.test.js
 ```
 
+Pro blocks install the same way from a local registry that includes them; the published one never
+does. With the private checkout in `src/lib/pro`:
+
+```sh
+SINAUI_PRO=1 pnpm build && pnpm preview
+SINAUI_REGISTRY=http://localhost:4173 node cli/index.js add pro/mail
+```
+
 To release: bump `version` in `cli/package.json`, then `cd cli && npm publish`.
