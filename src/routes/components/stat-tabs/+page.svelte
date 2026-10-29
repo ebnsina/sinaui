@@ -57,8 +57,10 @@
 		>
 		<tr
 			><td><code>items</code></td><td
-				><code>{'{'} value, label, display }[]</code>: <code>display</code> is the number as shown,
-				formatted with <code>Intl</code></td
+				><code>{'{'} value, label, display, change?, trend? }[]</code>: <code>display</code> is the
+				number as shown, formatted with <code>Intl</code>; <code>change</code> is a short line under
+				it ("+12% on last week") and <code>trend</code> (<code>up</code>, <code>down</code>,
+				<code>flat</code>) draws its arrow, without color</td
 			><td></td></tr
 		>
 		<tr><td><code>value</code></td><td><code>string</code>, bindable</td><td>the first item</td></tr
@@ -71,7 +73,8 @@
 <ul>
 	<li>
 		Native radios in a named radio group: one Tab stop, and each one is read as its label and
-		number, such as “Loans 3,242”.
+		number, such as “Loans 3,242”, then its change when there is one; the arrow is decoration, so
+		word the change to read on its own.
 	</li>
 	<li>Correct before hydration: the chosen number is marked in the server HTML.</li>
 	<li>Give the chart a title that names the chosen metric, so the change is announced with it.</li>
