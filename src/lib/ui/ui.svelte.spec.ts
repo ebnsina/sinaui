@@ -1864,6 +1864,18 @@ describe('sinaui', () => {
 		await page.viewport(414, 896);
 	});
 
+	it('sidebar layout: a disabled item shows its word badge and is not a link', async () => {
+		await page.viewport(1280, 900);
+		render(SidebarPage);
+		const nav = page.getByRole('navigation', { name: 'Library' });
+		await expect.element(nav.getByText('Samarkand')).toBeVisible();
+		await expect.element(nav.getByText('Soon')).toBeVisible();
+		await expect.element(nav.getByRole('link', { name: /Samarkand/ })).not.toBeInTheDocument();
+		const item = nav.getByText('Samarkand').element().closest('.item')!;
+		expect(item.getAttribute('aria-disabled')).toBe('true');
+		await page.viewport(414, 896);
+	});
+
 	it('sidebar layout, narrow: a menu opens the links in a sheet, choosing closes it', async () => {
 		await page.viewport(414, 896);
 		render(SidebarPage);

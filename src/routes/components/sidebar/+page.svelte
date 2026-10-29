@@ -80,10 +80,13 @@
 		<tr><td><code>label</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr
 			><td><code>groups</code></td><td
-				><code>{'{'} title?, items: {'{'} label, href, icon?, badge?, children? }[] }[]</code>:
+				><code
+					>{'{'} title?, items: {'{'} label, href, icon?, badge?, disabled?, children? }[] }[]</code
+				>:
 				<code>children</code>
-				are items too, opened from their parent; <code>icon</code> is needed at the top level for the
-				rail</td
+				are items too, opened from their parent; <code>icon</code> is needed at the top level for
+				the rail; <code>badge</code> is a count, or a word such as "Soon" shown muted;
+				<code>disabled</code> shows an item that isn't a link yet</td
 			><td></td></tr
 		>
 		<tr
