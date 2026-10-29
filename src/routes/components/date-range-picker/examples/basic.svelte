@@ -16,7 +16,7 @@
 </script>
 
 <div class="stack">
-	<DateRangePicker label="Study leave" bind:value={leave} {presets} min={now} />
+	<DateRangePicker label="Study leave" bind:value={leave} {presets} presetName min={now} />
 	<p>
 		{#if leave}{new Intl.PluralRules('en').select(nights!) === 'one'
 				? '1 night'

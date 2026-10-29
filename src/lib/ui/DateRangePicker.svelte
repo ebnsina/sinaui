@@ -21,6 +21,8 @@
 		endName?: string;
 		/** Quick picks shown beside the calendar ("Next 7 days"). */
 		presets?: ({ label: string } & DateRange)[];
+		/** When the value is one of the presets, the button reads its name ("Last 7 days"), not the dates. */
+		presetName?: boolean;
 		/** Months side by side; phones show one at a time. */
 		months?: number;
 		locale?: string;
@@ -41,6 +43,7 @@
 		startName,
 		endName,
 		presets,
+		presetName = false,
 		months = 2,
 		locale = 'en',
 		calendar = 'gregory',
@@ -72,6 +75,7 @@
 	);
 	const same = (p: DateRange) =>
 		!!value && p.start.compare(value.start) === 0 && p.end.compare(value.end) === 0;
+	const named = $derived(presetName ? presets?.find(same)?.label : undefined);
 
 	$effect(() => {
 		if (open) requestAnimationFrame(() => grid?.focusDay());
@@ -91,7 +95,8 @@
 				{disabled}
 				{...props}
 			>
-				<span id="{id}-value">{text ?? placeholder}</span>
+				<!-- A named preset still shows its dates on hover. -->
+				<span id="{id}-value" title={named ? text : undefined}>{named ?? text ?? placeholder}</span>
 				<Icon icon={Calendar03Icon} size={16} />
 			</button>
 		{/snippet}

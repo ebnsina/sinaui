@@ -2006,10 +2006,14 @@ describe('sinaui', () => {
 		days()[6].click();
 		await expect.poll(() => document.querySelector('[popover]:popover-open')).toBeNull();
 		await expect.element(page.getByText('4 nights away', { exact: false })).toBeVisible();
+		// Chosen days read as dates; a quick pick reads as its name, with the dates on hover.
+		await expect.element(trigger).not.toHaveTextContent('Next 7 days');
 
 		await trigger.click();
 		await page.getByRole('button', { name: 'Next 7 days' }).click();
 		await expect.element(page.getByText('6 nights away', { exact: false })).toBeVisible();
+		await expect.element(trigger).toHaveTextContent('Next 7 days');
+		expect(trigger.element().querySelector('[title]')?.getAttribute('title')).toMatch(/\d/);
 		await page.viewport(414, 896);
 	});
 
