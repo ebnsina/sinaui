@@ -72,6 +72,8 @@
 	.cell {
 		position: relative;
 		display: grid;
+		/* Top-aligned, so a number without a change lines up with the ones beside it. */
+		align-content: start;
 		gap: 0.25rem;
 		min-inline-size: 0;
 		padding: 1rem;

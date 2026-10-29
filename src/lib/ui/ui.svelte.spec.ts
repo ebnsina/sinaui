@@ -2983,6 +2983,10 @@ describe('sinaui', () => {
 		await expect.element(page.getByRole('radio', { name: 'Visits 13,706' })).toBeInTheDocument();
 		expect(r.container.querySelectorAll('.change svg')).toHaveLength(1);
 		expect(r.container.querySelector('.change svg')!.getAttribute('aria-hidden')).toBe('true');
+		// A number without a change sits level with the ones beside it, not centred in a taller cell.
+		const top = (el: Element) => Math.round(el.getBoundingClientRect().top);
+		const [a, b] = r.container.querySelectorAll('.value');
+		expect(top(a)).toBe(top(b));
 	});
 
 	it('table: plain rows split by hairlines by default; striped tints every other row', async () => {
