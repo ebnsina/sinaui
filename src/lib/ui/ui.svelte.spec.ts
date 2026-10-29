@@ -2677,6 +2677,16 @@ describe('sinaui', () => {
 		}
 	});
 
+	it('code block: text is shown as written, without colours', async () => {
+		render(CodeBlockPage);
+		const region = page.getByRole('region', { name: 'Prompt' }).element();
+		expect(region.querySelectorAll('[class*="th-token"]').length).toBe(0);
+		expect(region.querySelector('code')?.textContent).toContain(
+			"Deploy the app <web> and tell me when it's live."
+		);
+		expect(region.innerHTML).not.toContain('<web>');
+	});
+
 	it('alert dialog: focus starts on Cancel; a failed confirm stays open with the reason; retry closes', async () => {
 		render(AlertDialogPage);
 		await page.getByRole('button', { name: 'Delete manuscript' }).click();
@@ -3240,10 +3250,17 @@ describe('sinaui', () => {
 
 	it('card: in a row of cards, every footer sits on the bottom edge', async () => {
 		const footer = createRawSnippet(() => ({ render: () => '<button>Install</button>' }));
-		const r = mount(Card, { title: 'Gitea', description: 'Short.', footer, style: 'block-size: 20rem' });
+		const r = mount(Card, {
+			title: 'Gitea',
+			description: 'Short.',
+			footer,
+			style: 'block-size: 20rem'
+		});
 		const card = r.container.querySelector<HTMLElement>('.card')!;
 		const foot = card.querySelector<HTMLElement>('.footer')!;
-		expect(Math.round(card.getBoundingClientRect().bottom - foot.getBoundingClientRect().bottom)).toBeLessThanOrEqual(1);
+		expect(
+			Math.round(card.getBoundingClientRect().bottom - foot.getBoundingClientRect().bottom)
+		).toBeLessThanOrEqual(1);
 	});
 
 	it('card: a flush panel is square where it meets the title and the footer', async () => {

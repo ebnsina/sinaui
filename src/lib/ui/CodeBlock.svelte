@@ -30,7 +30,12 @@
 		| 'sql'
 		| 'svelte'
 		| 'ts'
-		| 'yaml';
+		| 'yaml'
+		/** Prose, like a prompt to copy: shown as written, without colours. */
+		| 'text';
+
+	const escape = (s: string) =>
+		s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 </script>
 
 <script lang="ts">
@@ -60,7 +65,9 @@
 	}: Props = $props();
 
 	const source = $derived(code.replace(/\n+$/, ''));
-	const markup = $derived(highlighter.highlight(source, { lang }).html);
+	const markup = $derived(
+		lang === 'text' ? escape(source) : highlighter.highlight(source, { lang }).html
+	);
 	const count = $derived(source.split('\n').length);
 	const marked = $derived(
 		new Set(
