@@ -22,7 +22,14 @@
 			items: [
 				{ label: 'Baghdad', href: '#baghdad', icon: Location01Icon },
 				{ label: 'Córdoba', href: '#cordoba', icon: Location01Icon },
-				{ label: 'Fez', href: '#fez', icon: Location01Icon }
+				{ label: 'Fez', href: '#fez', icon: Location01Icon },
+				{
+					label: 'Samarkand',
+					href: '#samarkand',
+					icon: Location01Icon,
+					badge: 'Soon',
+					disabled: true
+				}
 			]
 		}
 	];

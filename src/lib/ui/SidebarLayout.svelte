@@ -7,8 +7,10 @@
 		href: string;
 		/** Needed at the top level, where the collapsed rail shows only icons. */
 		icon?: typeof Home01Icon;
-		/** A count beside the name, such as items waiting; hidden at 0. */
-		badge?: number;
+		/** A count beside the name, such as items waiting; hidden at 0. A word ("Soon") shows muted. */
+		badge?: number | string;
+		/** Shown but not a link yet, such as a section that's coming: muted and skipped by Tab. */
+		disabled?: boolean;
 		/** Pages under this one, in an indented list it opens and closes; open while one is current. */
 		children?: SidebarItem[];
 	}
@@ -133,22 +135,34 @@
 	}}
 />
 
+{#snippet name(item: SidebarItem)}
+	{#if item.icon}<Icon icon={item.icon} size={18} />{/if}
+	<span class="text">{item.label}</span>
+	{#if item.badge}<span class={['badge', typeof item.badge === 'string' && 'word']}
+			>{item.badge}</span
+		>{/if}
+{/snippet}
+
 {#snippet link(item: SidebarItem, extra: object = {})}
-	<a
-		href={item.href}
-		class="item"
-		aria-current={item.href === current ? 'page' : undefined}
-		{...extra}
-		onclick={() => {
-			drawer = false;
-			flyout = undefined;
-			onselect?.(item);
-		}}
-	>
-		{#if item.icon}<Icon icon={item.icon} size={18} />{/if}
-		<span class="text">{item.label}</span>
-		{#if item.badge}<span class="badge">{item.badge}</span>{/if}
-	</a>
+	{#if item.disabled}
+		<span class="item disabled" aria-disabled="true" {...extra}>
+			{@render name(item)}
+		</span>
+	{:else}
+		<a
+			href={item.href}
+			class="item"
+			aria-current={item.href === current ? 'page' : undefined}
+			{...extra}
+			onclick={() => {
+				drawer = false;
+				flyout = undefined;
+				onselect?.(item);
+			}}
+		>
+			{@render name(item)}
+		</a>
+	{/if}
 {/snippet}
 
 {#snippet entries(items: SidebarItem[], asRail: boolean, key: string)}
@@ -238,9 +252,10 @@
 				aria-label={label}
 				onpointerover={(e) => {
 					if (e.pointerType === 'touch' || !hoverPill) return;
-					// The current page already has its own fill; hovering it adds nothing.
+					// The current page already has its own fill, and a disabled item can't be chosen.
 					const a = (e.target as Element).closest<HTMLElement>('.item:not(.flyout *)');
-					glide(hoverPill, a?.hasAttribute('aria-current') ? null : a, true);
+					const still = a?.hasAttribute('aria-current') || a?.ariaDisabled === 'true';
+					glide(hoverPill, still ? null : a, true);
 				}}
 				onpointerleave={() => hoverPill && glide(hoverPill, null, false)}
 			>
@@ -407,6 +422,11 @@
 	.fold:hover {
 		color: var(--ui-fg);
 	}
+	.item.disabled {
+		color: var(--ui-muted);
+		opacity: 0.6;
+		cursor: default;
+	}
 	.item[aria-current] {
 		color: var(--ui-sidebar-current-fg);
 		font-weight: 500;
@@ -455,6 +475,11 @@
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		line-height: 1.25rem;
+	}
+	.badge.word {
+		background: var(--ui-subtle);
+		color: var(--ui-muted);
+		font-weight: 500;
 	}
 	/* Not in the rail's flyout, which sits inside the collapsed sidebar but shows names. */
 	.collapsed .text:not(:global(.flyout *)),
