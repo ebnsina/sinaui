@@ -567,6 +567,17 @@
 	.crumbs {
 		flex: 1;
 		min-inline-size: 0;
+		container-type: inline-size;
+	}
+	/* The bar is one line: the trail never wraps, and a narrow bar keeps only the current page. */
+	.crumbs :global(ol) {
+		flex-wrap: nowrap;
+	}
+	@container (max-inline-size: 20rem) {
+		.crumbs :global(li:not(:last-child)),
+		.crumbs :global(li:last-child .sep) {
+			display: none;
+		}
 	}
 	.crumbs + .bar-top {
 		flex: none;
