@@ -1027,6 +1027,8 @@ describe('sinaui', () => {
 		const el = box.element() as HTMLInputElement;
 		const list = () => document.getElementById(el.getAttribute('aria-controls')!)!;
 
+		// Phones don't capitalize the first letter: free text is often a path or an event name.
+		expect(el.getAttribute('autocapitalize')).toBe('off');
 		// Typing filters and bolds the match, but highlights nothing: Enter keeps the text.
 		await box.click();
 		await userEvent.keyboard('astro');
@@ -1035,6 +1037,8 @@ describe('sinaui', () => {
 		expect(el.hasAttribute('aria-activedescendant')).toBe(false);
 		await expect.element(page.getByRole('option', { name: 'Astronomy' })).toBeVisible();
 		expect(list().querySelector('mark')?.textContent).toBe('Astro');
+		// The list fades in: measure contrast once it has.
+		await Promise.allSettled(document.getAnimations().map((a) => a.finished));
 		await expectNoAxeViolations();
 		await userEvent.keyboard('{Enter}');
 		await expect.element(box).toHaveValue('astro');
