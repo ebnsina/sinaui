@@ -55,7 +55,7 @@
 	id="basic"
 	title="With quick picks"
 	stack
-	description="Choose the first day, then the last; the span follows the pointer in between."
+	description="Choose the first day, then the last; the span follows the pointer in between. With presetName, a chosen quick pick shows by its name."
 	{...ex('basic')}
 />
 <Example
@@ -83,6 +83,11 @@
 		>
 		<tr><td><code>value</code></td><td><code>{'{'} start, end }</code>, bindable</td><td></td></tr>
 		<tr><td><code>presets</code></td><td><code>{'{'} label, start, end }[]</code></td><td></td></tr>
+		<tr
+			><td><code>presetName</code></td><td
+				><code>boolean</code>: the button names a chosen preset instead of its dates</td
+			><td><code>false</code></td></tr
+		>
 		<tr><td><code>months</code></td><td><code>number</code></td><td><code>2</code></td></tr>
 		<tr><td><code>min</code>, <code>max</code></td><td><code>CalendarDate</code></td><td></td></tr>
 		<tr><td><code>isUnavailable</code></td><td><code>(date) =&gt; boolean</code></td><td></td></tr>
