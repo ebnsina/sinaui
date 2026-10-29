@@ -60,6 +60,13 @@
 	{...ex('basic')}
 />
 <Example
+	id="free-text"
+	title="Free text"
+	stack
+	description="With allowsCustomValue, the options are suggestions: whatever is typed is the value, and Enter or Tab keeps it unless an option was highlighted with the arrows."
+	{...ex('free-text')}
+/>
+<Example
 	id="descriptions"
 	title="With descriptions"
 	stack
@@ -108,6 +115,11 @@
 		>
 		<tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
 		<tr
+			><td><code>allowsCustomValue</code></td><td
+				><code>boolean</code>: typed text is the value; options are suggestions</td
+			><td><code>false</code></td></tr
+		>
+		<tr
 			><td><code>onsearch</code></td><td
 				><code>(query) =&gt; void</code>: you filter; options show as given</td
 			><td></td></tr
@@ -133,8 +145,10 @@
 	<li>Screen readers hear how many options match as you type.</li>
 	<li>
 		Typing never changes the value on its own. Leaving the field without choosing puts back the last
-		choice.
+		choice. With <code>allowsCustomValue</code>, the typed text is the value and stays when you
+		leave.
 	</li>
+	<li>The part of each option that matches what you typed is shown in bold.</li>
 </ul>
 <table>
 	<thead><tr><th>Key</th><th>Action</th></tr></thead>
@@ -144,7 +158,10 @@
 		<tr><td><kbd>Tab</kbd></td><td>Chooses the highlighted option and moves on.</td></tr>
 		<tr>
 			<td><kbd>Esc</kbd></td>
-			<td>Closes the list and undoes the typing. Pressed again, clears the field.</td>
+			<td>
+				Closes the list and undoes the typing (keeps it with <code>allowsCustomValue</code>).
+				Pressed again, clears the field.
+			</td>
 		</tr>
 		<tr><td><kbd>Alt</kbd> + <kbd>↓</kbd></td><td>Opens the list without moving.</td></tr>
 	</tbody>

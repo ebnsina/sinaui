@@ -30,6 +30,8 @@
 		name?: string;
 		required?: boolean;
 		disabled?: boolean;
+		/** What's typed is the value, even when no option matches (a path pattern, a new tag). Options are suggestions. */
+		allowsCustomValue?: boolean;
 		/** Shown when nothing matches what was typed. */
 		empty?: string;
 		/** You filter (on a server, say): called with the text as it's typed; options are shown as given. */
@@ -54,6 +56,7 @@
 		name,
 		required = false,
 		disabled = false,
+		allowsCustomValue = false,
 		empty = 'No matches',
 		onsearch,
 		onloadmore,
@@ -83,7 +86,7 @@
 	// A string, so new option objects with the same label don't reset what's being typed.
 	const selectedLabel = $derived(selected?.label ?? '');
 	// The text in the box follows the chosen option until the user types over it.
-	let query = $derived(selectedLabel);
+	let query = $derived(selectedLabel || (allowsCustomValue ? value : ''));
 	let searched = '';
 	const search = (q: string) => {
 		if (onsearch && q !== searched) onsearch((searched = q));
@@ -96,6 +99,26 @@
 		const q = fold(query.trim());
 		return filtering && q && !onsearch ? all.filter(({ o }) => fold(o.label).includes(q)) : all;
 	});
+	// The matching part of a label, for emphasis. Folds one character at a time so the match maps
+	// back onto the label even where folding drops accents.
+	function parts(label: string): [string, string, string] {
+		const q = fold(query.trim());
+		if (!filtering || !q || onsearch) return [label, '', ''];
+		let folded = '';
+		const at: number[] = [];
+		let i = 0;
+		for (const ch of label) {
+			const f = fold(ch);
+			folded += f;
+			for (let k = 0; k < f.length; k++) at.push(i);
+			i += ch.length;
+		}
+		at.push(label.length);
+		const start = folded.indexOf(q);
+		if (start < 0) return [label, '', ''];
+		const [s, e] = [at[start], at[start + q.length]];
+		return [label.slice(0, s), label.slice(s, e), label.slice(e)];
+	}
 	const enabled = $derived(shown.filter(({ o }) => !o.disabled).map(({ i }) => i));
 	const optionId = (i: number) => `${id}-opt-${i}`;
 	const describedby = $derived(
@@ -148,7 +171,8 @@
 	function cancel() {
 		open = false;
 		filtering = false;
-		query = selected?.label ?? '';
+		// Typed text is already the value, so there's nothing to undo.
+		if (!allowsCustomValue) query = selected?.label ?? '';
 	}
 
 	// Near the end of what's loaded, ask for more; checked on scroll and whenever a page arrives,
@@ -198,6 +222,7 @@
 				if (open) {
 					e.preventDefault();
 					if (active >= 0) choose(active);
+					else if (allowsCustomValue) cancel();
 				}
 				break;
 			case 'Escape':
@@ -235,14 +260,18 @@
 			aria-describedby={describedby}
 			{placeholder}
 			{disabled}
+			name={allowsCustomValue ? name : undefined}
+			required={allowsCustomValue && required}
 			value={query}
 			oninput={(e) => {
 				query = e.currentTarget.value;
 				// Emptying the box clears the choice: the way to clear it by touch or mouse.
 				if (!query) value = '';
+				else if (allowsCustomValue) value = query as T;
 				filtering = true;
 				search(query);
-				active = enabled[0] ?? -1;
+				// Free text: nothing highlighted until an arrow key, so Enter and Tab keep what was typed.
+				active = allowsCustomValue ? -1 : (enabled[0] ?? -1);
 				open = true;
 			}}
 			onclick={() => !open && show(current())}
@@ -251,7 +280,7 @@
 		/>
 		<span class="chev" aria-hidden="true"><Icon icon={UnfoldMoreIcon} size={16} /></span>
 	</div>
-	{#if name}
+	{#if name && !allowsCustomValue}
 		<!-- React Aria's HiddenSelect: a real field for forms, autofill and required, out of sight. -->
 		<select
 			class="sr-only"
@@ -291,6 +320,7 @@
 			aria-busy={loading || undefined}
 		>
 			{#each shown as { o, i } (o.value)}
+				{@const [a, b, c] = parts(o.label)}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
 				<div
 					id={optionId(i)}
@@ -307,7 +337,9 @@
 					onclick={() => choose(i)}
 				>
 					<span class="text">
-						<span>{o.label}</span>
+						<span
+							>{a}{#if b}<mark>{b}</mark>{/if}{c}</span
+						>
 						{#if o.description}<span class="description">{o.description}</span>{/if}
 					</span>
 					<span class="tick" aria-hidden="true">
@@ -436,6 +468,11 @@
 		display: grid;
 		flex: 1;
 		min-inline-size: 0;
+	}
+	mark {
+		background: none;
+		color: inherit;
+		font-weight: 600;
 	}
 	.tick {
 		display: grid;

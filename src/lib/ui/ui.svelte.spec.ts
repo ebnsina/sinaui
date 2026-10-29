@@ -1021,6 +1021,47 @@ describe('sinaui', () => {
 		await expect.element(scholar).toHaveValue('Ibn al-Haytham');
 	});
 
+	it('combobox: free text keeps what was typed; arrows still pick a suggestion', async () => {
+		render(ComboboxPage);
+		const box = page.getByRole('combobox', { name: 'Field of study' });
+		const el = box.element() as HTMLInputElement;
+		const list = () => document.getElementById(el.getAttribute('aria-controls')!)!;
+
+		// Typing filters and bolds the match, but highlights nothing: Enter keeps the text.
+		await box.click();
+		await userEvent.keyboard('astro');
+		await expect.element(box).toHaveAttribute('aria-expanded', 'true');
+		expect(list().getAttribute('role')).toBe('listbox');
+		expect(el.hasAttribute('aria-activedescendant')).toBe(false);
+		await expect.element(page.getByRole('option', { name: 'Astronomy' })).toBeVisible();
+		expect(list().querySelector('mark')?.textContent).toBe('Astro');
+		await expectNoAxeViolations();
+		await userEvent.keyboard('{Enter}');
+		await expect.element(box).toHaveValue('astro');
+		await expect.element(box).toHaveAttribute('aria-expanded', 'false');
+		await expect.element(page.getByText('Value: astro')).toBeVisible();
+
+		// No match is fine too, and Tab and Escape both keep it.
+		await userEvent.fill(box, 'Calligraphy');
+		await expect.element(page.getByText('No matches', { exact: true })).toBeVisible();
+		await userEvent.keyboard('{Escape}');
+		await expect.element(box).toHaveValue('Calligraphy');
+		await userEvent.fill(box, 'Zoology');
+		await userEvent.keyboard('{Tab}');
+		expect(focused()).not.toBe(el);
+		await expect.element(box).toHaveValue('Zoology');
+
+		// An arrow highlights a suggestion; Enter takes it.
+		await box.click();
+		await userEvent.fill(box, 'o');
+		await userEvent.keyboard('{ArrowDown}');
+		const active = el.getAttribute('aria-activedescendant')!;
+		expect(document.getElementById(active)?.getAttribute('role')).toBe('option');
+		await userEvent.keyboard('{Enter}');
+		await expect.element(box).toHaveValue('Astronomy');
+		await expect.element(page.getByText('Value: Astronomy')).toBeVisible();
+	});
+
 	it('data table: sorts with aria-sort, searches ignoring accents, pages', async () => {
 		render(DataTablePage);
 		const loans = page.getByRole('button', { name: 'Loans' });
