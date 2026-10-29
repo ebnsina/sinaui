@@ -62,6 +62,12 @@
 	description="Without line numbers, for one-liners."
 	{...ex('command')}
 />
+<Example
+	id="text"
+	title="Plain text"
+	description="lang “text” shows prose as written, without colours: a prompt to copy, say."
+	{...ex('text')}
+/>
 
 <h2 id="props">Props</h2>
 <table>
@@ -70,7 +76,8 @@
 		<tr><td><code>code</code></td><td><code>string</code></td><td>required</td></tr>
 		<tr
 			><td><code>lang</code></td><td
-				>css, diff, go, html, js, json, python, shell, sql, svelte, ts, yaml</td
+				>css, diff, go, html, js, json, python, shell, sql, svelte, ts, yaml, or text (no colours,
+				for prose such as a prompt)</td
 			><td><code>'ts'</code></td></tr
 		>
 		<tr><td><code>filename</code></td><td><code>string</code></td><td></td></tr>
