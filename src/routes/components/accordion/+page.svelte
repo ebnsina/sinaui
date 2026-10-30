@@ -55,6 +55,14 @@
 	{...ex('exclusive')}
 />
 
+<Example
+	id="aside"
+	title="With a control"
+	stack
+	description="A count beside the title and a switch at the end of the row; the switch doesn't open the section."
+	{...ex('aside')}
+/>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Part</th><th>Props</th></tr></thead>
@@ -65,7 +73,9 @@
 		>
 		<tr
 			><td><code>Accordion.Item</code></td><td
-				><code>title</code> (required), <code>open</code> (bindable)</td
+				><code>title</code> (required), <code>description</code> (muted text beside the title),
+				<code>aside</code> (snippet for controls at the end of the row, outside the toggle),
+				<code>open</code> (bindable)</td
 			></tr
 		>
 	</tbody>

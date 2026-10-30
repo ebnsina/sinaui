@@ -7,24 +7,78 @@
 
 	interface Props extends Omit<HTMLDetailsAttributes, 'name' | 'title'> {
 		title: string;
+		/** Short muted text beside the title: a count, a status ("8 rules · 7 on"). */
+		description?: string;
+		/** Controls at the end of the row, outside the toggle: a switch, a menu. */
+		aside?: Snippet;
 		open?: boolean;
 		children: Snippet;
 	}
 
-	let { title, open = $bindable(false), children, class: className, ...rest }: Props = $props();
+	let {
+		title,
+		description,
+		aside,
+		open = $bindable(false),
+		children,
+		class: className,
+		...rest
+	}: Props = $props();
 	const accordion = getAccordion();
+	// The aside sits over the summary row, not in it: a control inside <summary> would toggle the item.
+	let asideWidth = $state(0);
+	let summaryHeight = $state(0);
 </script>
 
-<!-- Native <details>: expand/collapse, keyboard and screen-reader state come from the browser. -->
-<details class={['item', className]} name={accordion.name} bind:open {...rest}>
-	<summary>
-		<span>{title}</span>
-		<span class="chev"><Icon icon={ArrowDown01Icon} size={16} /></span>
-	</summary>
-	<div class="content">{@render children()}</div>
-</details>
+<div class="wrap">
+	<!-- Native <details>: expand/collapse, keyboard and screen-reader state come from the browser. -->
+	<details class={['item', className]} name={accordion.name} bind:open {...rest}>
+		<summary bind:clientHeight={summaryHeight}>
+			<span class="label">
+				<span>{title}</span>
+				{#if description}<span class="description">{description}</span>{/if}
+			</span>
+			{#if aside}<span class="aside-space" style:inline-size="{asideWidth}px"></span>{/if}
+			<span class="chev"><Icon icon={ArrowDown01Icon} size={16} /></span>
+		</summary>
+		<div class="content">{@render children()}</div>
+	</details>
+	{#if aside}
+		<div class="aside" bind:clientWidth={asideWidth} style:block-size="{summaryHeight}px">
+			{@render aside()}
+		</div>
+	{/if}
+</div>
 
 <style>
+	.wrap {
+		position: relative;
+	}
+	.label {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0 0.75rem;
+		flex: 1;
+		min-inline-size: 0;
+	}
+	.description {
+		font-weight: 400;
+		font-size: 0.875em;
+		color: var(--ui-muted);
+	}
+	.aside-space {
+		flex: none;
+	}
+	/* Right of the title, left of the chevron (16px icon plus the summary's 1rem gap). */
+	.aside {
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-end: calc(16px + 1rem);
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
 	summary {
 		box-sizing: border-box;
 		display: flex;
