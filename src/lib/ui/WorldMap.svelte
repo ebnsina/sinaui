@@ -214,7 +214,8 @@
 		restart();
 	}
 	function click(e: MouseEvent) {
-		if (moved) return;
+		// A double-click's second click zooms; it doesn't select again.
+		if (moved || e.detail > 1) return;
 		const code = codeAt(e.target);
 		if (!code || !byCode.has(code)) return;
 		current = code;
@@ -267,8 +268,12 @@
 			End: order.length - 1
 		}[e.key];
 		const p = points.get(code);
-		if (go !== undefined) focusCode(order[clamp(go, 0, order.length - 1)]);
-		else if (e.key === 'Enter' || e.key === ' ') onselect?.(code);
+		if (go !== undefined) {
+			// The browser may not count script focus as keyboard focus (say, after a click), so show the tooltip here.
+			const next = order[clamp(go, 0, order.length - 1)];
+			focusCode(next);
+			tipAtPoint(next);
+		} else if (e.key === 'Enter' || e.key === ' ') onselect?.(code);
 		else if ((e.key === '+' || e.key === '=') && p) zoomAt(2, ...p);
 		else if (e.key === '-' && p) zoomAt(0.5, ...p);
 		else if (e.key === '0') reset();
