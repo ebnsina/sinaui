@@ -54,7 +54,7 @@
 <Example
 	id="sheet"
 	title="Side sheet"
-	description="side=&quot;start&quot; slides in from the reading-start edge, and from the right in right-to-left pages; side=&quot;end&quot; from the other. The docs' mobile navigation uses it. Set --ui-sheet-width (20rem by default) to make it wider."
+	description="side=&quot;start&quot; slides in from the reading-start edge, and from the right in right-to-left pages; side=&quot;end&quot; from the other. The docs' mobile navigation uses it. Set --ui-sheet-width (20rem by default) to make it wider, and --ui-sheet-inset (3rem, the room left beside it on narrow screens) to 0 for a detail panel that fills a phone."
 	{...ex('sheet')}
 />
 

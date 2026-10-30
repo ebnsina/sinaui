@@ -408,6 +408,21 @@ describe('sinaui', () => {
 		]);
 	});
 
+	it('sheet inset: 3rem left beside a sheet on narrow screens by default, 0 fills the width', async () => {
+		const wide = (style: string) => {
+			const r = mount(Dialog, { open: true, title: 'Event', side: 'end', style });
+			const sheet = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].at(-1)!;
+			const width = sheet.getBoundingClientRect().width;
+			sheet.close();
+			r.unmount();
+			return width;
+		};
+		// A width bigger than any test viewport, so the inset alone decides.
+		const page = document.documentElement.clientWidth;
+		expect(wide('--ui-sheet-width: 200rem')).toBe(page - 48);
+		expect(wide('--ui-sheet-width: 200rem; --ui-sheet-inset: 0px')).toBe(page);
+	});
+
 	it('dialog: Escape closes and focus returns to the trigger', async () => {
 		render(DialogPage);
 		const trigger = page.getByRole('button', { name: 'Edit scholar' });

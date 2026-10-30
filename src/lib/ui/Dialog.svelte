@@ -236,7 +236,9 @@
 		--from: -100%;
 		margin: 0;
 		margin-inline-end: auto;
-		inline-size: min(var(--ui-sheet-width), 100vw - 3rem);
+		inline-size: min(var(--ui-sheet-width), 100vw - var(--ui-sheet-inset));
+		/* The browser caps a dialog short of the edge; a sheet's own width decides instead. */
+		max-inline-size: none;
 		block-size: 100dvh;
 		max-block-size: 100dvh;
 		border-radius: 0;
