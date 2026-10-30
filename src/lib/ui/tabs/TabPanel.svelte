@@ -52,6 +52,10 @@
 		display: block;
 		visibility: hidden;
 	}
+	/* fit: only the chosen panel takes room. */
+	:global(.tabs.fit) > .panel[hidden] {
+		display: none;
+	}
 	:global(.tabs[data-orientation='vertical']) > .panel {
 		grid-area: 1 / 2;
 	}
