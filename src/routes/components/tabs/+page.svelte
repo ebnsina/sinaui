@@ -62,6 +62,13 @@
 	{...ex('compact')}
 />
 <Example
+	id="fit"
+	title="Fit to the chosen panel"
+	stack
+	description="By default the area keeps the tallest panel's height, so nothing below moves when tabs switch. With fit it takes the chosen panel's height instead: use it when panels differ a lot in length, such as the same code in several languages."
+	{...ex('fit')}
+/>
+<Example
 	id="folder"
 	title="Folder"
 	description="The chosen tab rises out of the panel like a folder tab. Switching stretches it toward the new tab, leading edge first, and it settles on a spring; with reduced motion it simply moves."
@@ -98,6 +105,11 @@
 			><td><code>variant</code></td><td
 				><code>'line' | 'folder' | 'pill'</code> (folder and pill: horizontal only)</td
 			><td><code>'line'</code></td></tr
+		>
+		<tr
+			><td><code>fit</code></td><td
+				><code>boolean</code>: size to the chosen panel, not the tallest</td
+			><td><code>false</code></td></tr
 		>
 	</tbody>
 </table>

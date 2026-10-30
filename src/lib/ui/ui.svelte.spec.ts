@@ -123,6 +123,7 @@ import SizeRow from '../../routes/theming/examples/size.svelte';
 import ChatSheet from '../../routes/blocks/ai-chat/examples/sheet.svelte';
 import DialogStatus from '../../routes/components/dialog/examples/status.svelte';
 import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
+import FitTabs from '../../routes/components/tabs/examples/fit.svelte';
 import PillTabs from '../../routes/components/tabs/examples/pill.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
 import Table from '#lib/ui/Table.svelte';
@@ -3171,6 +3172,27 @@ describe('sinaui', () => {
 			Math.round(f.children[1].getBoundingClientRect().top)
 		);
 		expect(tops[0]).toBe(tops[1]);
+	});
+
+	it("tabs fit: the area takes the chosen panel's height; by default it keeps the tallest", async () => {
+		const r = mount(FitTabs);
+		const area = r.container.querySelector<HTMLElement>('.tabs')!;
+		await expect.element(page.getByRole('tabpanel')).toHaveTextContent(/Two manuscripts/);
+		const short = area.offsetHeight;
+		await page.getByRole('tab', { name: 'In full' }).click();
+		await expect.element(page.getByRole('tabpanel')).toHaveTextContent(/House of Wisdom/);
+		expect(area.offsetHeight).toBeGreaterThan(short + 20);
+		r.unmount();
+		// The same panels without fit: switching never changes the height.
+		const plain = mount(TabsPage);
+		const tabs = plain.container.querySelector<HTMLElement>('.tabs:not(.fit)')!;
+		const before = tabs.offsetHeight;
+		const second = tabs.querySelectorAll<HTMLElement>(
+			'[role="tab"]:not([aria-disabled="true"]):not([disabled])'
+		)[1];
+		second.click();
+		await expect.poll(() => second.getAttribute('aria-selected')).toBe('true');
+		expect(tabs.offsetHeight).toBe(before);
 	});
 
 	it('tabs folder: the raised tab follows the choice, and shares the panel’s fill', async () => {

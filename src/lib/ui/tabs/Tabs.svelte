@@ -13,6 +13,11 @@
 		size?: 'sm' | 'md';
 		/** line: an underline slides to the chosen tab. folder: the chosen tab rises out of the panel like a folder tab. pill: the chosen tab lifts out of a quiet track. folder and pill are horizontal only. */
 		variant?: 'line' | 'folder' | 'pill';
+		/**
+		 * Size the area to the chosen panel instead of the tallest one, for panels whose lengths
+		 * differ a lot (the same code in several languages). What's below moves when tabs switch.
+		 */
+		fit?: boolean;
 		children: Snippet;
 	}
 
@@ -22,6 +27,7 @@
 		activation = 'automatic',
 		size = 'md',
 		variant = 'line',
+		fit = false,
 		children,
 		class: className,
 		...rest
@@ -51,7 +57,13 @@
 </script>
 
 <div
-	class={['tabs', size, variant !== 'line' && orientation === 'horizontal' && variant, className]}
+	class={[
+		'tabs',
+		size,
+		variant !== 'line' && orientation === 'horizontal' && variant,
+		fit && 'fit',
+		className
+	]}
 	data-orientation={orientation}
 	{...rest}
 >
