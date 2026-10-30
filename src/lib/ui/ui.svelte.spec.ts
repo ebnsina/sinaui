@@ -51,6 +51,11 @@ import FormPage from '../../routes/components/form/+page.svelte';
 import DatePickerPage from '../../routes/components/date-picker/+page.svelte';
 import NumberFieldPage from '../../routes/components/number-field/+page.svelte';
 import CommandPalettePage from '../../routes/components/command-palette/+page.svelte';
+import CommandPalette from './CommandPalette.svelte';
+import Toc from './Toc.svelte';
+import DocsNav from './DocsNav.svelte';
+import TocPage from '../../routes/components/toc/+page.svelte';
+import DocsNavPage from '../../routes/components/docs-nav/+page.svelte';
 import ToggleGroupPage from '../../routes/components/toggle-group/+page.svelte';
 import ChartPage from '../../routes/components/chart/+page.svelte';
 import FileDropPage from '../../routes/components/file-drop/+page.svelte';
@@ -170,6 +175,8 @@ const pages = {
 	DatePickerPage,
 	NumberFieldPage,
 	CommandPalettePage,
+	TocPage,
+	DocsNavPage,
 	ToggleGroupPage,
 	ChartPage,
 	FileDropPage,
@@ -3457,6 +3464,89 @@ describe('sinaui', () => {
 		await page.getByRole('button', { name: 'Finish loading' }).click();
 		await expect.element(page.getByText('Ibn Sina', { exact: true }).first()).toBeVisible();
 		expect(region.getAttribute('aria-busy')).toBe('false');
+	});
+	it("command palette: search finds results itself and shows each one's description", async () => {
+		const seen: string[] = [];
+		const ran: string[] = [];
+		const result = (id: string) => ({
+			id,
+			label: `Lending ${id}`,
+			description: `…borrow a manuscript for ${id} days…`,
+			onselect: () => ran.push(id)
+		});
+		mount(CommandPalette, {
+			open: true,
+			label: 'Search the docs',
+			commands: [{ id: 'home', label: 'Introduction', onselect: () => {} }],
+			search: (q: string) => (seen.push(q), q === 'borrow' ? [result('7'), result('30')] : [])
+		});
+		const box = page.getByRole('combobox', { name: 'Search the docs' });
+		await expect.element(page.getByText('Introduction')).toBeVisible();
+		await userEvent.type(box, ' borrow ');
+		// The label and keywords don't mention "borrow": only the search function found these.
+		await expect.element(page.getByText('…borrow a manuscript for 7 days…')).toBeVisible();
+		expect(seen.at(-1)).toBe('borrow');
+		await userEvent.keyboard('{ArrowDown}{Enter}');
+		expect(ran).toEqual(['30']);
+	});
+
+	it('toc: follows the scroll, marks the section being read, and is absent without items', async () => {
+		const tall = document.createElement('div');
+		tall.innerHTML = ['one', 'two', 'three']
+			.map((id) => `<h2 id="toc-${id}" style="margin:0;height:1500px">${id}</h2>`)
+			.join('');
+		document.body.append(tall);
+		try {
+			scrollTo(0, 0);
+			mount(Toc, {
+				items: [
+					{ id: 'toc-one', label: 'One' },
+					{ id: 'toc-two', label: 'Two', level: 3 },
+					{ id: 'toc-three', label: 'Three' }
+				]
+			});
+			const nav = page.getByRole('navigation', { name: 'On this page' });
+			const current = () => nav.element().querySelector('[aria-current="location"]')?.textContent;
+			await expect.poll(current).toBe('One');
+			scrollTo(0, document.getElementById('toc-two')!.offsetTop + 10);
+			await expect.poll(current).toBe('Two');
+			// The last section is reached at the bottom of the page even if it never reaches the top.
+			scrollTo(0, document.documentElement.scrollHeight);
+			await expect.poll(current).toBe('Three');
+			expect(nav.element().querySelector('.sub a')?.textContent).toBe('Two');
+		} finally {
+			tall.remove();
+			scrollTo(0, 0);
+		}
+		const empty = mount(Toc, { items: [] });
+		expect(empty.container.querySelector('nav')).toBeNull();
+	});
+
+	it('docs nav: groups named by their labels, current page marked, onselect on choice', async () => {
+		const picked: string[] = [];
+		mount(DocsNav, {
+			label: 'Library guide',
+			current: '#lending',
+			groups: [
+				{ title: 'Get started', items: [{ label: 'Introduction', href: '#intro' }] },
+				{
+					title: 'Manuscripts',
+					items: [
+						{ label: 'Lending', href: '#lending' },
+						{ label: 'Translations', href: '#translations', badge: 'Soon' }
+					]
+				}
+			],
+			onselect: (item: { href: string }) => picked.push(item.href)
+		});
+		const nav = page.getByRole('navigation', { name: 'Library guide' });
+		await expect.element(nav.getByRole('list', { name: 'Manuscripts' })).toBeVisible();
+		await expect
+			.element(nav.getByRole('link', { name: 'Lending' }))
+			.toHaveAttribute('aria-current', 'page');
+		await expect.element(nav.getByRole('link', { name: /Translations\s*Soon/ })).toBeVisible();
+		await nav.getByRole('link', { name: 'Introduction' }).click();
+		expect(picked).toEqual(['#intro']);
 	});
 	describe('world map', () => {
 		const readers = [
