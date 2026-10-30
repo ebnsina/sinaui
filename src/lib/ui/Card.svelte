@@ -103,6 +103,10 @@
 		gap: 1rem;
 		padding: 1rem 1rem 0;
 	}
+	/* A card that's only a header (a link card) keeps the same space below as at its sides. */
+	.head:last-child {
+		padding-block-end: 1rem;
+	}
 	.heading {
 		min-inline-size: 0;
 	}
