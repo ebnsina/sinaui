@@ -52,7 +52,11 @@
 	<tbody>
 		<tr>
 			<td><code>commands</code></td>
-			<td><code>{'{'} id, label, onselect, group?, keywords?, shortcut?, icon? }[]</code></td>
+			<td
+				><code
+					>{'{'} id, label, onselect, description?, group?, keywords?, shortcut?, icon? }[]</code
+				></td
+			>
 			<td></td>
 		</tr>
 		<tr
@@ -68,9 +72,19 @@
 			><td><code>placeholder</code>, <code>empty</code></td><td><code>string</code></td><td
 			></td></tr
 		>
+		<tr
+			><td><code>search</code></td><td
+				><code>(query: string) =&gt; Command[]</code>: find matches yourself, best first</td
+			><td></td></tr
+		>
 	</tbody>
 </table>
 <p>A command's <code>shortcut</code> is shown beside it; the keys themselves are yours to bind.</p>
+<p>
+	For site search, pass <code>search</code>: it gets the typed query and returns the results to list
+	(from a prebuilt full-text index, say), and each result's <code>description</code> shows the
+	matching text on a second line. With no query, <code>commands</code> is shown.
+</p>
 
 <h2 id="accessibility">Accessibility</h2>
 <ul>

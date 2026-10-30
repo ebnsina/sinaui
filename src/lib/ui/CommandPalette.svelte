@@ -4,6 +4,8 @@
 	export interface Command {
 		id: string;
 		label: string;
+		/** A second, quieter line under the label, such as the matching text of a search result. */
+		description?: string;
 		/** Heading the command is listed under. */
 		group?: string;
 		/** Other words it should be found by ("settings" for "Preferences"). */
@@ -30,6 +32,11 @@
 		empty?: string;
 		/** Open with ⌘K (Ctrl+K elsewhere) from anywhere on the page. */
 		shortcut?: boolean;
+		/**
+		 * Find the matches yourself (a full-text index, say): given the trimmed query, return what to
+		 * list, best first. Without it, commands are matched by label and keywords.
+		 */
+		search?: (query: string) => Command[];
 	}
 
 	let {
@@ -38,7 +45,8 @@
 		label = 'Command palette',
 		placeholder = 'Type a command or search…',
 		empty = 'Nothing matches',
-		shortcut = true
+		shortcut = true,
+		search
 	}: Props = $props();
 
 	const id = $props.id();
@@ -60,8 +68,9 @@
 		return c.keywords?.some((k) => fold(k).includes(q)) ? 3 : -1;
 	}
 	const matches = $derived.by(() => {
+		if (!query.trim()) return commands;
+		if (search) return search(query.trim());
 		const q = fold(query.trim());
-		if (!q) return commands;
 		return commands
 			.map((c, i) => ({ c, r: rank(c, q), i }))
 			.filter((m) => m.r >= 0)
@@ -186,7 +195,14 @@
 							onclick={() => run(c)}
 						>
 							{#if c.icon}<span class="icon"><Icon icon={c.icon} size={18} /></span>{/if}
-							<span class="label">{c.label}</span>
+							{#if c.description}
+								<span class="label">
+									<span class="text">{c.label}</span>
+									<span class="description">{c.description}</span>
+								</span>
+							{:else}
+								<span class="label">{c.label}</span>
+							{/if}
 							{#if c.shortcut}
 								<span class="keys" aria-hidden="true">
 									{#each c.shortcut as k, i (i)}<kbd>{k}</kbd>{/each}
@@ -331,6 +347,18 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+	.label:has(.description) {
+		display: grid;
+	}
+	.text,
+	.description {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.description {
+		color: var(--ui-muted);
+		font-size: 0.8125rem;
 	}
 	.keys {
 		display: flex;

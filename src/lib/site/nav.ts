@@ -416,6 +416,11 @@ export const nav: {
 				keywords: ['tree view', 'folders', 'explorer', 'hierarchy']
 			},
 			{
+				title: 'Docs navigation',
+				href: '/components/docs-nav',
+				keywords: ['documentation sidebar', 'docs sidebar', 'guide navigation', 'grouped links']
+			},
+			{
 				title: 'Menubar',
 				href: '/components/menubar',
 				keywords: ['menu bar', 'file edit view', 'app menu', 'commands']
@@ -441,7 +446,12 @@ export const nav: {
 				href: '/components/stepper',
 				keywords: ['wizard', 'steps', 'progress', 'multi-step']
 			},
-			{ title: 'Tabs', href: '/components/tabs', keywords: ['tab bar'] }
+			{ title: 'Tabs', href: '/components/tabs', keywords: ['tab bar'] },
+			{
+				title: 'Table of contents',
+				href: '/components/toc',
+				keywords: ['on this page', 'scroll spy', 'outline', 'headings', 'anchors']
+			}
 		]
 	},
 	{
