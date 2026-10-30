@@ -3389,6 +3389,19 @@ describe('sinaui', () => {
 		expect(document.querySelectorAll('main article a').length).toBe(3);
 	});
 
+	it('card: a card with only a header has the same space below it as at its sides', async () => {
+		const r = mount(Card, {
+			title: 'Add a website',
+			description: 'Page views, visitors and sources.',
+			href: '#site'
+		});
+		const card = r.container.querySelector('article')!;
+		const desc = card.querySelector('.description')!;
+		const below = card.getBoundingClientRect().bottom - desc.getBoundingClientRect().bottom;
+		const side = desc.getBoundingClientRect().left - card.getBoundingClientRect().left;
+		expect(Math.round(below)).toBe(Math.round(side));
+	});
+
 	it('card: an icon sits beside the title, hidden from screen readers; the description lines up under the title', async () => {
 		const r = mount(Card, {
 			title: 'Readers',
