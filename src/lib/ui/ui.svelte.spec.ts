@@ -1,4 +1,4 @@
-import { page, userEvent } from 'vitest/browser';
+import { commands, page, userEvent } from 'vitest/browser';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render as mount } from 'vitest-browser-svelte';
 import { createRawSnippet, type Component } from 'svelte';
@@ -124,8 +124,11 @@ import Table from '#lib/ui/Table.svelte';
 import StatTabs from '#lib/ui/StatTabs.svelte';
 import AccountMenu from '#lib/ui/AccountMenu.svelte';
 import Sparkline from '#lib/ui/Sparkline.svelte';
+import WorldMap from '#lib/ui/WorldMap.svelte';
+import { size as worldMapSize } from '#lib/ui/world-map-shapes.js';
 import StatTabsPage from '../../routes/components/stat-tabs/+page.svelte';
 import SparklinePage from '../../routes/components/sparkline/+page.svelte';
+import WorldMapPage from '../../routes/components/world-map/+page.svelte';
 import Assistant from '#lib/blocks/chat/Assistant.svelte';
 import { fetchServerSentEvents } from '@tanstack/ai-svelte';
 import type { ToolCallPart, ToolResultPart } from '@tanstack/ai';
@@ -182,6 +185,7 @@ const pages = {
 	SidebarPage,
 	StatTabsPage,
 	SparklinePage,
+	WorldMapPage,
 	PasswordInputPage,
 	SearchFieldPage,
 	EmptyStatePage,
@@ -243,6 +247,13 @@ async function expectNoAxeViolations() {
 }
 
 const focused = () => document.activeElement;
+
+// Registered in vite.config.ts: the page as a reader who asks for less motion sees it.
+declare module 'vitest/browser' {
+	interface BrowserCommands {
+		reduceMotion: (on: boolean) => Promise<void>;
+	}
+}
 
 // Pages render the way the docs layout serves them: inside <main>, with the tokens loaded.
 function render(Page: Component) {
@@ -3446,5 +3457,127 @@ describe('sinaui', () => {
 		await page.getByRole('button', { name: 'Finish loading' }).click();
 		await expect.element(page.getByText('Ibn Sina', { exact: true }).first()).toBeVisible();
 		expect(region.getAttribute('aria-busy')).toBe('false');
+	});
+	describe('world map', () => {
+		const readers = [
+			{ code: 'IQ', value: 600 },
+			{ code: 'eg', value: 300 },
+			{ code: 'SG', value: 100 },
+			{ code: 'Other', value: 50 }
+		];
+		const country = (name: RegExp) => page.getByRole('button', { name });
+
+		it('names each country with its value and share, lists them in a table, and leaves out non-codes', async () => {
+			const r = mount(WorldMap, {
+				data: readers,
+				title: 'Readers by country',
+				valueLabel: 'Readers',
+				onselect: () => {}
+			});
+			await expect.element(page.getByRole('group', { name: 'Readers by country' })).toBeVisible();
+			await expect.element(country(/^Iraq, 600, 60%$/)).toBeInTheDocument();
+			// Lower-case codes count; Singapore is too small to outline, so it's a dot.
+			await expect.element(country(/^Egypt, 300, 30%$/)).toBeInTheDocument();
+			expect(r.container.querySelector('circle[data-code="SG"]')).not.toBeNull();
+			const table = page.getByRole('table', { name: 'Readers by country' });
+			await expect.element(table).toBeInTheDocument();
+			expect(table.element().querySelectorAll('tbody tr')).toHaveLength(3);
+			expect(r.container.querySelector('[data-code="Other"]')).toBeNull();
+			// The space held before the outlines load matches their size: nothing shifts.
+			expect(worldMapSize).toEqual([960, 418]);
+		});
+
+		it('hover shows a tooltip with the name, value and share; click selects', async () => {
+			const picked: string[] = [];
+			mount(WorldMap, {
+				data: readers,
+				title: 'Readers by country',
+				onselect: (c: string) => picked.push(c)
+			});
+			const egypt = country(/^Egypt/);
+			await expect.element(egypt).toBeInTheDocument();
+			await egypt.hover();
+			const tip = document.querySelector('.world-map .tip');
+			expect(tip?.textContent).toMatch(/Egypt\s*300\s*30% of total/);
+			await egypt.click();
+			expect(picked).toEqual(['EG']);
+		});
+
+		it('keyboard: one tab stop, arrows walk from the largest value, Enter selects, plus zooms', async () => {
+			const picked: string[] = [];
+			const r = mount(WorldMap, {
+				data: readers,
+				title: 'Readers by country',
+				onselect: (c: string) => picked.push(c)
+			});
+			await expect.element(country(/^Iraq/)).toBeInTheDocument();
+			expect(r.container.querySelectorAll('[tabindex="0"]')).toHaveLength(1);
+			r.container.querySelector<SVGElement>('[tabindex="0"]')!.focus();
+			expect(focused()?.getAttribute('data-code')).toBe('IQ');
+			await userEvent.keyboard('{ArrowRight}');
+			expect(focused()?.getAttribute('data-code')).toBe('EG');
+			// Keyboard focus shows the tooltip on the country.
+			expect(document.querySelector('.world-map .tip')?.textContent).toMatch(/Egypt/);
+			await userEvent.keyboard('{End}');
+			expect(focused()?.getAttribute('data-code')).toBe('SG');
+			await userEvent.keyboard('{Enter}');
+			expect(picked).toEqual(['SG']);
+			await userEvent.keyboard('{Home}+');
+			expect(focused()?.getAttribute('data-code')).toBe('IQ');
+			await expect.element(page.getByRole('button', { name: 'Show the whole map' })).toBeVisible();
+			await userEvent.keyboard('0');
+			await expect
+				.element(page.getByRole('button', { name: 'Show the whole map' }))
+				.not.toBeInTheDocument();
+		});
+
+		it('zoom buttons zoom and reset the view; the zoom-out button is off at full view', async () => {
+			const r = mount(WorldMap, { data: readers, title: 'Readers by country' });
+			const out = page.getByRole('button', { name: 'Zoom out' });
+			await expect.element(out).toBeDisabled();
+			await page.getByRole('button', { name: 'Zoom in' }).click();
+			const view = r.container.querySelector<SVGGElement>('.view')!;
+			expect(view.style.transform).toContain('scale(2)');
+			await page.getByRole('button', { name: 'Show the whole map' }).click();
+			expect(view.style.transform).toContain('scale(1)');
+		});
+
+		it('pings pulse; reduced motion shows the map and pings without animation', async () => {
+			const r = mount(WorldMap, {
+				data: readers,
+				title: 'Readers by country',
+				pings: [{ code: 'IQ', value: 3 }]
+			});
+			await expect
+				.element(country(/^Iraq/).or(page.getByRole('img', { name: /^Iraq/ })))
+				.toBeInTheDocument();
+			await expect.poll(() => r.container.querySelector('.pulse')).not.toBeNull();
+			expect(getComputedStyle(r.container.querySelector('.pulse')!).animationName).toMatch(
+				/pulse$/
+			);
+			r.unmount();
+			await commands.reduceMotion(true);
+			try {
+				const still = mount(WorldMap, {
+					data: readers,
+					title: 'Readers by country',
+					pings: [{ code: 'IQ', value: 3 }]
+				});
+				await expect.poll(() => still.container.querySelector('.map.revealed')).not.toBeNull();
+				const land = still.container.querySelector('.land')!;
+				expect(getComputedStyle(land).animationName).toBe('none');
+				expect(getComputedStyle(land).opacity).toBe('1');
+				expect(getComputedStyle(still.container.querySelector('.pulse')!).animationName).toBe(
+					'none'
+				);
+			} finally {
+				await commands.reduceMotion(false);
+			}
+		});
+
+		it('says so when there is no data', async () => {
+			mount(WorldMap, { data: [], title: 'Readers by country', empty: 'No readers yet.' });
+			await expect.element(page.getByText('No readers yet.')).toBeVisible();
+		});
 	});
 });

@@ -309,6 +309,11 @@ export const nav: {
 				keywords: ['trend', 'mini chart', 'tiny chart', 'inline chart']
 			},
 			{
+				title: 'World map',
+				href: '/components/world-map',
+				keywords: ['choropleth', 'countries', 'geo', 'locations', 'map', 'live', 'visitors']
+			},
+			{
 				title: 'Chat',
 				href: '/components/chat',
 				keywords: ['messages', 'conversation', 'thread', 'messenger', 'inbox', 'dm']
