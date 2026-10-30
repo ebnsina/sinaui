@@ -3631,6 +3631,19 @@ describe('sinaui', () => {
 			expect(tip?.textContent).toMatch(/Egypt\s*300\s*30% of total/);
 			await egypt.click();
 			expect(picked).toEqual(['EG']);
+			// A double-click zooms in and selects once, not twice.
+			await egypt.dblClick();
+			expect(picked).toEqual(['EG', 'EG']);
+			await expect
+				.element(page.getByRole('button', { name: 'Show the whole map' }))
+				.toBeInTheDocument();
+			// After clicks, the arrow keys still bring the tooltip along to the next country.
+			await page.getByRole('button', { name: 'Zoom in' }).click();
+			await page.getByRole('button', { name: 'Show the whole map' }).click();
+			(egypt.element() as SVGElement).focus();
+			await userEvent.keyboard('{ArrowRight}');
+			expect(focused()?.getAttribute('data-code')).toBe('SG');
+			expect(document.querySelector('.world-map .tip')?.textContent).toMatch(/Singapore/);
 		});
 
 		it('keyboard: one tab stop, arrows walk from the largest value, Enter selects, plus zooms', async () => {
