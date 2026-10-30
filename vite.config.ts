@@ -66,7 +66,16 @@ export default defineConfig({
 						instances: [
 							{ browser: 'chromium', headless: true },
 							{ browser: 'webkit', headless: true }
-						]
+						],
+						commands: {
+							// `commands.reduceMotion(true)`: the page as a reader who asks for less motion sees it.
+							reduceMotion: async (ctx, on: boolean) => {
+								if (ctx.provider.name !== 'playwright') throw new Error('needs Playwright');
+								await (ctx as unknown as { page: import('playwright').Page }).page.emulateMedia({
+									reducedMotion: on ? 'reduce' : 'no-preference'
+								});
+							}
+						}
 					},
 					include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
 					exclude: ['src/lib/server/**']
