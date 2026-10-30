@@ -208,6 +208,47 @@ describe('docs block', () => {
 			.toHaveTextContent("fetch('/books')");
 	});
 
+	it('page: one rhythm between blocks, more room above headings, an adjustable gap', async () => {
+		render(DocsPage, {
+			title: 'Rhythm',
+			children: text(
+				'<div class="flow"><p id="r1">a</p><pre id="r2">x</pre><pre id="r3">y</pre><h2 id="r4">H</h2><p id="r5">b</p><h3 id="r6">S</h3><ul id="r7"><li>c</li></ul></div>'
+			)
+		});
+		// The snippet renders its own wrapper; the rules apply to the prose column's direct children.
+		const flow = document.querySelector('.flow')!;
+		flow.replaceWith(...flow.childNodes);
+		const top = (id: string) => getComputedStyle(document.getElementById(id)!).marginBlockStart;
+		const bottom = (id: string) => getComputedStyle(document.getElementById(id)!).marginBlockEnd;
+		expect(top('r1')).toBe('0px');
+		expect([top('r2'), top('r3')]).toEqual(['20px', '20px']);
+		expect([top('r4'), top('r5'), top('r6'), top('r7')]).toEqual(['48px', '10px', '36px', '10px']);
+		expect(bottom('r7')).toBe('0px');
+		(document.querySelector('.prose') as HTMLElement).style.setProperty('--prose-gap', '2rem');
+		expect(top('r3')).toBe('32px');
+	});
+
+	it('code tabs: each tab is its own height, so a short sample leaves no gap', async () => {
+		const samples = [
+			{ label: 'curl', lang: 'shell' as const, code: 'curl /books' },
+			{
+				label: 'Python',
+				lang: 'python' as const,
+				code: Array.from({ length: 12 }, (_, i) => `line_${i} = ${i}`).join('\n')
+			}
+		];
+		render(CodeTabs, { samples });
+		const box = () => document.querySelector('.code-tabs')!.getBoundingClientRect().height;
+		await expect
+			.element(page.getByRole('tab', { name: 'curl' }))
+			.toHaveAttribute('aria-selected', 'true');
+		const short = box();
+		await page.getByRole('tab', { name: 'Python' }).click();
+		await expect.poll(box).toBeGreaterThan(short + 100);
+		await page.getByRole('tab', { name: 'curl' }).click();
+		await expect.poll(box).toBeLessThan(short + 5);
+	});
+
 	it('code tabs: one sample is a plain code block', async () => {
 		render(CodeTabs, { samples: [{ label: 'JSON', lang: 'json', code: '{}' }] });
 		await expect.element(page.getByText('{}')).toBeVisible();
