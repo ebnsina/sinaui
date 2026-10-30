@@ -6,6 +6,7 @@
 		MinusSignIcon
 	} from '@hugeicons/core-free-icons';
 	import Icon from './Icon.svelte';
+	import RollingNumber from './RollingNumber.svelte';
 
 	interface Item {
 		value: string;
@@ -45,7 +46,8 @@
 			<label class="cell">
 				<input type="radio" {name} value={item.value} bind:group={value} />
 				<span class="label">{item.label}</span>
-				<span class="value">{item.display}</span>
+				<!-- Rolls to a new number, so a changed period or filter shows where the figures moved. -->
+				<span class="value"><RollingNumber value={item.display} duration={400} /></span>
 				{#if item.change}
 					<span class="change">
 						{#if item.trend}<Icon icon={arrows[item.trend]} size={14} />{/if}

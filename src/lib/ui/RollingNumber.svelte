@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 
 	interface Props {
 		/** A number, or text you've already formatted ("18px", "40 days"): its digits roll either way. */
@@ -7,10 +7,12 @@
 		/** Intl.NumberFormat options for a number value: percent, currency, units, decimals. */
 		format?: Intl.NumberFormatOptions;
 		locales?: Intl.LocalesArgument;
+		/** The longest a roll takes, in ms; quicker changes roll quicker still. */
+		duration?: number;
 		class?: string;
 	}
 
-	let { value, format, locales, class: className }: Props = $props();
+	let { value, format, locales, duration = 600, class: className }: Props = $props();
 
 	const text = $derived(
 		typeof value === 'string' ? value : new Intl.NumberFormat(locales, format).format(value)
@@ -25,15 +27,15 @@
 	let ready = $state(false);
 	onMount(() => (ready = true));
 
-	// Always rolls, at the pace values arrive: a lone change takes the full 600ms, quick repeats roll
+	// Always rolls, at the pace values arrive: a lone change takes the full duration, quick repeats roll
 	// quicker (picking up mid-roll), and a timer's rapid ticks are near-instant rather than churning.
-	let roll = $state(600);
+	let roll = $state(untrack(() => duration));
 	let changedAt = -Infinity;
 	$effect.pre(() => {
 		void text;
 		const now = performance.now();
 		const gap = now - changedAt;
-		roll = gap < 120 ? 0 : Math.min(600, Math.round(gap * 0.8));
+		roll = gap < 120 ? 0 : Math.min(duration, Math.round(gap * 0.8));
 		changedAt = now;
 	});
 </script>

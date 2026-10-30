@@ -1598,6 +1598,28 @@ describe('sinaui', () => {
 		expect(svg.closest('figure')!.textContent).toContain('Loans dipped in April');
 	});
 
+	it('chart: onselect gets the point chosen by click or by Enter', async () => {
+		render(ChartPage);
+		await expect
+			.poll(() => document.querySelector('figure svg[aria-label="Returns by day"]'))
+			.not.toBeNull();
+		const figure = document
+			.querySelector('figure svg[aria-label="Returns by day"]')!
+			.closest('figure')!;
+		figure.scrollIntoView({ block: 'center' });
+		// Interactive once it has drawn in on screen.
+		await expect.poll(() => figure.querySelector('.plot.live')).not.toBeNull();
+		const svg = figure.querySelector<SVGElement>('svg[aria-label="Returns by day"]')!;
+		const status = figure.parentElement!.querySelector('[role="status"]')!;
+		expect(status.textContent).toContain('No day chosen.');
+		expect(getComputedStyle(svg).cursor).toBe('pointer');
+		svg.focus();
+		await userEvent.keyboard('{Enter}');
+		await expect.poll(() => status.textContent).toContain('Sat: 54 books returned.');
+		await userEvent.keyboard('{ArrowRight}{Enter}');
+		await expect.poll(() => status.textContent).toContain('Sun: 61 books returned.');
+	});
+
 	it('focus details: dialog opens on itself, mouse-opened menu highlights nothing, panels', async () => {
 		render(DialogPage);
 		await page.getByRole('button', { name: 'Edit scholar' }).click();
@@ -3111,6 +3133,21 @@ describe('sinaui', () => {
 		const top = (el: Element) => Math.round(el.getBoundingClientRect().top);
 		const [a, b] = r.container.querySelectorAll('.value');
 		expect(top(a)).toBe(top(b));
+	});
+
+	it('stat tabs: a new number rolls in and is read as the new value', async () => {
+		const items = (loans: string) => [
+			{ value: 'loans', label: 'Loans', display: loans },
+			{ value: 'visits', label: 'Visits', display: '13,706' }
+		];
+		const r = mount(StatTabs, { label: 'Chart metric', items: items('3,242') });
+		await expect.element(page.getByRole('radio', { name: 'Loans 3,242' })).toBeChecked();
+		// A lone change rolls for 400ms at most, kept short for headline figures.
+		const roll = (r.container.querySelector('.value .rolling') as HTMLElement).style;
+		expect(roll.getPropertyValue('--roll')).toBe('400ms');
+		await r.rerender({ items: items('3,318') });
+		await expect.element(page.getByRole('radio', { name: 'Loans 3,318' })).toBeInTheDocument();
+		expect(r.container.querySelector('.value [data-c="1"] .strip')).not.toBeNull();
 	});
 
 	it('table: plain rows split by hairlines by default; striped tints every other row', async () => {
