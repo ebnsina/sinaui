@@ -1,5 +1,5 @@
 import { page } from 'vitest/browser';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { createRawSnippet } from 'svelte';
 import '#lib/ui/tokens.css';
@@ -34,13 +34,11 @@ describe('docs block', () => {
 	// Wide enough for the tabs, the sidebar and the contents rail.
 	beforeEach(() => page.viewport(1440, 900));
 
-	it('layout: marks the current tab and page, and search finds pages by title', async () => {
-		const went: string[] = [];
+	it('layout: marks the current tab and page', async () => {
 		render(DocsLayout, {
 			name: 'Warraq',
 			sections,
 			current: '#quickstart',
-			onnavigate: (href: string) => went.push(href),
 			children: text('<p>Body</p>')
 		});
 		const tabs = page.getByRole('navigation', { name: 'Warraq docs sections' });
@@ -58,6 +56,17 @@ describe('docs block', () => {
 			.element(side.getByRole('link', { name: 'Introduction' }))
 			.not.toHaveAttribute('aria-current');
 		await expect.element(page.getByRole('main')).toHaveTextContent('Body');
+	});
+
+	it('layout: search finds pages by title and opens them through onnavigate', async () => {
+		const went: string[] = [];
+		render(DocsLayout, {
+			name: 'Warraq',
+			sections,
+			current: '#quickstart',
+			onnavigate: (href: string) => went.push(href),
+			children: text('<p>Body</p>')
+		});
 
 		await page.getByRole('button', { name: 'Search the docs' }).click();
 		await page.getByRole('combobox').fill('books');
@@ -100,37 +109,55 @@ describe('docs block', () => {
 		}
 	});
 
-	it('page: copies the Markdown source, says when it fails, and links prev and next', async () => {
+	it('page: links the Markdown address and the previous and next pages', async () => {
+		render(DocsPage, {
+			title: 'Quickstart',
+			markdownHref: '/quickstart.md',
+			prev: { label: 'Introduction', href: '/' },
+			next: { label: 'Books', href: '/books' },
+			children: text('<p>Body</p>')
+		});
+		await expect
+			.element(page.getByRole('link', { name: 'View as Markdown' }))
+			.toHaveAttribute('href', '/quickstart.md');
+		await expect
+			.element(page.getByRole('link', { name: /Previous\s*Introduction/ }))
+			.toHaveAttribute('rel', 'prev');
+		await expect
+			.element(page.getByRole('link', { name: /Next\s*Books/ }))
+			.toHaveAttribute('href', '/books');
+	});
+
+	describe('copy page as Markdown', () => {
+		// A stand-in clipboard: the test browser doesn't grant the real one.
 		let copied = '';
 		const real = Object.getOwnPropertyDescriptor(Navigator.prototype, 'clipboard');
-		Object.defineProperty(navigator, 'clipboard', {
-			configurable: true,
-			value: { writeText: async (t: string) => void (copied = t) }
-		});
 		const quiet = console.error;
-		console.error = () => {};
-		try {
-			const ok = render(DocsPage, {
+		beforeEach(() => {
+			copied = '';
+			Object.defineProperty(navigator, 'clipboard', {
+				configurable: true,
+				value: { writeText: async (t: string) => void (copied = t) }
+			});
+			console.error = () => {};
+		});
+		afterEach(() => {
+			console.error = quiet;
+			delete (navigator as { clipboard?: unknown }).clipboard;
+			if (real) Object.defineProperty(Navigator.prototype, 'clipboard', real);
+		});
+
+		it('copies the source the page loads', async () => {
+			render(DocsPage, {
 				title: 'Quickstart',
 				markdown: async () => '# Quickstart\n',
-				markdownHref: '/quickstart.md',
-				prev: { label: 'Introduction', href: '/' },
-				next: { label: 'Books', href: '/books' },
 				children: text('<p>Body</p>')
 			});
-			await expect
-				.element(page.getByRole('link', { name: 'View as Markdown' }))
-				.toHaveAttribute('href', '/quickstart.md');
-			await expect
-				.element(page.getByRole('link', { name: /Previous\s*Introduction/ }))
-				.toHaveAttribute('rel', 'prev');
-			await expect
-				.element(page.getByRole('link', { name: /Next\s*Books/ }))
-				.toHaveAttribute('href', '/books');
 			await page.getByRole('button', { name: 'Copy page as Markdown' }).click();
 			await expect.poll(() => copied).toBe('# Quickstart\n');
-			ok.unmount();
+		});
 
+		it('says it could not copy when the source fails to load', async () => {
 			render(DocsPage, {
 				title: 'Broken',
 				markdown: async () => {
@@ -140,11 +167,8 @@ describe('docs block', () => {
 			});
 			await page.getByRole('button', { name: 'Copy page as Markdown' }).click();
 			await expect.element(page.getByText("Couldn't copy").first()).toBeInTheDocument();
-		} finally {
-			console.error = quiet;
-			delete (navigator as { clipboard?: unknown }).clipboard;
-			if (real) Object.defineProperty(Navigator.prototype, 'clipboard', real);
-		}
+			expect(copied).toBe('');
+		});
 	});
 
 	it('page: no Markdown actions, rail or pager without their props', async () => {
