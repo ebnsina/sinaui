@@ -58,6 +58,13 @@
 	{...ex('sheet')}
 />
 
+<Example
+	id="status"
+	title="With a status icon"
+	description="The icon snippet sits before the title, for a sheet that shows a record's state at a glance. It's decorative: the title still names the dialog."
+	{...ex('status')}
+/>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
@@ -68,6 +75,7 @@
 		>
 		<tr><td><code>title</code></td><td><code>string</code> (required)</td><td></td></tr>
 		<tr><td><code>description</code></td><td><code>string</code></td><td></td></tr>
+		<tr><td><code>icon</code></td><td><code>Snippet</code>, before the title</td><td></td></tr>
 		<tr
 			><td><code>side</code></td><td><code>'center' | 'start' | 'end'</code></td><td
 				><code>'center'</code></td
