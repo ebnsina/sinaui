@@ -54,6 +54,7 @@
 		['--ui-sidebar-title-case', 'Sidebar layout: the group titles’ letter case (none or uppercase)', false],
 		['--ui-sidebar-title-tracking', 'Sidebar layout: the group titles’ letter spacing', false],
 		['--ui-sheet-width', 'Dialog: a side sheet’s width', false],
+		['--ui-sheet-inset', 'Dialog: room a side sheet leaves beside it on narrow screens', false],
 		['--ui-ease-out', 'Things arriving', false],
 		['--ui-ease-in-out', 'Things moving on screen', false],
 		['--ui-ease-drawer', 'Sheets and drawers', false],
