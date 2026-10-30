@@ -483,6 +483,33 @@ describe('sinaui', () => {
 		expect(new FormData(form).get('notify')).toBe('on');
 	});
 
+	it('switch: the knob slides over, or just switches under reduced motion; disabled stays put', async () => {
+		render(SwitchPage);
+		const sw = page.getByRole('switch', { name: 'Notify me of new translations' });
+		await expect.element(sw).toBeChecked();
+		const knob = () =>
+			getComputedStyle((sw.element() as HTMLElement).nextElementSibling!, '::before');
+		expect(knob().transitionProperty).toContain('translate');
+		// On, the knob sits at the far end of the 36px track; off, at the start.
+		expect(knob().translate).toBe('16px');
+		(sw.element() as HTMLElement).focus();
+		await userEvent.keyboard(' ');
+		await expect.element(sw).not.toBeChecked();
+		await commands.reduceMotion(true);
+		try {
+			expect(knob().transitionProperty).not.toContain('translate');
+		} finally {
+			await commands.reduceMotion(false);
+		}
+		const off = page.getByRole('switch', { name: 'Lend to the Córdoba library' });
+		await expect.element(off).toBeDisabled();
+		await page
+			.getByText('Lend to the Córdoba library', { exact: true })
+			.first()
+			.click({ force: true });
+		await expect.element(off).not.toBeChecked();
+	});
+
 	it('input: label, hint and error are wired for screen readers; focus follows the spec', async () => {
 		render(InputPage);
 		const name = page.getByRole('textbox', { name: 'Full name' });
