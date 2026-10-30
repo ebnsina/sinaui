@@ -116,6 +116,7 @@ import Chat from '#lib/blocks/chat/Chat.svelte';
 import Orb from '#lib/ui/Orb.svelte';
 import SizeRow from '../../routes/theming/examples/size.svelte';
 import ChatSheet from '../../routes/blocks/ai-chat/examples/sheet.svelte';
+import DialogStatus from '../../routes/components/dialog/examples/status.svelte';
 import FolderTabs from '../../routes/components/tabs/examples/folder.svelte';
 import PillTabs from '../../routes/components/tabs/examples/pill.svelte';
 import FieldRowPage from '../../routes/components/select/examples/row.svelte';
@@ -406,6 +407,19 @@ describe('sinaui', () => {
 			'rgba(0, 0, 0, 0)',
 			'0px'
 		]);
+	});
+
+	it('dialog icon: sits before the title, hidden from screen readers, title still names the dialog', async () => {
+		const r = mount(DialogStatus, { open: true });
+		const dialog = page.getByRole('dialog', { name: 'Loan returned' });
+		await expect.element(dialog).toBeVisible();
+		const icon = dialog.element().querySelector<HTMLElement>('header .icon')!;
+		const title = dialog.element().querySelector<HTMLElement>('h2')!;
+		expect(icon.getAttribute('aria-hidden')).toBe('true');
+		expect(icon.getBoundingClientRect().right).toBeLessThanOrEqual(
+			title.getBoundingClientRect().left
+		);
+		r.unmount();
 	});
 
 	it('sheet inset: 3rem left beside a sheet on narrow screens by default, 0 fills the width', async () => {

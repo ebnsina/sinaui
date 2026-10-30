@@ -15,6 +15,8 @@
 		side?: 'center' | 'start' | 'end';
 		/** false: no close button, and a press on the backdrop doesn't close it (confirmations). */
 		dismissible?: boolean;
+		/** Before the title: a status icon (a blocked request, a success), decorative. */
+		icon?: Snippet;
 		children?: Snippet;
 		footer?: Snippet;
 	}
@@ -26,6 +28,7 @@
 		closeLabel = 'Close',
 		side = 'center',
 		dismissible = true,
+		icon,
 		children,
 		footer,
 		class: className,
@@ -67,7 +70,14 @@
 >
 	<div class="body">
 		<header>
-			<h2 id="{id}-title">{title}</h2>
+			{#if icon}
+				<div class="titled">
+					<span class="icon" aria-hidden="true">{@render icon()}</span>
+					<h2 id="{id}-title">{title}</h2>
+				</div>
+			{:else}
+				<h2 id="{id}-title">{title}</h2>
+			{/if}
 			{#if dismissible}
 				<button type="button" class="close" aria-label={closeLabel} onclick={() => dialog.close()}>
 					<Icon icon={Cancel01Icon} />
@@ -136,6 +146,16 @@
 		align-items: start;
 		justify-content: space-between;
 		gap: 1rem;
+	}
+	.titled {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-inline-size: 0;
+	}
+	.icon {
+		display: inline-flex;
+		flex: none;
 	}
 	header:not(:has(+ .desc)) {
 		margin-block-end: 0.75rem;
