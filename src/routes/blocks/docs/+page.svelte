@@ -119,6 +119,13 @@
 	so the crumbs and pager come from the same nav as the sidebar. <code>CodeTabs</code> takes
 	<code>{'samples: { label, code, lang?, filename? }[]'}</code> and a bindable <code>value</code>.
 </p>
+<p>
+	The content keeps one rhythm: every block sits <code>--prose-gap</code> (1.25rem; set it to change
+	it) below the last, and headings get more room above than below. Wrap a component that sets its
+	own margins, such as a lone <code>CodeBlock</code> or an <code>Alert</code>, in a
+	<code>div</code>;
+	<code>CodeTabs</code> already is, and each of its tabs is only as tall as its own code.
+</p>
 
 <h2 id="accessibility">Accessibility</h2>
 <ul>

@@ -33,26 +33,30 @@
 	const shown = $derived(samples.some((s) => s.label === value) ? value : samples[0]?.label);
 </script>
 
-{#if samples.length === 1}
-	{@const s = samples[0]}
-	<CodeBlock code={s.code} lang={s.lang} filename={s.filename} {lineNumbers} />
-{:else if samples.length}
+<!-- Always one wrapper, so the code block's own margins never reach the prose around it. -->
+{#if samples.length}
 	<div class="code-tabs">
-		<Tabs.Root size="sm" bind:value={() => shown, (v) => (value = v)}>
-			<Tabs.List {label}>
-				{#each samples as s (s.label)}<Tabs.Tab value={s.label}>{s.label}</Tabs.Tab>{/each}
-			</Tabs.List>
-			{#each samples as s (s.label)}
-				<Tabs.Panel value={s.label}>
-					<CodeBlock code={s.code} lang={s.lang} filename={s.filename ?? s.label} {lineNumbers} />
-				</Tabs.Panel>
-			{/each}
-		</Tabs.Root>
+		{#if samples.length === 1}
+			{@const s = samples[0]}
+			<CodeBlock code={s.code} lang={s.lang} filename={s.filename} {lineNumbers} />
+		{:else}
+			<!-- fit: each panel is its own height, so a short curl leaves no gap under it. -->
+			<Tabs.Root size="sm" fit bind:value={() => shown, (v) => (value = v)}>
+				<Tabs.List {label}>
+					{#each samples as s (s.label)}<Tabs.Tab value={s.label}>{s.label}</Tabs.Tab>{/each}
+				</Tabs.List>
+				{#each samples as s (s.label)}
+					<Tabs.Panel value={s.label}>
+						<CodeBlock code={s.code} lang={s.lang} filename={s.filename ?? s.label} {lineNumbers} />
+					</Tabs.Panel>
+				{/each}
+			</Tabs.Root>
+		{/if}
 	</div>
 {/if}
 
 <style>
-	.code-tabs :global(.codeblock) {
+	.code-tabs :global([role='tabpanel'] .codeblock) {
 		margin-block-start: 0.5rem;
 	}
 </style>

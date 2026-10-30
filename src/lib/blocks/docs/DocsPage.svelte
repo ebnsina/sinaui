@@ -23,7 +23,10 @@
 		toc?: TocItem[];
 		prev?: Link;
 		next?: Link;
-		/** The content, styled as prose: give its h2 and h3 the ids used in `toc`. */
+		/**
+		 * The content, styled as prose: give its h2 and h3 the ids used in `toc`. Wrap a component that
+		 * sets its own margins (CodeBlock, Alert) in a div so it keeps the spacing; CodeTabs already is.
+		 */
 		children: Snippet;
 	}
 
@@ -145,11 +148,31 @@
 		outline-offset: var(--ui-ring-offset);
 	}
 
-	/* The content: about 68 characters a line at 1rem in a 46rem column. */
+	/* The content: about 68 characters a line at 1rem in a 46rem column. One rhythm: each block sits
+	   one --prose-gap below the last; headings get more room above than below. Components with their
+	   own margins (a code block, an alert) go in a wrapper so those can't break it. */
 	.prose {
 		margin-block-start: 2rem;
 		font-size: 1rem;
 		line-height: 1.7;
+	}
+	.prose > :global(*) {
+		margin-block: 0;
+	}
+	.prose > :global(* + *) {
+		margin-block-start: var(--prose-gap, 1.25rem);
+	}
+	.prose > :global(h2) {
+		margin-block-start: 3rem;
+	}
+	.prose > :global(h3) {
+		margin-block-start: 2.25rem;
+	}
+	.prose > :global(h4) {
+		margin-block-start: 1.75rem;
+	}
+	.prose > :global(:is(h2, h3, h4) + *) {
+		margin-block-start: 0.625rem;
 	}
 	.prose > :global(:first-child) {
 		margin-block-start: 0;
@@ -162,24 +185,18 @@
 		text-wrap: balance;
 	}
 	.prose :global(h2) {
-		margin: 3rem 0 0.75rem;
 		font-size: 1.5rem;
 	}
 	.prose :global(h3) {
-		margin: 2.25rem 0 0.5rem;
 		font-size: 1.1875rem;
 	}
 	.prose :global(h4) {
-		margin: 1.75rem 0 0.5rem;
 		font-size: 1rem;
-	}
-	.prose :global(:is(p, ul, ol, blockquote)) {
-		margin: 0 0 1rem;
 	}
 	.prose :global(:is(ul, ol)) {
 		padding-inline-start: 1.5rem;
 	}
-	.prose :global(li + li) {
+	.prose :global(:is(li + li, li > ul, li > ol)) {
 		margin-block-start: 0.375rem;
 	}
 	.prose :global(a) {
@@ -202,9 +219,9 @@
 		font-size: 0.875em;
 		overflow-wrap: anywhere;
 	}
-	.prose :global(hr) {
+	.prose > :global(hr) {
 		block-size: 1px;
-		margin: 2.5rem 0;
+		margin-block: 2.5rem;
 		border: 0;
 		box-shadow: inset 0 1px var(--ui-line);
 	}
@@ -216,7 +233,6 @@
 	.prose :global(table) {
 		display: block;
 		max-inline-size: 100%;
-		margin: 0 0 1.25rem;
 		overflow-x: auto;
 		border-collapse: collapse;
 		font-size: 0.875rem;
@@ -232,10 +248,6 @@
 		vertical-align: top;
 		box-shadow: inset 0 -1px var(--ui-line);
 	}
-	.prose > :global(:is(.codeblock, .code-tabs, .alert)) {
-		margin-block-end: 1.25rem;
-	}
-
 	.pager {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
