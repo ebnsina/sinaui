@@ -38,12 +38,11 @@
 	// "/pro/<template>/site/…", "…/app/…" or a variant like "…/modern-site/…": a template's own pages.
 	// A 404 has no route id, so fall back to the address (minus any base path): a missing page inside
 	// a template still shows bare, never inside the docs.
-	const template = $derived(
-		(page.route.id ?? page.url.pathname.slice(resolve('/').length - 1)).match(
-			/^\/pro\/([^/]+)\/(?:[a-z-]+-)?(?:site|app)(?:\/|$)/
-		)?.[1]
-	);
-	const bare = $derived(!!template);
+	const route = $derived(page.route.id ?? page.url.pathname.slice(resolve('/').length - 1));
+	const template = $derived(route.match(/^\/pro\/([^/]+)\/(?:[a-z-]+-)?(?:site|app)(?:\/|$)/)?.[1]);
+	// A block's live demo ("/blocks/docs/site/…"), shown in a frame on the block's page: bare too.
+	const demo = $derived(route.match(/^\/blocks\/([^/]+)\/site(?:\/|$)/)?.[1]);
+	const bare = $derived(!!template || !!demo);
 	const menu: { title: string; href: PageId; pro?: boolean }[] = [
 		{ title: 'Docs', href: '/docs' },
 		{ title: 'Components', href: '/components/button' },
@@ -59,7 +58,9 @@
 			? 'home'
 			: template
 				? `pro-${template}`
-				: page.route.id.slice(1).replaceAll('/', '-')
+				: demo
+					? `blocks-${demo}`
+					: page.route.id.slice(1).replaceAll('/', '-')
 	);
 	const ogImage = $derived(`${page.url.origin}${asset(`og/${ogSlug}.png` as AssetPath)}`);
 

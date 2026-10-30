@@ -47,13 +47,18 @@ const nur = [
 	'/newsletter',
 	'/404'
 ].map((p) => `/pro/blog/modern-site${p}`);
+// The docs block's live demo, shown bare in a frame on its page.
+const docsDemo = ['', '/quickstart', '/authentication', '/manuscripts'].map(
+	(p) => `/blocks/docs/site${p}`
+);
 for (const href of [
 	'/',
 	...nav.flatMap((g) => g.items.map((i) => i.href)),
 	...daftar,
 	...daftarApp,
 	...sidra,
-	...nur
+	...nur,
+	...docsDemo
 ]) {
 	test(`${href}: no sideways scroll, no axe violations`, async ({ page }) => {
 		// Scroll reveals start faded below the fold; axe judges what they settle into.

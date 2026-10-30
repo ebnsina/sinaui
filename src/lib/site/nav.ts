@@ -553,6 +553,11 @@ export const nav: {
 				keywords: ['analytics', 'admin', 'stats', 'kpi', 'charts', 'overview', 'reports']
 			},
 			{
+				title: 'Docs',
+				href: '/blocks/docs',
+				keywords: ['documentation', 'docs site', 'clerk', 'mintlify', 'toc', 'sidebar', 'markdown']
+			},
+			{
 				title: 'File explorer',
 				href: '/blocks/file-explorer',
 				keywords: ['file manager', 'finder', 'explorer', 'files', 'folders', 'upload', 'drive']
