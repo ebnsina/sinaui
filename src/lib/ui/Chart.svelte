@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, untrack, type Snippet } from 'svelte';
 	import type {
+		ChartPoint,
 		ChartTooltipBodyContext,
 		ChartTooltipBodyTarget,
 		DomChartDefinition
@@ -23,6 +24,8 @@
 		center?: Snippet;
 		/** Your own tooltip content, in place of the standard one. */
 		tooltipBody?: Snippet<[ChartTooltipBodyContext<any, any, any>]>;
+		/** A point was clicked, or chosen with Enter or Space; null for a click on empty space. */
+		onselect?: (point: ChartPoint<any, any, any> | null) => void;
 		class?: string;
 	}
 	/* eslint-enable @typescript-eslint/no-explicit-any */
@@ -35,6 +38,7 @@
 		height,
 		center,
 		tooltipBody,
+		onselect,
 		class: className
 	}: Props = $props();
 	const id = $props.id();
@@ -54,6 +58,7 @@
 		height,
 		idPrefix: `ts-chart-${id.replaceAll(/[^a-zA-Z0-9_-]/g, '')}`,
 		renderer,
+		onSelect: onselect,
 		onTooltipBodyChange: tooltipBody
 			? (t: ChartTooltipBodyTarget | null) => (tooltip = t)
 			: undefined
@@ -78,7 +83,7 @@
 	);
 </script>
 
-<figure class={['chart', className]} aria-labelledby="{id}-title">
+<figure class={['chart', onselect && 'selectable', className]} aria-labelledby="{id}-title">
 	<figcaption>
 		<span id="{id}-title" class="title">{title}</span>
 		{#if description}<span class="description">{description}</span>{/if}
@@ -200,6 +205,10 @@
 				filter: none;
 			}
 		}
+	}
+	/* Points that do something when chosen say so under the pointer. */
+	.selectable .plot :global(svg) {
+		cursor: pointer;
 	}
 	.plot :global(svg:focus-visible) {
 		outline: var(--ui-ring-width) solid var(--ui-ring);

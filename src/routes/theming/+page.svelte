@@ -51,7 +51,11 @@
 		['--ui-sidebar-item-h', 'Sidebar layout: the height of each page row', false],
 		['--ui-sidebar-font', 'Sidebar layout: the page rows’ text size', false],
 		['--ui-sidebar-title-font', 'Sidebar layout: the group titles’ text size', false],
-		['--ui-sidebar-title-case', 'Sidebar layout: the group titles’ letter case (none or uppercase)', false],
+		[
+			'--ui-sidebar-title-case',
+			'Sidebar layout: the group titles’ letter case (none or uppercase)',
+			false
+		],
 		['--ui-sidebar-title-tracking', 'Sidebar layout: the group titles’ letter spacing', false],
 		['--ui-sheet-width', 'Dialog: a side sheet’s width', false],
 		['--ui-sheet-inset', 'Dialog: room a side sheet leaves beside it on narrow screens', false],

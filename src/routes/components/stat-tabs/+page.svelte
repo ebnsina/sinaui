@@ -36,7 +36,10 @@
 
 <h2 id="installation">Installation</h2>
 <Install names="stat-tabs">
-	<p>Copy <code>src/lib/ui/StatTabs.svelte</code> and <code>tokens.css</code>. No dependencies.</p>
+	<p>
+		Copy <code>src/lib/ui/StatTabs.svelte</code>, <code>RollingNumber.svelte</code>,
+		<code>Icon.svelte</code> and <code>tokens.css</code>.
+	</p>
 </Install>
 
 <h2 id="examples">Examples</h2>
@@ -77,6 +80,10 @@
 		word the change to read on its own.
 	</li>
 	<li>Correct before hydration: the chosen number is marked in the server HTML.</li>
+	<li>
+		When a number changes (a new period, a filter), its digits roll to the new value in 400ms, so
+		it's clear which figures moved. With reduced motion, the new value simply replaces the old.
+	</li>
 	<li>Give the chart a title that names the chosen metric, so the change is announced with it.</li>
 </ul>
 <table>

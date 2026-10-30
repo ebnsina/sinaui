@@ -56,6 +56,11 @@
 		<tr><td><code>value</code></td><td><code>number | string</code></td><td>required</td></tr>
 		<tr><td><code>format</code></td><td><code>Intl.NumberFormatOptions</code></td><td></td></tr>
 		<tr><td><code>locales</code></td><td><code>Intl.LocalesArgument</code></td><td></td></tr>
+		<tr
+			><td><code>duration</code></td><td><code>number</code> (ms): the longest a roll takes</td><td
+				><code>600</code></td
+			></tr
+		>
 	</tbody>
 </table>
 <p>

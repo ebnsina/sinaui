@@ -67,6 +67,12 @@
 />
 <Example id="radial" title="Radial" description="Bars around a circle." {...ex('radial')} />
 <Example
+	id="select"
+	title="Choose a point"
+	description="Click a bar, or focus the chart and press Enter, to act on it: here, show that day's returns. Turn the tooltip's pinning off when a click does something else."
+	{...ex('select')}
+/>
+<Example
 	id="tooltip"
 	title="Custom tooltip"
 	description="Your own tooltip content, here with a second value the bars don't show."
@@ -102,6 +108,12 @@
 			><td><code>tooltipBody</code></td><td><code>Snippet</code>: your own tooltip content</td><td
 			></td></tr
 		>
+		<tr
+			><td><code>onselect</code></td><td
+				><code>(point: ChartPoint | null) =&gt; void</code>: a point was clicked, or chosen with
+				Enter or Space; <code>null</code> for a click on empty space</td
+			><td></td></tr
+		>
 	</tbody>
 </table>
 
@@ -112,6 +124,10 @@
 	</li>
 	<li>
 		It can be focused and read point by point with the arrow keys; each point shows its tooltip.
+	</li>
+	<li>
+		With <code>onselect</code>, Enter or Space chooses the focused point, the same as a click. Say
+		what choosing does in the description, since nothing else shows it before the click.
 	</li>
 	<li>Its space is reserved before it draws, so the page doesn't shift.</li>
 	<li>Say what the chart shows in the description: not everyone can see the picture.</li>
