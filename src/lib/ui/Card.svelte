@@ -80,9 +80,10 @@
 		display: flex;
 		flex-direction: column;
 		min-inline-size: 0;
-		border: 1px solid var(--ui-field-line);
+		border: 1px solid var(--ui-card-line, var(--ui-field-line));
 		border-radius: calc(var(--ui-radius) + 0.25rem);
 		background: var(--ui-surface);
+		box-shadow: var(--ui-card-shadow, none);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
