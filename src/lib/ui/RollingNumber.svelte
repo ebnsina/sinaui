@@ -27,8 +27,10 @@
 	};
 	const strip = $derived(`'${digits.join('\\A ')}'`);
 	// Keyed from the right, so the ones stay the ones when 99 becomes 100 and only the new digit enters.
+	// Split by grapheme, not code point: a Bangla or Arabic vowel sign must stay on its letter.
+	const graphemes = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 	const chars = $derived.by(() => {
-		const all = [...text];
+		const all = [...graphemes.segment(text)].map((g) => g.segment);
 		return all.map((c, i) => ({ c, key: all.length - i, digit: digitOf(c) }));
 	});
 
