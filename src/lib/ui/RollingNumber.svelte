@@ -40,8 +40,11 @@
 	// quicker (picking up mid-roll), and a timer's rapid ticks are near-instant rather than churning.
 	let roll = $state(untrack(() => duration));
 	let changedAt = -Infinity;
+	let mounted = false;
 	$effect.pre(() => {
 		void text;
+		// The first value isn't a change: the first real change (a count-up on load) rolls in full.
+		if (!mounted) return void (mounted = true);
 		const now = performance.now();
 		const gap = now - changedAt;
 		roll = gap < 120 ? 0 : Math.min(duration, Math.round(gap * 0.8));
