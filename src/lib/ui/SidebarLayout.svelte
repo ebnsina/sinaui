@@ -53,6 +53,13 @@
 		crumbs?: { label: string; href?: string }[];
 		/** The page sits in a rounded panel inset from the window; the sidebar shares the window's tint. */
 		inset?: boolean;
+		/**
+		 * On phones, these pages (up to four) become a bottom tab bar like a mobile app's, with a last
+		 * tab that opens the full navigation; the menu button in the top bar goes away.
+		 */
+		tabs?: SidebarItem[];
+		/** The last tab's name; translate it for non-English UIs. */
+		moreLabel?: string;
 		children: Snippet;
 	}
 
@@ -68,6 +75,8 @@
 		topbar,
 		crumbs,
 		inset = false,
+		tabs,
+		moreLabel = 'More',
 		children
 	}: Props = $props();
 
@@ -242,7 +251,7 @@
 
 <!-- The outer box is the container its own width is measured by; the grid sits inside it. -->
 <div class="shell">
-	<div class={['app', collapsed && 'collapsed', inset && 'inset']}>
+	<div class={['app', collapsed && 'collapsed', inset && 'inset', tabs?.length && 'tabbed']}>
 		<aside class="sidebar" aria-label={label}>
 			{#if header}<div class="head">{@render header(collapsed)}</div>{/if}
 			<nav
@@ -301,6 +310,30 @@
 			</div>
 			{@render children()}
 		</div>
+
+		{#if tabs?.length}
+			<!-- Phones: the main pages one thumb-reach away, as in a mobile app. -->
+			<nav class="tabs" aria-label="{label}: main pages">
+				{#each tabs.slice(0, 4) as item (item.href)}
+					<a
+						href={item.href}
+						class="tab"
+						aria-current={item.href === current ? 'page' : undefined}
+						onclick={() => onselect?.(item)}
+					>
+						<span class="tab-icon">
+							{#if item.icon}<Icon icon={item.icon} size={22} />{/if}
+							{#if item.badge}<span class="tab-badge">{item.badge}</span>{/if}
+						</span>
+						<span class="tab-text">{item.label}</span>
+					</a>
+				{/each}
+				<button type="button" class="tab" aria-haspopup="dialog" onclick={() => (drawer = true)}>
+					<span class="tab-icon"><Icon icon={Menu01Icon} size={22} /></span>
+					<span class="tab-text">{moreLabel}</span>
+				</button>
+			</nav>
+		{/if}
 	</div>
 </div>
 
@@ -642,7 +675,86 @@
 		border-start-start-radius: var(--ui-radius);
 		border-start-end-radius: var(--ui-radius);
 	}
+	.tabs {
+		display: none;
+	}
+	.tab {
+		display: grid;
+		justify-items: center;
+		align-content: center;
+		gap: 0.125rem;
+		min-inline-size: 0;
+		min-block-size: 3.5rem;
+		padding: 0.375rem 0.25rem;
+		border: 0;
+		background: none;
+		color: var(--ui-muted);
+		font: 500 0.6875rem/1.2 var(--ui-font);
+		text-decoration: none;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+	}
+	.tab[aria-current='page'] {
+		color: var(--ui-fg);
+		font-weight: 600;
+	}
+	.tab:focus-visible {
+		outline: var(--ui-ring-width) solid var(--ui-ring);
+		outline-offset: calc(-1 * var(--ui-ring-width));
+		border-radius: var(--ui-radius-control);
+	}
+	.tab-icon {
+		position: relative;
+		display: grid;
+		place-items: center;
+		inline-size: 3.25rem;
+		block-size: 1.75rem;
+		border-radius: 999px;
+		transition: background var(--ui-dur) var(--ui-ease-out);
+	}
+	.tab[aria-current='page'] .tab-icon {
+		background: var(--ui-sidebar-current-bg);
+		color: var(--ui-sidebar-current-fg);
+	}
+	.tab-badge {
+		position: absolute;
+		inset-block-start: -0.125rem;
+		inset-inline-end: 0.375rem;
+		min-inline-size: 1rem;
+		padding-inline: 0.25rem;
+		border-radius: 999px;
+		background: var(--ui-accent);
+		color: var(--ui-on-accent);
+		font-size: 0.625rem;
+		font-weight: 600;
+		line-height: 1rem;
+		text-align: center;
+	}
+	.tab-text {
+		max-inline-size: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 	@container (max-width: 40rem) {
+		.app.tabbed {
+			grid-template-rows: minmax(0, 1fr) auto;
+		}
+		.tabs {
+			display: grid;
+			grid-auto-flow: column;
+			grid-auto-columns: minmax(0, 1fr);
+			/* Clear of the home indicator once installed as an app. */
+			padding-block-end: env(safe-area-inset-bottom);
+			border-block-start: 1px solid var(--ui-sidebar-line);
+			background: var(--ui-surface);
+		}
+		.tabbed .bar .menu {
+			display: none;
+		}
+		.tabbed .bar {
+			padding-inline-start: 0.75rem;
+		}
 		.inset .main {
 			margin: 0;
 			border-radius: 0;
@@ -673,7 +785,8 @@
 	@media (prefers-reduced-motion: reduce) {
 		.text,
 		.group,
-		.chev {
+		.chev,
+		.tab-icon {
 			transition: none;
 		}
 	}
