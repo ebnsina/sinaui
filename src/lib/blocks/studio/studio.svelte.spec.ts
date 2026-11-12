@@ -65,6 +65,27 @@ describe('studio', () => {
 		await expect.element(sheet.getByRole('link', { name: 'Settings' })).toBeVisible();
 	});
 
+	it('desktop, collapsed: the brand mark fits in the rail, whole and centered over the icons', async () => {
+		await page.viewport(1280, 900);
+		render(Library);
+		await page
+			.getByRole('button', { name: /Collapse sidebar/ })
+			.first()
+			.click();
+		const mark = document.querySelector<HTMLElement>('.sidebar .mark')!;
+		const head = mark.closest<HTMLElement>('.head')!;
+		const icon = document.querySelector<SVGElement>('.sidebar nav .item svg')!;
+		// Wait for the rail to finish narrowing.
+		await expect.poll(() => head.getBoundingClientRect().width).toBeLessThan(60);
+		const [m, h, i] = [mark, head, icon].map((el) => el.getBoundingClientRect());
+		// Nothing of the mark is cut off by the header's clip.
+		expect(m.left).toBeGreaterThanOrEqual(h.left);
+		expect(m.right).toBeLessThanOrEqual(h.right);
+		expect(head.scrollWidth).toBeLessThanOrEqual(head.clientWidth);
+		// And it sits on the same center line as the icons below it.
+		expect(Math.abs((m.left + m.right) / 2 - (i.left + i.right) / 2)).toBeLessThanOrEqual(1);
+	});
+
 	it('desktop: the tab bar stays hidden', async () => {
 		await page.viewport(1280, 900);
 		render(Library);
