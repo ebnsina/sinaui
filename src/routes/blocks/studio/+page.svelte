@@ -214,6 +214,14 @@
 	</tbody>
 </table>
 
+<h2 id="theming">Theming</h2>
+<p>
+	The pieces follow your tokens. Three more are there for a dashboard that wants color: set
+	<code>--ui-stat-icon-bg</code> and <code>--ui-stat-icon-fg</code> on a Stat (or on each position
+	in a row) to color its icon tile, and <code>--ui-card-icon</code> to color the icon beside a Card's
+	title.
+</p>
+
 <h2 id="accessibility">Accessibility</h2>
 <ul>
 	<li>
