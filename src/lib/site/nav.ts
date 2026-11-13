@@ -596,6 +596,21 @@ export const nav: {
 				]
 			},
 			{
+				title: 'Studio',
+				href: '/blocks/studio',
+				keywords: [
+					'app shell',
+					'admin',
+					'portal',
+					'dashboard',
+					'sidebar',
+					'bottom tabs',
+					'mobile app',
+					'detail sheet',
+					'page header'
+				]
+			},
+			{
 				title: 'Team',
 				href: '/blocks/team',
 				keywords: ['members', 'invite', 'roles', 'permissions', 'seats', 'organization']
