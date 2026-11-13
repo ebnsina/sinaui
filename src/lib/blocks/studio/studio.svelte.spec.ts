@@ -5,6 +5,8 @@ import axe from 'axe-core';
 import '#lib/ui/tokens.css';
 import Library from '../../../routes/blocks/studio/examples/library.svelte';
 import Stat from './Stat.svelte';
+import Studio from './Studio.svelte';
+import { createRawSnippet } from 'svelte';
 
 describe('studio', () => {
 	it('desktop: marks the current page, names it in the breadcrumbs, and follows a choice', async () => {
@@ -131,5 +133,35 @@ describe('studio', () => {
 			unmount();
 			main.remove();
 		}
+	});
+});
+
+describe('studio rail', () => {
+	const props = {
+		name: 'Maktab',
+		home: '/rail-test',
+		groups: [{ items: [{ label: 'Home', href: '/rail-test' }] }],
+		path: '/rail-test',
+		user: { name: 'Amina' },
+		search: false,
+		children: createRawSnippet(() => ({ render: () => '<p>Page</p>' }))
+	};
+
+	it('holds the sidebar collapsed on a rail page, then gives back what the person chose', async () => {
+		await page.viewport(1280, 900);
+		localStorage.clear();
+		const view = render(Studio, { ...props, rail: true });
+		const toggle = page.getByRole('button', { name: /sidebar/ }).first();
+		await expect.element(toggle).toHaveAttribute('aria-expanded', 'false');
+
+		// Expanding here is for now only: nothing is remembered.
+		await toggle.click();
+		await expect.element(toggle).toHaveAttribute('aria-expanded', 'true');
+		expect(JSON.stringify(localStorage)).not.toContain('rail-test-sidebar');
+
+		await view.rerender({ ...props, rail: false });
+		await expect.element(toggle).toHaveAttribute('aria-expanded', 'true');
+		await view.rerender({ ...props, rail: true });
+		await expect.element(toggle).toHaveAttribute('aria-expanded', 'false');
 	});
 });
