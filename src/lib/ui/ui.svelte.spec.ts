@@ -566,6 +566,20 @@ describe('sinaui', () => {
 		await expect.element(page.getByRole('button', { name: 'Share manuscript' })).toBeVisible();
 	});
 
+	it('button depth: flat by default; --ui-button-depth raises filled and outlined buttons', async () => {
+		render(ButtonPage);
+		const el = page.getByRole('button', { name: 'Transcribe' }).element() as HTMLElement;
+		// box-shadow computes as "<color> x y blur spread"; the edge is the y offset.
+		const edge = () => getComputedStyle(el).boxShadow.match(/-?[\d.]+px/g)?.[1];
+		expect(edge()).toBe('0px');
+		document.documentElement.style.setProperty('--ui-button-depth', '4px');
+		try {
+			await expect.poll(edge).toBe('4px');
+		} finally {
+			document.documentElement.style.removeProperty('--ui-button-depth');
+		}
+	});
+
 	it('dropdown: menu button keyboard contract, selection and dismissal', async () => {
 		render(DropdownPage);
 		const trigger = page.getByRole('button', { name: 'Canon of Medicine' });
