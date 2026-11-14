@@ -48,6 +48,7 @@
 		['--ui-sidebar-current-fg', 'Sidebar layout: the current page’s text', true],
 		['--ui-sidebar-w', 'Sidebar layout: its open width', false],
 		['--ui-button-pad-lg', 'Button: a large button’s side padding', false],
+		['--ui-button-depth', 'Button: a raised edge the button presses into (0 is flat)', false],
 		['--ui-sidebar-item-h', 'Sidebar layout: the height of each page row', false],
 		['--ui-sidebar-font', 'Sidebar layout: the page rows’ text size', false],
 		['--ui-sidebar-title-font', 'Sidebar layout: the group titles’ text size', false],

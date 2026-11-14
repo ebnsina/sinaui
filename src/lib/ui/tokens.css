@@ -70,6 +70,9 @@
 	--ui-button-font: 0.9375rem;
 	/* a large button's side padding; raise it with a pill radius for hero buttons */
 	--ui-button-pad-lg: 1rem;
+	/* Raised buttons: a solid edge under filled and outlined buttons that they press into.
+	   0 keeps them flat; around 4px gives a chunky, game-like feel. */
+	--ui-button-depth: 0px;
 	/* Everyday UI text (labels, menus, lists) and the height of a menu or list row. */
 	--ui-font-size: 0.9375rem;
 	--ui-item-h: 2.25rem;
