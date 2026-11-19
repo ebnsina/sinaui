@@ -44,6 +44,23 @@ Sina UI components are copied into the project and owned there, not imported fro
 - Dates use \`@internationalized/date\` (\`CalendarDate\`, \`CalendarDateTime\`); format numbers and dates with \`Intl\`.
 - Keep the built-in motion, keyboard handling and announcements; don't replace them.
 
+## Signed-in apps: start from Studio
+
+Any admin, portal or dashboard starts from the Studio block, never a hand-made shell:
+
+\`\`\`sh
+npx sinaui add blocks/studio
+\`\`\`
+
+- \`Studio\` goes in the signed-in area's layout: \`<Studio name home groups path={page.url.pathname} user onsignout>\`.
+  It gives the searchable sidebar, breadcrumbs, the account menu with the theme switch, and on phones a
+  bottom tab bar (the first group's pages, or your own \`tabs\`). It fills the window; pages scroll inside it.
+- Each page opens with \`PageHeader\` (title, description, and the page's controls in \`actions\` on the right).
+- Headline numbers are \`Stat\`s in a grid.
+- A table row opens a \`DetailSheet\` with all its fields and actions; the row's first cell is a \`RowLink\`.
+- Borderless, lifted cards: set \`--ui-card-line: transparent\` and \`--ui-card-shadow: var(--ui-shadow-xs)\`.
+- If the block is missing something, add it to Sina UI as a prop; don't restyle it in the app.
+
 ## Components
 
 ${list}

@@ -12,6 +12,15 @@
 		label?: string;
 		/** vertical: markers down the side with names beside them, for sidebars and narrow columns. */
 		orientation?: 'horizontal' | 'vertical';
+		/** Numbers the steps in this locale's digits (১, ২, ৩ for bn). */
+		locale?: string;
+		/** Translate these for non-English UIs. */
+		labels?: Partial<{
+			step: (n: string, total: string) => string;
+			completed: string;
+			current: string;
+			attention: (error: string) => string;
+		}>;
 	}
 
 	let {
@@ -19,8 +28,19 @@
 		current = $bindable(0),
 		onstep,
 		label = 'Progress',
-		orientation = 'horizontal'
+		orientation = 'horizontal',
+		locale,
+		labels
 	}: Props = $props();
+
+	const n = $derived(new Intl.NumberFormat(locale).format);
+	const t = $derived({
+		step: (i: string, total: string) => `Step ${i} of ${total}`,
+		completed: 'completed',
+		current: 'current',
+		attention: (e: string) => `needs attention: ${e}`,
+		...labels
+	});
 
 	const last = $derived(steps.length - 1);
 </script>
@@ -28,7 +48,7 @@
 <nav aria-label={label} class={['stepper', orientation]}>
 	<!-- Narrow screens show only the current step's name; this says where it is in the list. -->
 	<p class="count" aria-hidden="true">
-		Step {Math.min(current, last) + 1} of {steps.length}: {steps[Math.min(current, last)]?.label}
+		{t.step(n(Math.min(current, last) + 1), n(steps.length))}: {steps[Math.min(current, last)]?.label}
 	</p>
 	<div class="rail" style:--n={steps.length}>
 		<ol>
@@ -60,18 +80,18 @@
 		{:else if state === 'done'}
 			<span class="tick"><Icon icon={Tick02Icon} size={14} strokeWidth={2.5} /></span>
 		{:else}
-			{i + 1}
+			{n(i + 1)}
 		{/if}
 	</span>
 	<span class="text">
 		<!-- One hidden phrase for screen readers (split across elements, its spaces get lost), and the
 		     visible label hidden from them. -->
 		<span class="sr-only"
-			>Step {i + 1} of {steps.length}: {step.label}{state === 'done'
-				? ', completed'
+			>{t.step(n(i + 1), n(steps.length))}: {step.label}{state === 'done'
+				? `, ${t.completed}`
 				: state === 'current'
-					? ', current'
-					: ''}{step.error ? `, needs attention: ${step.error}` : ''}</span
+					? `, ${t.current}`
+					: ''}{step.error ? `, ${t.attention(step.error)}` : ''}</span
 		>
 		<span class="name" aria-hidden="true">{step.label}</span>
 		{#if step.error}<span class="description problem" aria-hidden="true">{step.error}</span>
