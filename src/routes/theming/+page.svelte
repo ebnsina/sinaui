@@ -37,7 +37,12 @@
 			'Text size inside fields (16px or more on touch: iOS zooms smaller)',
 			false
 		],
-		['--ui-shadow-card', 'Resting cards: none, the surface tint is their edge', false],
+		['--ui-shadow-card', 'Resting widgets and blocks: none by default', false],
+		[
+			'--ui-card-line',
+			'Card: its outline and its inner sheet’s hairline (unset: --ui-line)',
+			false
+		],
 		['--ui-shadow-overlay', 'Menus, popovers, dialogs', false],
 		['--ui-font', 'Text', false],
 		['--ui-font-size', 'Everyday text: labels, menus, lists (14px with a mouse)', false],

@@ -55,21 +55,23 @@
 	]}
 	{...rest}
 >
-	{#if title || aside}
-		<div class="head">
-			{#if title}
-				<div class={['heading', icon && 'with-icon']}>
-					{#if icon}<span class="icon"><Icon {icon} size={18} /></span>{/if}
-					<svelte:element this={`h${level}`} class="title">
-						{#if href}<a {href}>{title}</a>{:else}{title}{/if}
-					</svelte:element>
-					{#if description}<p class="description">{description}</p>{/if}
-				</div>
-			{/if}
-			{@render aside?.()}
-		</div>
-	{/if}
-	{#if children}<div class={['panel', flush && 'flush']}>{@render children()}</div>{/if}
+	<div class="sheet">
+		{#if title || aside}
+			<div class="head">
+				{#if title}
+					<div class={['heading', icon && 'with-icon']}>
+						{#if icon}<span class="icon"><Icon {icon} size={18} /></span>{/if}
+						<svelte:element this={`h${level}`} class="title">
+							{#if href}<a {href}>{title}</a>{:else}{title}{/if}
+						</svelte:element>
+						{#if description}<p class="description">{description}</p>{/if}
+					</div>
+				{/if}
+				{@render aside?.()}
+			</div>
+		{/if}
+		{#if children}<div class={['panel', flush && 'flush']}>{@render children()}</div>{/if}
+	</div>
 	{#if footer}<div class="footer">{@render footer()}</div>{/if}
 </article>
 
@@ -81,7 +83,10 @@
 		display: flex;
 		flex-direction: column;
 		min-inline-size: 0;
-		border: 1px solid var(--ui-card-line, transparent);
+		/* A tinted frame with a hairline outline; the content sits on a sheet inset inside it, and the
+		   footer stays on the frame below the sheet. */
+		padding: 0.25rem;
+		border: 1px solid var(--ui-card-line, var(--ui-line));
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-card-shadow, none);
@@ -97,6 +102,15 @@
 	.selected {
 		border-color: var(--ui-fg);
 		box-shadow: inset 0 0 0 1px var(--ui-fg);
+	}
+	.sheet {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		min-inline-size: 0;
+		border: 1px solid var(--ui-card-line, var(--ui-line));
+		border-radius: var(--ui-radius);
+		background: var(--ui-bg);
 	}
 	.head {
 		display: flex;
@@ -125,9 +139,11 @@
 	.has-icon {
 		--indent: calc(18px + 0.5rem);
 	}
-	.has-icon > .panel:not(.flush),
-	.has-icon > .footer {
+	.has-icon .panel:not(.flush) {
 		padding-inline-start: calc(1rem + var(--indent));
+	}
+	.has-icon > .footer {
+		padding-inline-start: calc(0.75rem + var(--indent));
 	}
 	.icon {
 		display: flex;
@@ -177,8 +193,7 @@
 		min-inline-size: 0;
 		padding: 1rem;
 	}
-	.head + .panel,
-	.head + .footer {
+	.head + .panel {
 		padding-block-start: 0.75rem;
 	}
 	.head + .flush {
@@ -188,29 +203,21 @@
 		border-start-start-radius: 0;
 		border-start-end-radius: 0;
 	}
-	.flush:has(+ .footer) {
-		border-end-start-radius: 0;
-		border-end-end-radius: 0;
-	}
 	.flush {
 		gap: 0;
 		overflow: hidden;
 		padding: 0;
 		border-radius: var(--ui-radius);
 	}
-	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog. */
+	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog.
+	   On the frame, so with its 0.25rem the footer text lines up with the sheet's 1rem inset. */
 	.footer {
-		margin-block-start: auto;
 		display: flex;
 		flex-wrap: wrap-reverse;
 		align-items: center;
 		justify-content: flex-end;
 		gap: 0.5rem;
-		padding: 0 1rem 1rem;
-	}
-	.flush + .footer {
-		padding-block-start: 1rem;
-		border-block-start: 1px solid var(--ui-line);
+		padding: 0.75rem 0.75rem 0.5rem;
 	}
 	/* Controls inside a linked card stay clickable above the stretched link. */
 	.linked :is(.panel, .footer) :global(:is(a, button, input, select, textarea, label)) {
