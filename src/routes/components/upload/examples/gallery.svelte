@@ -99,7 +99,7 @@
 		gap: 0.5rem;
 		inline-size: min(28rem, 100%);
 		padding: 0.5rem;
-		border-radius: 1.25rem;
+		border-radius: var(--ui-radius);
 		transition: background var(--ui-dur) ease;
 	}
 	.over {
@@ -119,7 +119,7 @@
 		padding: 0;
 		overflow: hidden;
 		border: 0;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 	}
 	.image img {
@@ -154,7 +154,7 @@
 		inset: auto 0.375rem 0.375rem;
 		padding: 0.25rem;
 		border: 0;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-danger);
 		color: var(--ui-on-danger);
 		font: 600 0.75rem/1.2 var(--ui-font);
@@ -170,7 +170,7 @@
 		block-size: 1.375rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-fg);
 		color: var(--ui-surface);
 		cursor: pointer;
@@ -182,7 +182,7 @@
 		gap: 0.5rem;
 		block-size: 3rem;
 		border: 0;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		font: 500 0.875rem/1 var(--ui-font);

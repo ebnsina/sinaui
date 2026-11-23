@@ -151,7 +151,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		opacity: 0;
 		pointer-events: none;
@@ -173,5 +173,9 @@
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.4 var(--ui-font);
 		box-shadow: var(--ui-shadow-overlay);
+	}
+	/* Focus lands on the menu only to hand it to an item, whose highlight shows it; no ring on the box. */
+	.menu:focus {
+		outline: none;
 	}
 </style>

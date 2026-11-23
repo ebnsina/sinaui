@@ -48,6 +48,7 @@
 	class={[
 		'card',
 		href && 'linked',
+		icon && title && 'has-icon',
 		selected && 'selected',
 		tone === 'danger' && 'danger',
 		className
@@ -80,8 +81,8 @@
 		display: flex;
 		flex-direction: column;
 		min-inline-size: 0;
-		border: 1px solid var(--ui-card-line, var(--ui-field-line));
-		border-radius: calc(var(--ui-radius) + 0.25rem);
+		border: 1px solid var(--ui-card-line, transparent);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-card-shadow, none);
 		color: var(--ui-fg);
@@ -119,6 +120,14 @@
 	}
 	.with-icon > :not(.icon) {
 		grid-column: 2;
+	}
+	/* The body and footer share the title's column, so the text runs down one edge under the icon. */
+	.has-icon {
+		--indent: calc(18px + 0.5rem);
+	}
+	.has-icon > .panel:not(.flush),
+	.has-icon > .footer {
+		padding-inline-start: calc(1rem + var(--indent));
 	}
 	.icon {
 		display: flex;
@@ -187,7 +196,7 @@
 		gap: 0;
 		overflow: hidden;
 		padding: 0;
-		border-radius: calc(var(--ui-radius) + 0.25rem - 1px);
+		border-radius: var(--ui-radius);
 	}
 	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog. */
 	.footer {

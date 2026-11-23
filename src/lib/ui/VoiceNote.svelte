@@ -70,7 +70,7 @@
 		gap: 0.625rem;
 		inline-size: min(16rem, 100%);
 		padding: 0.375rem 0.75rem 0.375rem 0.375rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		font-size: 0.8125rem;
 	}
@@ -82,7 +82,7 @@
 		block-size: 2rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		cursor: pointer;
@@ -107,7 +107,7 @@
 	}
 	input::-webkit-slider-runnable-track {
 		block-size: 0.25rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: linear-gradient(
 			to right,
 			var(--ui-accent) var(--at),
@@ -116,19 +116,19 @@
 	}
 	input::-moz-range-track {
 		block-size: 0.25rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--ui-fg) 18%, transparent);
 	}
 	input::-moz-range-progress {
 		block-size: 0.25rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 	}
 	input::-webkit-slider-thumb {
 		inline-size: 0.75rem;
 		block-size: 0.75rem;
 		margin-block-start: -0.25rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		appearance: none;
 	}
@@ -136,7 +136,7 @@
 		inline-size: 0.75rem;
 		block-size: 0.75rem;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 	}
 	.time {

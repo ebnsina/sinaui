@@ -99,7 +99,7 @@
 		padding: 0;
 		overflow: hidden;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--ui-accent) 16%, var(--ui-surface));
 		color: var(--ui-accent);
 		cursor: pointer;

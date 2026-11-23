@@ -26,7 +26,7 @@
 		place-items: center;
 		inline-size: 2.25rem;
 		block-size: 2.25rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-hover);
 		color: var(--ui-fg);
 	}

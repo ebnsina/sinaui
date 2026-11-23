@@ -45,7 +45,7 @@
 		inline-size: 3rem;
 		block-size: 3rem;
 		margin-block-end: 0.25rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		transition: scale 400ms var(--ui-ease-out) 60ms;

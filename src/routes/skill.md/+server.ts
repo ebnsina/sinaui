@@ -58,7 +58,7 @@ npx sinaui add blocks/studio
 - Each page opens with \`PageHeader\` (title, description, and the page's controls in \`actions\` on the right).
 - Headline numbers are \`Stat\`s in a grid.
 - A table row opens a \`DetailSheet\` with all its fields and actions; the row's first cell is a \`RowLink\`.
-- Borderless, lifted cards: set \`--ui-card-line: transparent\` and \`--ui-card-shadow: var(--ui-shadow-xs)\`.
+- Lifted cards on a tinted page: set \`--ui-card-shadow: var(--ui-shadow-xs)\`.
 - If the block is missing something, add it to Sina UI as a prop; don't restyle it in the app.
 
 ## Components

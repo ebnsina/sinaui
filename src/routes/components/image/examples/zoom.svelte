@@ -10,7 +10,7 @@
 		width={960}
 		height={1280}
 		ratio="1"
-		placeholder="#c9b48a"
+		placeholder="#c8c8cc"
 	/>
 </div>
 

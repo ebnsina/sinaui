@@ -114,7 +114,7 @@
 		place-items: center;
 		inline-size: 3rem;
 		block-size: 3rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--ui-accent) 12%, transparent);
 		color: var(--ui-accent);
 	}

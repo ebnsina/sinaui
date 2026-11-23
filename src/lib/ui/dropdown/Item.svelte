@@ -67,8 +67,7 @@
 		padding: 0 0.625rem;
 		/* Invisible normally; outlines the item in Windows High Contrast. */
 		border: 1px solid transparent;
-		/* Concentric with the menu: outer radius minus its 4px padding. */
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: transparent;
 		color: inherit;
 		font: inherit;
@@ -83,8 +82,31 @@
 			min-block-size: 2.75rem;
 		}
 	}
+	/* The highlighted item's icon inks in and leans a step toward its label. */
 	.item :global(svg) {
+		flex: none;
 		color: var(--ui-muted);
+		transition:
+			color var(--ui-dur-press) ease,
+			translate var(--ui-dur) var(--ui-ease-out);
+	}
+	.item:focus :global(svg) {
+		translate: 2px 0;
+	}
+	.item:focus:dir(rtl) :global(svg) {
+		translate: -2px 0;
+	}
+	.item:focus:not(.danger) :global(svg) {
+		color: var(--ui-fg);
+	}
+	.item:active :global(svg) {
+		scale: 0.9;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.item:is(:focus, :active, :focus:dir(rtl)) :global(svg) {
+			translate: none;
+			scale: none;
+		}
 	}
 	/* The menu's gliding highlight marks the focused item; items stay transparent above it. */
 	.item {

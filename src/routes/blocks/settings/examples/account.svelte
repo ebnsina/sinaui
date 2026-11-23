@@ -110,7 +110,7 @@
 	.frame {
 		inline-size: 100%;
 		padding: 1rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 	}
 </style>

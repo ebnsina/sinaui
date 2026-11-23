@@ -34,7 +34,7 @@
 	}
 	:global(.catalog) {
 		inline-size: min(28rem, 100%);
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

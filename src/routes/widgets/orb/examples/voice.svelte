@@ -41,9 +41,9 @@
 
 	const colors = [
 		{ name: 'Emerald', value: 'var(--ui-accent)' },
-		{ name: 'Blue', value: '#3b82f6' },
-		{ name: 'Rose', value: '#f43f5e' },
-		{ name: 'Amber', value: '#f59e0b' }
+		{ name: 'Ink', value: '#1b1b1d' },
+		{ name: 'Graphite', value: '#5c5c62' },
+		{ name: 'Silver', value: '#a8a8ae' }
 	];
 </script>
 
@@ -112,7 +112,7 @@
 		block-size: 1.5rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--c);
 		cursor: pointer;
 		transition: transform var(--ui-dur-press) var(--ui-ease-out);

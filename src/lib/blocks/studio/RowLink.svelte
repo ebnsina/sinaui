@@ -30,6 +30,6 @@
 	button:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: 2px;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 	}
 </style>

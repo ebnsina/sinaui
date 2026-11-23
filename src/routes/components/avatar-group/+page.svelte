@@ -18,19 +18,19 @@
 	<title>Avatar group — Sina UI</title>
 	<meta
 		name="description"
-		content="Overlapping avatars for a team or the readers of a page, with the rest folded into +N."
+		content="A row of avatars for a team or the readers of a page, with the rest folded into +N."
 	/>
 	<meta property="og:title" content="Avatar group — Sina UI" />
 	<meta
 		property="og:description"
-		content="Overlapping avatars for a team or the readers of a page, with the rest folded into +N."
+		content="A row of avatars for a team or the readers of a page, with the rest folded into +N."
 	/>
 </svelte:head>
 
 <p class="eyebrow">Display</p>
 <h1>Avatar group</h1>
 <p class="lede">
-	Overlapping avatars for a team, a thread or the readers of a page. Past a few, the rest fold into
+	A row of avatars for a team, a thread or the readers of a page. Past a few, the rest fold into
 	“+N”, which opens the full list.
 </p>
 
@@ -77,9 +77,6 @@
 		<tr><td><code>onselect</code></td><td><code>(person) =&gt; void</code></td><td></td></tr>
 	</tbody>
 </table>
-<p>
-	Set <code>--ring</code> to the background color behind the group, so the gaps between faces match it.
-</p>
 
 <h2 id="keyboard">Keyboard</h2>
 <table>

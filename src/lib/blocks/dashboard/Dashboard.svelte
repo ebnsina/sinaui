@@ -267,7 +267,7 @@
 		block-size: 46rem;
 		max-block-size: 90dvh;
 		overflow: hidden;
-		border-radius: 1.25rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 		box-shadow: var(--ui-shadow-card);
 	}
@@ -320,7 +320,7 @@
 	/* Tiles and panels are cards on the page's background. */
 	.stat,
 	.panel {
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

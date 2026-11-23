@@ -9,7 +9,7 @@
 		width={960}
 		height={1280}
 		ratio="4 / 3"
-		placeholder="#c9b48a"
+		placeholder="#c8c8cc"
 		caption="A library in Basra, from al-Wasiti's Maqamat of al-Hariri, 1237."
 	/>
 </div>

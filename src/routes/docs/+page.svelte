@@ -75,7 +75,7 @@
 		block-size: 100%;
 		padding: 1rem 1.125rem;
 		background: var(--ui-subtle);
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		color: var(--ui-fg);
 		font-weight: 500;
 		text-decoration: none;

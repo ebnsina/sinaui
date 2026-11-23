@@ -90,7 +90,7 @@
 		font-weight: 500;
 		list-style: none;
 		cursor: pointer;
-		border-radius: calc(var(--ui-radius) / 2);
+		border-radius: var(--ui-radius);
 		-webkit-tap-highlight-color: transparent;
 	}
 	summary::-webkit-details-marker {

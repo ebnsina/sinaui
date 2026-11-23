@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import AccentPicker from '#lib/site/AccentPicker.svelte';
 	const tokens: [string, string, boolean][] = [
 		['--ui-bg', 'The page', true],
 		['--ui-surface', 'Cards, menus, dialogs', true],
@@ -22,8 +23,9 @@
 		['--ui-ring-offset', 'Gap between ring and control', false],
 		['--ui-chart-1', 'First chart series (the accent)', true],
 		['--ui-chart-2 … 6', 'The other chart series, in order', false],
-		['--ui-radius', 'Corners of surfaces: cards, menus, dialogs', false],
-		['--ui-radius-control', 'Corners of controls: buttons, fields, tags; 999px for pills', false],
+		['--ui-radius', 'Corners of surfaces: cards, menus, dialogs (square by default)', false],
+		['--ui-radius-control', 'Corners of controls: buttons, fields (square by default)', false],
+		['--ui-radius-pill', 'Corners of tags, badges and tracks; 999px for pills', false],
 		['--ui-control-h', 'Height of fields, selects, medium buttons and tabs', false],
 		['--ui-control-h-sm', 'Height of small buttons', false],
 		['--ui-control-h-xs', 'Height of extra-small buttons (24px with a mouse)', false],
@@ -35,13 +37,19 @@
 			'Text size inside fields (16px or more on touch: iOS zooms smaller)',
 			false
 		],
-		['--ui-shadow-card', 'Resting cards: a 1px ring, no drop shadow', false],
+		['--ui-shadow-card', 'Resting cards: none, the surface tint is their edge', false],
 		['--ui-shadow-overlay', 'Menus, popovers, dialogs', false],
 		['--ui-font', 'Text', false],
 		['--ui-font-size', 'Everyday text: labels, menus, lists (14px with a mouse)', false],
 		['--ui-item-h', 'Height of a menu or list row (32px with a mouse)', false],
 		['--ui-font-mono', 'Code and numbers', false],
 		['--ui-font-heading', 'Titles of dialogs, cards, alerts; unset, they follow the text', false],
+		['--ui-heading-weight', 'Headings: weight (700)', false],
+		['--ui-heading-stretch', 'Headings: width on Mona Sans’s width axis (88%)', false],
+		['--ui-heading-tracking', 'Headings: letter spacing', false],
+		['--ui-label-font', 'Small labels and group titles: font (mono)', false],
+		['--ui-label-case', 'Small labels: letter case (uppercase)', false],
+		['--ui-label-tracking', 'Small labels: letter spacing', false],
 		['--ui-sidebar-bg', 'Sidebar layout: the sidebar', true],
 		['--ui-sidebar-line', 'Sidebar layout: its edges (a hairline by default)', true],
 		['--ui-sidebar-current-bg', 'Sidebar layout: the current page', true],
@@ -51,6 +59,7 @@
 		['--ui-sidebar-item-h', 'Sidebar layout: the height of each page row', false],
 		['--ui-sidebar-font', 'Sidebar layout: the page rows’ text size', false],
 		['--ui-sidebar-title-font', 'Sidebar layout: the group titles’ text size', false],
+		['--ui-sidebar-title-family', 'Sidebar layout: the group titles’ font (the label font)', false],
 		[
 			'--ui-sidebar-title-case',
 			'Sidebar layout: the group titles’ letter case (none or uppercase)',
@@ -92,11 +101,36 @@
 	<a href={resolve('/docs')}>Installation</a>.
 </p>
 
+<h2 id="accent">Accent color</h2>
+<p>
+	Sina UI is monochrome by default: the accent is the text ink. For color, set
+	<code>data-accent</code> on <code>&lt;html&gt;</code> to <code>blue</code>, <code>orange</code>,
+	<code>lime</code>, <code>emerald</code>, <code>pink</code> or <code>sky</code>, and
+	<code>mono</code> on a part that should stay in ink. Primary buttons, checked controls, focus rings,
+	links, sliders and the first chart series all follow it. Set it on any container instead to color just
+	that part of a page.
+</p>
+<div class="try">
+	<AccentPicker side="bottom" size="md" />
+	<span>Try one: the whole site follows.</span>
+</div>
+<pre><code>&lt;html data-accent="blue"&gt;</code></pre>
+<p>
+	Each preset passes 4.5:1 as text on the page and under the text of a filled button, in light and
+	dark. Svelte's orange, <code>#ff3e00</code>, reads at only 3.5:1 on white, so in light mode the
+	orange preset takes a deeper step of it. For a color of your own, set <code>--ui-accent</code> and
+	<code>--ui-on-accent</code>, with a light and a dark half (see
+	<a href="#dark-mode">Dark mode</a>).
+</p>
+
 <h2 id="corners">Corners</h2>
 <p>
-	Surfaces and controls round separately. <code>--ui-radius</code> shapes cards, menus and dialogs;
-	<code>--ui-radius-control</code> shapes buttons, fields and tags. Set the control radius to
-	<code>999px</code> for pill-shaped controls while cards keep their corners.
+	Every corner is square by default, an editorial look. Surfaces and controls round separately:
+	<code>--ui-radius</code> shapes cards, menus and dialogs, <code>--ui-radius-control</code> buttons
+	and fields, and <code>--ui-radius-pill</code> tags, badges and tracks. For a softer look, set them
+	to
+	<code>0.75rem</code>, <code>0.5rem</code> and <code>999px</code>. Circles, like avatars and radio
+	buttons, stay round.
 </p>
 
 <h2 id="size">Size</h2>
@@ -123,8 +157,13 @@
 
 <h2 id="type">Type</h2>
 <p>
-	Components use <code>--ui-font</code> for text and <code>--ui-font-mono</code> for code. Load your fonts
-	as usual, then point these at them.
+	Components use <code>--ui-font</code> for text and <code>--ui-font-mono</code> for code, numbers and
+	small labels. The defaults are Mona Sans and Geist Mono; load them (both are free on Fontsource) or
+	point these at your own fonts.
+</p>
+<p>
+	Headings get their hierarchy from weight and width, not color: bold, and narrowed on Mona Sans's
+	width axis through <code>--ui-heading-stretch</code>. A font without a width axis ignores it.
 </p>
 <p>
 	Text inside components follows your page's font. <code>tokens.css</code> sets the page to
@@ -163,10 +202,16 @@
 </table>
 
 <style>
+	.try {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		color: var(--ui-muted);
+	}
 	.token .swatch {
 		inline-size: 1rem;
 		block-size: 1rem;
-		border-radius: 0.25rem;
+		border-radius: var(--ui-radius-control);
 		box-shadow: inset 0 0 0 1px var(--ui-line);
 	}
 </style>

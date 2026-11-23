@@ -411,6 +411,10 @@
 		background: var(--ui-surface);
 		cursor: pointer;
 	}
+	/* With chips, the first one sits as far from the side as from the top and bottom. */
+	.control:has(li) {
+		padding-inline-start: 0.3125rem;
+	}
 	@media (pointer: coarse) {
 		.control {
 			min-block-size: var(--ui-control-h-touch);
@@ -449,7 +453,7 @@
 		gap: 0.125rem;
 		max-inline-size: 100%;
 		padding-inline: 0.5rem 0.125rem;
-		border-radius: calc(var(--ui-radius-control) * 0.75);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		font-size: 0.875rem;
 		line-height: 1.75rem;
@@ -477,12 +481,12 @@
 	.remove {
 		inline-size: 1.375rem;
 		block-size: 1.375rem;
-		border-radius: calc(var(--ui-radius-control) * 0.5);
+		border-radius: var(--ui-radius-control);
 	}
 	.clear {
 		inline-size: 1.75rem;
 		block-size: 1.75rem;
-		border-radius: calc(var(--ui-radius-control) * 0.75);
+		border-radius: var(--ui-radius-control);
 	}
 	@media (pointer: coarse) {
 		.remove {
@@ -551,7 +555,7 @@
 		gap: 0.5rem;
 		margin: 0.375rem 0.375rem 0;
 		padding: 0 0.625rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 	}
@@ -582,7 +586,7 @@
 	.bulk button {
 		padding: 0.25rem 0.5rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-accent);
 		font: 500 0.8125rem/1.4 var(--ui-font);
@@ -626,7 +630,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		opacity: 0;
 		pointer-events: none;
@@ -640,7 +644,7 @@
 		gap: 0.625rem;
 		min-block-size: var(--ui-item-h);
 		padding: 0.375rem 0.625rem;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		cursor: pointer;
 	}
 	@media (pointer: coarse) {
@@ -661,7 +665,7 @@
 		inline-size: 1rem;
 		block-size: 1rem;
 		border: 1.5px solid var(--ui-control-line);
-		border-radius: 0.3125rem;
+		border-radius: var(--ui-radius-control);
 		color: var(--ui-on-accent);
 		transition:
 			background-color var(--ui-dur) ease,

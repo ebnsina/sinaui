@@ -108,7 +108,7 @@
 		margin: 0;
 		padding: 0 0.75rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius-control) - 0.1875rem);
+		border-radius: var(--ui-radius-control);
 		background: transparent;
 		color: var(--ui-muted);
 		font: 500 0.875rem/1 var(--ui-font);

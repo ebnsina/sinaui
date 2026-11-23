@@ -91,7 +91,7 @@
 		box-sizing: border-box;
 		min-block-size: var(--ui-control-h);
 		padding: 0.25rem 0.375rem;
-		border-radius: calc(var(--ui-radius-control) + 0.125rem);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-faint);
 	}
 	.toolbar:focus {

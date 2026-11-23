@@ -139,7 +139,7 @@
 		place-items: center;
 		padding: 0;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: none;
 		cursor: pointer;
 	}

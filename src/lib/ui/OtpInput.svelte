@@ -195,7 +195,7 @@
 	.gap {
 		inline-size: 0.5rem;
 		block-size: 2px;
-		border-radius: 1px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-control-line);
 	}
 	/* Each character pops in as it's typed. */
@@ -213,7 +213,7 @@
 	.caret {
 		inline-size: 2px;
 		block-size: 1.5rem;
-		border-radius: 1px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-fg);
 		animation: blink 1s steps(2, jump-none) infinite;
 	}

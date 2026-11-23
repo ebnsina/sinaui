@@ -51,7 +51,7 @@
 <Example
 	id="led-color"
 	title="LED, your own color"
-	description="Any color for the segments; here without seconds, in another time zone."
+	description="Any color for the segments, here a bright white; without seconds, in another time zone."
 	{...ex('led-color')}
 />
 
@@ -72,7 +72,7 @@
 		>
 		<tr
 			><td><code>color</code></td><td><code>string</code>: lit color, LED only</td><td
-				><code>'#3ee6a2'</code></td
+				>a light tint of the accent</td
 			></tr
 		>
 		<tr><td><code>seconds</code></td><td><code>boolean</code></td><td><code>true</code></td></tr>

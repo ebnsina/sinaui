@@ -63,7 +63,7 @@
 		padding: 0 0.5rem;
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius-control) * 0.75);
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--tone) 10%, transparent);
 		/* Tone pulled 20% toward the text color: darker in light mode, lighter in dark, so small text
 		   keeps 4.5:1 even on a tinted surface. */
@@ -91,7 +91,7 @@
 	.dot {
 		inline-size: 0.375rem;
 		block-size: 0.375rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--tone);
 	}
 </style>

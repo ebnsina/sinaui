@@ -265,8 +265,7 @@
 		block-size: 32rem;
 		max-block-size: 80dvh;
 		overflow: hidden;
-		/* Concentric with the prompt: its 0.75rem corners + its 0.75rem inset. */
-		border-radius: 1.5rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -300,7 +299,7 @@
 	}
 	.welcome {
 		padding: 0.75rem 1rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-accent) 8%, transparent);
 	}
 	.line {
@@ -318,7 +317,7 @@
 	.user {
 		margin-block-start: 0.5rem;
 		padding: 0.25rem 0.625rem;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 	}
 	.thinking {
@@ -370,7 +369,7 @@
 		display: grid;
 		gap: 0.125rem;
 		padding: 0.75rem 1rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 	}
 	.help .accent {
@@ -385,7 +384,7 @@
 		margin: 0 0.75rem;
 		padding: 0.5rem 0.75rem;
 		border: 1px solid var(--ui-field-line);
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 	}
 	.prompt:focus-within {
 		border-color: var(--ui-accent);
@@ -423,7 +422,7 @@
 		gap: 0.125rem;
 		margin: 0.375rem 0.75rem 0;
 		padding: 0.5rem 0.75rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		list-style: none;
 	}

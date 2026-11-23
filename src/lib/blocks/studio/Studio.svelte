@@ -169,7 +169,7 @@
 		place-items: center;
 		inline-size: 1.75rem;
 		block-size: 1.75rem;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-weight: 600;

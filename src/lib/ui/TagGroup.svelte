@@ -90,7 +90,7 @@
 		align-items: center;
 		gap: 0.25rem;
 		padding: 0.3125rem 0.75rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: 500 0.8125rem/1.2 var(--ui-font);
@@ -113,7 +113,7 @@
 		block-size: 1.25rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

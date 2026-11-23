@@ -76,10 +76,11 @@
 		margin: 0 0 0.375rem;
 		padding-inline: 0.625rem;
 		color: var(--ui-muted);
+		font-family: var(--ui-label-font);
 		font-size: 0.6875rem;
-		font-weight: 500;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
+		font-weight: 400;
+		letter-spacing: var(--ui-label-tracking);
+		text-transform: var(--ui-label-case);
 	}
 	ul {
 		display: grid;

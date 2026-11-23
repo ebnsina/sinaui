@@ -92,7 +92,7 @@
 		block-size: 1.125rem;
 		box-sizing: border-box;
 		border: 1px solid var(--ui-control-line);
-		border-radius: calc(var(--ui-radius) / 2);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		color: var(--ui-on-accent);
 		transition:

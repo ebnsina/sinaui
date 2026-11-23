@@ -136,7 +136,7 @@
 	.grip {
 		position: relative;
 		z-index: 1;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-control-line);
 		opacity: 0;
 		scale: 0.8;

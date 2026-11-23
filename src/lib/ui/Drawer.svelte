@@ -130,7 +130,7 @@
 		overflow: hidden;
 		border: 1px solid transparent;
 		border-block-end: 0;
-		border-radius: calc(var(--ui-radius) * 2) calc(var(--ui-radius) * 2) 0 0;
+		border-radius: var(--ui-radius) var(--ui-radius) 0 0;
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.5 var(--ui-font);
@@ -185,7 +185,7 @@
 		inline-size: 2.5rem;
 		block-size: 0.3125rem;
 		margin: 0.625rem auto 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-control-line);
 		cursor: grab;
 	}
@@ -205,7 +205,8 @@
 		margin: 0.25rem 0 0;
 		font-family: var(--ui-font-heading);
 		font-size: 1.125rem;
-		font-weight: 600;
+		font-weight: var(--ui-heading-weight);
+		font-stretch: var(--ui-heading-stretch);
 		line-height: 1.3;
 		letter-spacing: -0.02em;
 	}

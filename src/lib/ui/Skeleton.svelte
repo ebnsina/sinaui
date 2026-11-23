@@ -61,7 +61,7 @@
 	   shows the same band at the same moment and it reads as one sweep across the group. */
 	.skeleton {
 		display: block;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background-color: var(--ui-hover);
 		background-image: linear-gradient(
 			100deg,
@@ -75,7 +75,7 @@
 		animation: sweep 2s var(--ui-ease-in-out) infinite;
 	}
 	.circle {
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 	}
 	@keyframes sweep {
 		from {

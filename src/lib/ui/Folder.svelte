@@ -60,7 +60,7 @@
 		inline-size: calc(var(--w) + 1.5rem);
 		padding: 0.75rem 0.5rem 0.625rem;
 		border: 0;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-fg);
 		font: 0.875rem/1.3 var(--ui-font);
@@ -123,7 +123,7 @@
 			repeating-linear-gradient(
 					to bottom,
 					transparent 0 calc(var(--w) * 0.075),
-					rgb(15 23 42 / 0.08) calc(var(--w) * 0.075) calc(var(--w) * 0.085)
+					rgb(0 0 0 / 0.08) calc(var(--w) * 0.075) calc(var(--w) * 0.085)
 				)
 				0 calc(var(--w) * 0.12) / 70% 100% no-repeat,
 			#fff;

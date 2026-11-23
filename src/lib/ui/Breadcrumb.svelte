@@ -133,7 +133,7 @@
 		display: block;
 		max-inline-size: 14rem;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
@@ -169,7 +169,7 @@
 		margin: 0 -0.375rem;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: inherit;
 		cursor: pointer;

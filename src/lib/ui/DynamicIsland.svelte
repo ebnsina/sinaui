@@ -43,9 +43,6 @@
 		closing = wasOpen && !expanded;
 		wasOpen = expanded;
 	});
-	// A soft rectangle while it's one line. Grown into a card, its corners are concentric with what's inside:
-	// the system radius (0.75rem) plus the card's 1.25rem padding, so 32px; small, it stays a soft rectangle.
-	const radius = (h: number) => Math.min(h * 0.4, 32);
 
 	// The width its container allows: content wraps within it instead of growing past it.
 	let room = $state<number>();
@@ -107,13 +104,12 @@
 <!-- A live region: screen readers hear when an activity starts, changes or ends. -->
 <div
 	bind:this={island}
-	class={['island', ready && 'ready', className]}
+	class={['island', ready && 'ready', expanded && 'expanded', className]}
 	role="region"
 	aria-label={label}
 	aria-live="polite"
 	style:width={size ? `${size.w}px` : undefined}
 	style:height={size ? `${size.h}px` : undefined}
-	style:border-radius={size ? `${radius(size.h)}px` : undefined}
 	style:--ease={closing ? CLOSE : EASE}
 	style:--dur={closing ? '420ms' : '700ms'}
 	style:--room={room ? `${room}px` : undefined}
@@ -141,11 +137,15 @@
 
 <style>
 	/* An overlay surface like any other in the system: the motion is iOS, the look is ours. */
+	.island.expanded {
+		border-radius: var(--ui-radius);
+	}
 	.island {
 		position: relative;
 		margin-inline: auto;
 		overflow: hidden;
-		border-radius: 0.875rem;
+		/* A pill while it's one line, a surface once grown into a card. */
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-xs);
 		color: var(--ui-fg);

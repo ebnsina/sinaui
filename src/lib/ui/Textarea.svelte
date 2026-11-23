@@ -58,10 +58,14 @@
 		appearance: none;
 		inline-size: 100%;
 		margin: 0;
-		padding: 0.5rem 0.75rem;
+		/* One line is exactly a control's height, so a one-row box lines up with buttons and inputs;
+		   taller boxes keep the same inset, so text starts where it does in an Input. */
+		--h: var(--ui-control-h);
+		--pad-y: calc((var(--h) - 2px - 1.5em) / 2);
+		padding: var(--pad-y) 0.75rem;
 		box-sizing: border-box;
 		border: 1px solid var(--ui-field-line);
-		border-radius: var(--ui-radius);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
 		color: inherit;
 		/* 16px minimum: iOS Safari zooms the page into any smaller field on focus. */
@@ -72,8 +76,13 @@
 		resize: vertical;
 		/* Grows with its text where supported; elsewhere it's a normal resizable box starting at `rows`. */
 		field-sizing: content;
-		min-block-size: calc(var(--rows, 3) * 1.5em + 1rem + 2px);
+		min-block-size: calc(var(--rows, 3) * 1.5em + 2 * var(--pad-y) + 2px);
 		max-block-size: 20rem;
+	}
+	@media (pointer: coarse) {
+		textarea {
+			--h: var(--ui-control-h-touch);
+		}
 	}
 	textarea::placeholder {
 		color: var(--ui-muted);

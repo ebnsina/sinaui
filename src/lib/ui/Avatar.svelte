@@ -60,7 +60,7 @@
 		inline-size: var(--size);
 		block-size: var(--size);
 		overflow: hidden;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		font: 600 calc(var(--size) * 0.38) / 1 var(--ui-font);

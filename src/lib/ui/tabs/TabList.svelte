@@ -265,9 +265,9 @@
 	}
 	/* Folder: the chosen tab is a raised piece of the panel's fill, curving into it at the bottom. */
 	.folder {
-		--curve: 0.75rem;
+		--curve: var(--ui-radius);
 		isolation: isolate;
-		/* The outer curves land on the panel's straight top edge, past its rounded corners. */
+		/* The outer curves land on the panel's straight top edge, past its corners; square, they vanish. */
 		padding-inline: calc(var(--ui-radius) + var(--curve));
 		padding-block-end: 0;
 		box-shadow: none;
@@ -334,7 +334,7 @@
 		max-inline-size: 100%;
 		gap: 0;
 		padding: var(--pad);
-		border-radius: calc(var(--ui-radius-control) + var(--pad));
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		box-shadow: none;
 	}

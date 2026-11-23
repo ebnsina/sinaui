@@ -199,7 +199,7 @@
 		padding: 0.3125rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
 		/* Pill while it is one line; rounded, not stretched, once tags wrap. */
-		border-radius: min(var(--ui-radius-control), 1.25rem);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
 		cursor: text;
 	}
@@ -235,7 +235,7 @@
 		gap: 0.125rem;
 		max-inline-size: 100%;
 		padding-inline: 0.5rem 0.125rem;
-		border-radius: calc(var(--ui-radius-control) * 0.75);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		font-size: 0.875rem;
 		line-height: 1.75rem;
@@ -254,7 +254,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius-control) * 0.5);
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

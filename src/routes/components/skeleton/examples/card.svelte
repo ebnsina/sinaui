@@ -60,7 +60,7 @@
 		flex: none;
 		inline-size: 3rem;
 		block-size: 3rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		font-weight: 600;
 	}

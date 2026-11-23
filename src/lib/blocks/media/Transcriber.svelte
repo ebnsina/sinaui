@@ -157,7 +157,7 @@
 		inline-size: 100%;
 		box-sizing: border-box;
 		padding: 1.25rem;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -177,7 +177,7 @@
 		block-size: 3.5rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		cursor: pointer;
@@ -212,7 +212,7 @@
 	.live {
 		inline-size: 0.5rem;
 		block-size: 0.5rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-danger);
 		animation: pulse 1s ease-in-out infinite;
 	}
@@ -232,7 +232,7 @@
 		margin: 0;
 		padding-block: 1rem;
 		padding-inline: 1.25rem 0.5rem;
-		border-radius: calc(var(--ui-radius) + 0.5rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		animation: appear 300ms var(--ui-ease-out);
 	}

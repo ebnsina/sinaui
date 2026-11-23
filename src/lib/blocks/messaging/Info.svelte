@@ -235,7 +235,7 @@
 		inset-block-end: -1px;
 		inline-size: 0.625rem;
 		block-size: 0.625rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 0 0 2px var(--ui-surface);
 	}
@@ -250,7 +250,7 @@
 	}
 	.media :global(img),
 	.media :global(figure) {
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 	}
 	.none {
 		margin: 0;

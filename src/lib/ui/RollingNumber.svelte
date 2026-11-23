@@ -56,7 +56,11 @@
 
 <!-- Every visible character is CSS generated content, so the only real text is the value itself:
      copying, find-in-page and screen readers all get "1–8", never the digit strips. -->
-<span class={['rolling', ready && 'ready', className]} style:--roll="{roll}ms" style:--strip={strip}>
+<span
+	class={['rolling', ready && 'ready', className]}
+	style:--roll="{roll}ms"
+	style:--strip={strip}
+>
 	<span class="sr-only">{text}</span><span class="chars" aria-hidden="true">
 		{#each chars as { c, key, digit } (key)}
 			{#if digit >= 0}

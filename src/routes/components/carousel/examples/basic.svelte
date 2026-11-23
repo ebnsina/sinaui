@@ -2,18 +2,18 @@
 	import Carousel from '#lib/ui/Carousel.svelte';
 
 	const treasures = [
-		{ title: 'The Canon of Medicine', by: 'Ibn Sīnā', year: 1025, hue: 160 },
-		{ title: 'Book of Optics', by: 'Ibn al-Haytham', year: 1021, hue: 200 },
-		{ title: 'Al-Jabr', by: 'Al-Khwārizmī', year: 820, hue: 30 },
-		{ title: 'Tabula Rogeriana', by: 'Al-Idrīsī', year: 1154, hue: 280 },
-		{ title: 'Book of Ingenious Devices', by: 'Al-Jazarī', year: 1206, hue: 340 }
+		{ title: 'The Canon of Medicine', by: 'Ibn Sīnā', year: 1025, shade: 0.34 },
+		{ title: 'Book of Optics', by: 'Ibn al-Haytham', year: 1021, shade: 0.28 },
+		{ title: 'Al-Jabr', by: 'Al-Khwārizmī', year: 820, shade: 0.4 },
+		{ title: 'Tabula Rogeriana', by: 'Al-Idrīsī', year: 1154, shade: 0.24 },
+		{ title: 'Book of Ingenious Devices', by: 'Al-Jazarī', year: 1206, shade: 0.31 }
 	];
 </script>
 
 <div class="wrap">
 	<Carousel label="Treasures of the House of Wisdom" slides={treasures}>
 		{#snippet slide(t)}
-			<article class="card" style:--hue={t.hue}>
+			<article class="card" style:--shade={t.shade}>
 				<span class="year">{t.year}</span>
 				<h4>{t.title}</h4>
 				<p>{t.by}</p>
@@ -34,11 +34,11 @@
 		aspect-ratio: 16 / 10;
 		padding: 1.25rem;
 		box-sizing: border-box;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: linear-gradient(
 			145deg,
-			hsl(var(--hue) 45% 38%),
-			hsl(calc(var(--hue) + 40) 50% 24%)
+			oklch(var(--shade) 0 0),
+			oklch(calc(var(--shade) - 0.14) 0 0)
 		);
 		color: #fff;
 	}

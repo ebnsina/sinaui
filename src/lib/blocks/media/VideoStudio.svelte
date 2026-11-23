@@ -107,14 +107,13 @@
 </section>
 
 <style>
-	/* Concentric: 1.75rem card = 1.25rem padding + the frame's 0.5rem. */
 	.studio {
 		display: grid;
 		gap: 1.25rem;
 		inline-size: 100%;
 		box-sizing: border-box;
 		padding: 1.25rem;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -168,7 +167,7 @@
 		gap: 0.5rem;
 		inline-size: min(20rem, 80%);
 		padding: 0.875rem 1rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-surface) 82%, transparent);
 		backdrop-filter: blur(10px);
 		box-shadow: var(--ui-shadow-card);

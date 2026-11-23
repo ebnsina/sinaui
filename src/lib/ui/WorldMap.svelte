@@ -650,12 +650,12 @@
 		background: var(--map-none);
 	}
 	.ramp i:first-child {
-		border-start-start-radius: 0.25rem;
-		border-end-start-radius: 0.25rem;
+		border-start-start-radius: var(--ui-radius-control);
+		border-end-start-radius: var(--ui-radius-control);
 	}
 	.ramp i:last-child {
-		border-start-end-radius: 0.25rem;
-		border-end-end-radius: 0.25rem;
+		border-start-end-radius: var(--ui-radius-control);
+		border-end-end-radius: var(--ui-radius-control);
 	}
 	.ramp .s1 {
 		background: var(--map-1);
@@ -680,7 +680,7 @@
 	}
 	.none i {
 		inline-size: 0.75rem;
-		border-radius: 0.125rem;
+		border-radius: var(--ui-radius-control);
 	}
 	.sr-only {
 		position: absolute;

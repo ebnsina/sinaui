@@ -426,8 +426,9 @@
 		padding-inline: 0.4375rem;
 		overflow: hidden;
 		color: var(--ui-muted);
+		font-family: var(--ui-sidebar-title-family);
 		font-size: var(--ui-sidebar-title-font);
-		font-weight: 500;
+		font-weight: 400;
 		text-transform: var(--ui-sidebar-title-case);
 		letter-spacing: var(--ui-sidebar-title-tracking);
 		white-space: nowrap;
@@ -528,7 +529,7 @@
 	.badge {
 		margin-inline-start: auto;
 		padding: 0 0.4375rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-size: 0.75rem;
@@ -574,8 +575,8 @@
 		inset-block: 0.5rem;
 		inset-inline-start: -0.75rem;
 		inline-size: 3px;
-		border-start-end-radius: 4px;
-		border-end-end-radius: 4px;
+		border-start-end-radius: var(--ui-radius-control);
+		border-end-end-radius: var(--ui-radius-control);
 		background: var(--ui-accent);
 	}
 	@media (forced-colors: active) {
@@ -736,7 +737,7 @@
 		place-items: center;
 		inline-size: 3.25rem;
 		block-size: 1.75rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		transition: background var(--ui-dur) var(--ui-ease-out);
 	}
 	.tab[aria-current='page'] .tab-icon {
@@ -749,7 +750,7 @@
 		inset-inline-end: 0.375rem;
 		min-inline-size: 1rem;
 		padding-inline: 0.25rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-size: 0.625rem;

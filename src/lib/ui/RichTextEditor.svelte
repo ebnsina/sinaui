@@ -468,7 +468,7 @@
 	}
 	.box :global(.rte-bar) {
 		margin: 0.25rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 	}
 	.surface {
 		max-block-size: 24rem;
@@ -554,7 +554,7 @@
 	}
 	.content :global(code) {
 		padding: 0.1em 0.3em;
-		border-radius: 0.25rem;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		font-size: 0.875em;
 	}

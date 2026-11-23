@@ -18,6 +18,7 @@
 </script>
 
 <script lang="ts">
+	import { stagger } from './motion';
 	import { announce, isApple } from './announce';
 	import { scrollEdges } from './scroll-edges';
 	import Icon from './Icon.svelte';
@@ -93,6 +94,11 @@
 			query = '';
 			active = 0;
 			dialog.showModal();
+			// The first screen of results cascades in behind the palette.
+			stagger([...results.querySelectorAll('.heading, [role="option"]')].slice(0, 12), {
+				y: 6,
+				delay: 60
+			});
 		} else if (!open && dialog.open) dialog.close();
 	});
 
@@ -230,7 +236,7 @@
 		padding: 0;
 		overflow: hidden;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.75);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.4 var(--ui-font);
@@ -371,7 +377,7 @@
 		block-size: 1.375rem;
 		padding: 0 0.3rem;
 		box-sizing: border-box;
-		border-radius: calc(var(--ui-radius) * 0.6);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		font: 500 0.75rem/1 var(--ui-font);

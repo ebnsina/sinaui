@@ -511,7 +511,7 @@
 		margin: 0;
 		padding: 0.25rem;
 		list-style: none;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

@@ -122,7 +122,7 @@
 		position: relative;
 		block-size: 0.5rem;
 		overflow: hidden;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-hover);
 	}
 	/* scaleX, not width: filling runs on the compositor. */

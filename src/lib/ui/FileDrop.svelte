@@ -168,11 +168,7 @@
 		value = next;
 		problems = turnedAway;
 		sync();
-		announce(
-			[added > 0 && t.added(added), ...turnedAway]
-				.filter(Boolean)
-				.join(' ')
-		);
+		announce([added > 0 && t.added(added), ...turnedAway].filter(Boolean).join(' '));
 	}
 
 	function remove(f: File) {
@@ -275,7 +271,12 @@
 					<span class="name">{f.name}</span>
 					<span class="size">{size(f.size)}</span>
 				</span>
-				<button type="button" class="remove" aria-label={t.remove(f.name)} onclick={() => remove(f)}>
+				<button
+					type="button"
+					class="remove"
+					aria-label={t.remove(f.name)}
+					onclick={() => remove(f)}
+				>
 					<Icon icon={Cancel01Icon} size={16} />
 				</button>
 			</li>
@@ -303,7 +304,7 @@
 		justify-items: center;
 		gap: 0.25rem;
 		padding: 1.75rem 1rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		text-align: center;
 		transition: background-color var(--ui-dur) ease;
@@ -362,7 +363,7 @@
 		font-size: 0.8125rem;
 	}
 	.choose {
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		color: color-mix(in srgb, var(--ui-accent) 80%, var(--ui-fg));
 		font-weight: 500;
 		text-decoration: underline;
@@ -421,7 +422,7 @@
 		flex: none;
 		inline-size: 2.5rem;
 		block-size: 2.5rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		object-fit: cover;
 	}
 	.doc {
@@ -454,7 +455,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

@@ -269,8 +269,6 @@
 </div>
 
 <style>
-	/* One card: the list and the chat share it. Concentric corners: 1.75rem card, 1rem list panel
-	   inset by 0.75rem. */
 	.assistant {
 		position: relative;
 		display: grid;
@@ -279,7 +277,7 @@
 		block-size: 38rem;
 		max-block-size: 85dvh;
 		overflow: hidden;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		transition: grid-template-columns 300ms var(--ui-ease-drawer);
@@ -332,7 +330,7 @@
 		margin-inline: 0.75rem 0.25rem;
 		padding: 0.75rem 0.5rem;
 		overflow: hidden;
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		transition: opacity 200ms var(--ui-ease-out);
 	}

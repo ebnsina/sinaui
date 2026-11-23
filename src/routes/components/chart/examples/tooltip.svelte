@@ -69,7 +69,7 @@
 	.swatch {
 		inline-size: 0.625rem;
 		block-size: 0.625rem;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 	}
 	.on {
 		background: var(--ts-chart-1);

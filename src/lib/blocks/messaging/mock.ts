@@ -40,7 +40,7 @@ function voice(seconds = 3) {
 
 // An eight-pointed star, standing in for a photo of the engraved plate.
 const plate = `data:image/svg+xml,${encodeURIComponent(
-	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#c9b48a"/><g fill="none" stroke="#5b4a2a" stroke-width="2.5"><circle cx="50" cy="50" r="38"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="6"/></g></svg>'
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#c8c8cc"/><g fill="none" stroke="#4a4a4f" stroke-width="2.5"><circle cx="50" cy="50" r="38"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="6"/></g></svg>'
 )}`;
 
 export const people: ChatUser[] = [

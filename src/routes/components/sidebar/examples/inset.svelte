@@ -59,7 +59,7 @@
 		inline-size: 100%;
 		block-size: 28rem;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) + 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		border: 1px solid var(--ui-field-line);
 	}
@@ -74,7 +74,7 @@
 		place-items: center;
 		inline-size: 1.75rem;
 		block-size: 1.75rem;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-weight: 600;

@@ -25,7 +25,7 @@
 	.frame {
 		inline-size: 100%;
 		block-size: 14rem;
-		border-radius: calc(var(--ui-radius) + 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		border: 1px solid var(--ui-field-line);
 		overflow: hidden;

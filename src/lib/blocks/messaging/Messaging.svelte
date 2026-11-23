@@ -838,7 +838,7 @@
 		block-size: 1.25rem;
 		padding: 0 0.375rem;
 		box-sizing: border-box;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-size: 0.75rem;
@@ -921,7 +921,7 @@
 		inset-block-end: 0;
 		inline-size: 0.75rem;
 		block-size: 0.75rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 0 0 2px var(--ui-subtle);
 	}

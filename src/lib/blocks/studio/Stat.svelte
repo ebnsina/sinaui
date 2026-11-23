@@ -50,7 +50,7 @@
 		align-content: start;
 		gap: 0.375rem;
 		padding: 1rem 1.125rem;
-		border: 1px solid var(--ui-card-line, var(--ui-field-line));
+		border: 1px solid var(--ui-card-line, transparent);
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-card-shadow, none);

@@ -151,7 +151,7 @@
 		padding: 0.375rem 0.625rem;
 		/* Invisible normally; outlines the tooltip in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 2px);
+		border-radius: var(--ui-radius);
 		background: var(--ui-fg);
 		color: var(--ui-bg);
 		font: 500 0.8125rem/1.4 var(--ui-font);
@@ -169,7 +169,7 @@
 		block-size: 0.5rem;
 		background: inherit;
 		border: inherit;
-		border-radius: 1px;
+		border-radius: var(--ui-radius-control);
 		translate: -50% 0;
 		rotate: 45deg;
 	}

@@ -3,7 +3,7 @@
 
 	// Whole tiles drag: on a phone, press and hold a tile, then move it.
 	let folios = $state(
-		['1r', '1v', '2r', '2v', '3r', '3v'].map((name, i) => ({ name, hue: 150 + i * 28 }))
+		['1r', '1v', '2r', '2v', '3r', '3v'].map((name, i) => ({ name, shade: 0.95 - i * 0.025 }))
 	);
 </script>
 
@@ -19,7 +19,7 @@
 		<button
 			type="button"
 			class={['tile', dragging && 'dragging']}
-			style:--hue={folio.hue}
+			style:--shade={folio.shade}
 			data-sortable-item
 			{...handle}
 		>
@@ -40,10 +40,14 @@
 		aspect-ratio: 3 / 4;
 		padding: 0.625rem;
 		border: 0;
-		border-radius: calc(var(--ui-radius) * 1.5);
-		/* Parchment tinted per folio, so the order is easy to follow. */
-		background: linear-gradient(160deg, oklch(0.93 0.04 var(--hue)), oklch(0.82 0.07 var(--hue)));
-		color: oklch(0.3 0.05 var(--hue));
+		border-radius: var(--ui-radius);
+		/* Each folio a step darker, so the order is easy to follow. */
+		background: linear-gradient(
+			160deg,
+			oklch(var(--shade) 0 0),
+			oklch(calc(var(--shade) - 0.1) 0 0)
+		);
+		color: oklch(0.3 0 0);
 		font: 600 0.8125rem/1 var(--ui-font);
 		text-align: start;
 		user-select: none;

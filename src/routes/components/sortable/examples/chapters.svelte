@@ -25,7 +25,7 @@
 	.chip {
 		padding: 0.5rem 0.875rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: 500 0.875rem/1 var(--ui-font);

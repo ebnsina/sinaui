@@ -114,7 +114,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius-control) - 0.1875rem);
+		border-radius: var(--ui-radius-control);
 		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
 		box-shadow: 0 0 0 1px var(--ui-field-line);
 		opacity: 0;
@@ -130,13 +130,20 @@
 		/* The control height with the track's padding, like Input and Button. */
 		min-block-size: calc(var(--ui-control-h) - 0.375rem);
 		padding: 0 0.875rem;
-		border-radius: calc(var(--ui-radius-control) - 0.1875rem);
+		border-radius: var(--ui-radius-control);
 		color: var(--ui-muted);
 		font-weight: 500;
 		white-space: nowrap;
 		cursor: pointer;
 		-webkit-tap-highlight-color: transparent;
 		transition: color var(--ui-dur-press) ease;
+	}
+	/* The label gives under a press; the thumb behind it stays put and glides on release. */
+	.segment > span {
+		transition: scale var(--ui-dur-press) var(--ui-ease-out);
+	}
+	.segment:active > span {
+		scale: var(--ui-press-scale);
 	}
 	@media (pointer: coarse) {
 		.segment {

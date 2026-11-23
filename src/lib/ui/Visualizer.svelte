@@ -63,9 +63,17 @@
 		const levels = new Float32Array(bars);
 
 		// Color comes from the page (--ui-accent through `color`), so it follows the theme.
-		let color = getComputedStyle(canvas).color;
+		// Bar ends follow --ui-radius-pill (square by default), read with the color.
+		let color = '';
+		let pill = 0;
+		const read = () => {
+			const cs = getComputedStyle(canvas);
+			color = cs.color;
+			pill = parseFloat(cs.getPropertyValue('--ui-radius-pill')) || 0;
+		};
+		read();
 		const recolor = () => {
-			color = getComputedStyle(canvas).color;
+			read();
 			if (!frame) draw();
 		};
 		const themes = new MutationObserver(recolor);
@@ -110,7 +118,7 @@
 				// A resting bar is a quiet dot; a lit one is solid.
 				g!.globalAlpha = 0.25 + 0.75 * Math.min(1, levels[i] * 3);
 				g!.beginPath();
-				g!.roundRect(i * (bw + gap), y, bw, bh, bw / 2);
+				g!.roundRect(i * (bw + gap), y, bw, bh, Math.min(pill * (devicePixelRatio || 1), bw / 2));
 				g!.fill();
 			}
 			g!.globalAlpha = 1;

@@ -164,7 +164,7 @@
 		inline-size: 100%;
 		box-sizing: border-box;
 		padding: 1.25rem;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -185,14 +185,13 @@
 	.row > :global(.btn) {
 		margin-inline-start: auto;
 	}
-	/* Concentric: the button's corners + the 0.75rem around it. */
 	.player {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
 		padding-block: 0.75rem;
 		padding-inline: 0.75rem 1rem;
-		border-radius: calc(var(--ui-radius) + 0.75rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		animation: appear 300ms var(--ui-ease-out);
 	}

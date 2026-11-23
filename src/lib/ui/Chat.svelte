@@ -1117,7 +1117,7 @@
 		inset-block-end: -1px;
 		inline-size: 0.625rem;
 		block-size: 0.625rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 0 0 2px var(--ui-surface);
 	}
@@ -1136,7 +1136,7 @@
 	.bubble {
 		margin: 0;
 		padding: 0.4375rem 0.75rem;
-		border-radius: 1.125rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
@@ -1148,7 +1148,7 @@
 	}
 	.mention {
 		padding: 0 0.125rem;
-		border-radius: 0.25rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--ui-accent) 16%, transparent);
 		font-weight: 600;
 	}
@@ -1202,7 +1202,7 @@
 		gap: 0.625rem;
 		inline-size: min(22rem, 100%);
 		padding: 0.5rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: inherit;
 		font-size: 0.8125rem;
@@ -1212,7 +1212,7 @@
 		flex: none;
 		inline-size: 4rem;
 		block-size: 4rem;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		object-fit: cover;
 	}
 	.link-card > span {
@@ -1306,7 +1306,7 @@
 		max-inline-size: 100%;
 		padding: 0.25rem 0.625rem;
 		border: 0;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-fg) 6%, transparent);
 		color: var(--ui-muted);
 		font: inherit;
@@ -1360,7 +1360,7 @@
 	}
 	.files :global(.pic) {
 		max-block-size: 16rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		overflow: hidden;
 	}
 	/* The crop above would cut an outside ring, so it sits inside the picture. */
@@ -1373,7 +1373,7 @@
 		gap: 0.625rem;
 		grid-column: 1 / -1;
 		padding: 0.5rem 0.75rem;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
@@ -1396,7 +1396,7 @@
 		min-block-size: 1.75rem;
 		padding: 0 0.5rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: inherit;
@@ -1479,7 +1479,7 @@
 		block-size: 1.875rem;
 		padding: 0;
 		border: 0;
-		border-radius: calc(var(--ui-radius-control) - 0.125rem);
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;
@@ -1527,13 +1527,13 @@
 		display: inline-flex;
 		gap: 0.1875rem;
 		padding: 0.5rem 0.625rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 	}
 	.dots i {
 		inline-size: 0.375rem;
 		block-size: 0.375rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-muted);
 		animation: bounce 1.2s infinite ease-in-out;
 	}
@@ -1566,7 +1566,7 @@
 		min-block-size: 2.25rem;
 		padding: 0 0.625rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface-overlay);
 		box-shadow: var(--ui-shadow-overlay);
 		color: var(--ui-fg);

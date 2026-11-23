@@ -146,7 +146,7 @@
 		--line: 1.7em;
 		margin: 0;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-fg) 4%, var(--ui-surface));
 		color: var(--ui-fg);
 		font: 0.8125rem/1 var(--ui-font-mono);
@@ -268,44 +268,30 @@
 		margin: 0;
 		font: inherit;
 	}
-	/* Syntax colors, each 4.5:1 or better on this background in both themes. */
-	.codeblock :global(.th-tag),
-	.codeblock :global(.th-command),
-	.codeblock :global(.th-selector) {
-		color: light-dark(#047857, #34d399);
+	/* Syntax in monochrome: structure reads through weight and ink, never hue; each shade 4.5:1+. */
+	.codeblock :global(:is(.th-keyword, .th-operator, .th-tag, .th-command, .th-selector)) {
+		color: var(--ui-fg);
+		font-weight: 600;
 	}
-	.codeblock :global(.th-attr),
-	.codeblock :global(.th-property) {
-		color: light-dark(#9a3412, #fdba74);
+	.codeblock :global(:is(.th-function, .th-type, .th-meta)) {
+		color: var(--ui-fg);
 	}
-	.codeblock :global(.th-string),
-	.codeblock :global(.th-link) {
-		color: light-dark(#0e7490, #67e8f9);
+	.codeblock :global(:is(.th-attr, .th-property, .th-number, .th-literal)) {
+		color: color-mix(in oklab, var(--ui-fg) 78%, var(--ui-muted));
 	}
-	.codeblock :global(.th-keyword),
-	.codeblock :global(.th-operator) {
-		color: light-dark(#9d174d, #f9a8d4);
-	}
-	.codeblock :global(.th-function) {
-		color: light-dark(#1d4ed8, #93c5fd);
-	}
-	.codeblock :global(.th-number),
-	.codeblock :global(.th-literal) {
-		color: light-dark(#854d0e, #fde68a);
-	}
-	.codeblock :global(.th-type),
-	.codeblock :global(.th-meta) {
-		color: light-dark(#6d28d9, #c4b5fd);
+	.codeblock :global(:is(.th-string, .th-link, .th-comment)) {
+		color: var(--ui-muted);
 	}
 	.codeblock :global(.th-comment) {
-		color: light-dark(#57606a, #a3a3a3);
 		font-style: italic;
 	}
 	.codeblock :global(.th-inserted) {
-		color: light-dark(#047857, #34d399);
+		color: var(--ui-fg);
+		font-weight: 600;
 	}
 	.codeblock :global(.th-deleted) {
-		color: light-dark(#b42318, #ff8a7a);
+		color: var(--ui-muted);
+		text-decoration: line-through;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.armed:not(.seen) .sheet,

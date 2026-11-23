@@ -48,7 +48,8 @@
 <nav aria-label={label} class={['stepper', orientation]}>
 	<!-- Narrow screens show only the current step's name; this says where it is in the list. -->
 	<p class="count" aria-hidden="true">
-		{t.step(n(Math.min(current, last) + 1), n(steps.length))}: {steps[Math.min(current, last)]?.label}
+		{t.step(n(Math.min(current, last) + 1), n(steps.length))}: {steps[Math.min(current, last)]
+			?.label}
 	</p>
 	<div class="rail" style:--n={steps.length}>
 		<ol>
@@ -159,7 +160,7 @@
 		inline-size: 2rem;
 		block-size: 2rem;
 		border: 1px solid var(--ui-field-line);
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
@@ -213,7 +214,7 @@
 		inset-inline: calc(50% + 1.5rem) calc(-50% + 1.5rem);
 		block-size: 2px;
 		overflow: hidden;
-		border-radius: 1px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-line);
 	}
 	.link::after {

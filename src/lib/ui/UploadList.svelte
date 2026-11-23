@@ -220,7 +220,7 @@
 		display: block;
 		block-size: 4px;
 		overflow: hidden;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-hover);
 	}
 	.fill {
@@ -262,7 +262,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

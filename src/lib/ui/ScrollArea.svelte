@@ -154,7 +154,7 @@
 		inset-inline-end: 0.125rem;
 		inline-size: 0.3125rem;
 		block-size: calc(var(--size) * 100%);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--ui-fg) 30%, transparent);
 		translate: 0 calc(var(--offset) / var(--size) * 100%);
 		transform-origin: right;
@@ -193,7 +193,7 @@
 		margin-block: 0;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
