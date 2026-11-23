@@ -78,39 +78,57 @@
 <style>
 	.card {
 		position: relative;
+		/* Its own layer, so the outer ring (z-index -1) paints behind the card, not behind the page. */
+		isolation: isolate;
 		box-sizing: border-box;
 		/* a column, so a card stretched to its row's height keeps its footer on the bottom edge */
 		display: flex;
 		flex-direction: column;
 		min-inline-size: 0;
-		/* A tinted frame with a hairline outline; the content sits on a sheet inset inside it, and the
-		   footer stays on the frame below the sheet. */
-		padding: 0.25rem;
+		/* A tinted frame with a hairline outline. The sheet inside lies on the frame's edge, so their
+		   lines merge; the footer stays on the frame's tint below it; a faint ring sits 5px outside. */
 		border: 1px solid var(--ui-card-line, var(--ui-line));
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
-		box-shadow: var(--ui-card-shadow, none);
+		box-shadow: var(--ui-card-shadow, 0 1px 2px light-dark(rgb(0 0 0 / 0.04), transparent));
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.5 var(--ui-font);
 	}
-	.danger {
+	/* The sheet's line lies on the frame's, so edge colors go on both. */
+	.danger,
+	.danger .sheet {
 		border-color: color-mix(in oklab, var(--ui-danger) 45%, var(--ui-field-line));
 	}
 	.danger .title {
 		color: var(--ui-danger);
 	}
-	.selected {
+	.selected,
+	.selected .sheet {
 		border-color: var(--ui-fg);
 		box-shadow: inset 0 0 0 1px var(--ui-fg);
+	}
+	.card::after {
+		content: '';
+		position: absolute;
+		inset: -5px;
+		z-index: -1;
+		border: 1px solid color-mix(in oklab, var(--ui-card-line, var(--ui-line)) 64%, transparent);
+		border-radius: var(--ui-radius);
+		pointer-events: none;
 	}
 	.sheet {
 		display: flex;
 		flex: 1;
 		flex-direction: column;
 		min-inline-size: 0;
+		/* Pulled onto the frame's border, so the two hairlines are one line. */
+		margin: -1px -1px 0;
 		border: 1px solid var(--ui-card-line, var(--ui-line));
 		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
+	}
+	.sheet:last-child {
+		margin-block-end: -1px;
 	}
 	.head {
 		display: flex;
@@ -143,7 +161,7 @@
 		padding-inline-start: calc(1rem + var(--indent));
 	}
 	.has-icon > .footer {
-		padding-inline-start: calc(0.75rem + var(--indent));
+		padding-inline-start: calc(1rem + var(--indent));
 	}
 	.icon {
 		display: flex;
@@ -175,11 +193,13 @@
 	.title a:focus-visible {
 		outline: none;
 	}
-	.linked {
+	.linked,
+	.linked .sheet {
 		transition: border-color var(--ui-dur-press) ease;
 	}
 	@media (hover: hover) and (pointer: fine) {
-		.linked:hover {
+		.linked:hover,
+		.linked:hover .sheet {
 			border-color: color-mix(in srgb, var(--ui-fg) 22%, transparent);
 		}
 	}
@@ -210,14 +230,14 @@
 		border-radius: var(--ui-radius);
 	}
 	/* Actions sit at the end, main action last; wrapping keeps it on the bottom row, like Dialog.
-	   On the frame, so with its 0.25rem the footer text lines up with the sheet's 1rem inset. */
+	   On the frame's tint, below the sheet. */
 	.footer {
 		display: flex;
 		flex-wrap: wrap-reverse;
 		align-items: center;
 		justify-content: flex-end;
 		gap: 0.5rem;
-		padding: 0.75rem 0.75rem 0.5rem;
+		padding: 0.75rem 1rem;
 	}
 	/* Controls inside a linked card stay clickable above the stretched link. */
 	.linked :is(.panel, .footer) :global(:is(a, button, input, select, textarea, label)) {
