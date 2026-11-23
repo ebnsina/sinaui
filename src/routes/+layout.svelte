@@ -163,7 +163,12 @@
 		}
 		const top = links[first].offsetTop;
 		const height = links[last].offsetTop + links[last].offsetHeight - top;
-		marker.style.transform = `translateY(${top}px) scaleY(${height})`;
+		// The dot sits just before the current link's text (sub-sections are indented) and centers on its line.
+		const a = links[first].querySelector('a')!;
+		const cs = getComputedStyle(a);
+		const x = parseFloat(cs.paddingInlineStart) - 9;
+		const dir = cs.direction === 'rtl' ? -1 : 1;
+		marker.style.transform = `translate(${x * dir}px, ${top + height / 2}px) translateY(-50%)`;
 		marker.style.opacity = '1';
 		// First placement snaps; after that it glides.
 		if (!placed) requestAnimationFrame(() => (placed = true));
@@ -911,15 +916,16 @@
 	.toc li a[aria-current='true'] {
 		color: var(--ui-accent);
 	}
-	/* 1px tall, scaled to the current link: transform only, so it stays smooth while you scroll. */
+	/* A small square dot beside the current link, gliding between them: transform only, so it stays
+	   smooth while you scroll. */
 	.marker {
 		position: absolute;
 		inset-block-start: 0;
 		inset-inline-start: 0;
-		inline-size: 2px;
-		block-size: 1px;
+		inline-size: 5px;
+		block-size: 5px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
-		transform-origin: top;
 		opacity: 0;
 		pointer-events: none;
 	}
