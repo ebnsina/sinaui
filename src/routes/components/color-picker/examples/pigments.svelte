@@ -78,7 +78,7 @@
 	}
 	.tag {
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		font-size: 0.75rem;
 		font-weight: 600;
 		white-space: nowrap;

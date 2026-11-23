@@ -155,7 +155,7 @@
 		inset-block-start: 0;
 		inline-size: 2px;
 		margin-inline-start: -0.5px;
-		border-radius: 1px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-fg);
 		opacity: 0;
 		transform-origin: 0 0;

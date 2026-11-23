@@ -33,7 +33,7 @@
 		box-sizing: border-box;
 		inline-size: 100%;
 		padding: 1.5rem 1.25rem 1.25rem;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--tone);

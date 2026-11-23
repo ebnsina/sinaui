@@ -6,6 +6,7 @@
 	import '#lib/ui/tokens.css';
 	import './docs.css';
 	import favicon from '#lib/assets/favicon.svg';
+	import Logo from '#lib/site/Logo.svelte';
 	import { onMount } from 'svelte';
 	import { afterNavigate, goto, snapshot } from '$app/navigation';
 	import { page } from '$app/state';
@@ -22,6 +23,7 @@
 	import { search } from '#lib/site/search.svelte.js';
 	import { setTheme } from '#lib/ui/theme.js';
 	import ThemeToggle from '#lib/ui/ThemeToggle.svelte';
+	import AccentPicker from '#lib/site/AccentPicker.svelte';
 	import {
 		ArrowUp01Icon,
 		Menu01Icon,
@@ -126,6 +128,16 @@
 		const a = tocList?.querySelector<HTMLElement>('[aria-current]');
 		if (tocCard && a) tocCard.scrollTop = a.offsetTop - tocCard.clientHeight / 2;
 	};
+	// In the always-shown column (wide screens), the section being read stays in view as you scroll.
+	$effect(() => {
+		void current;
+		const a = tocList?.querySelector<HTMLElement>('[aria-current]');
+		if (!tocCard || !a || getComputedStyle(tocCard).position !== 'static') return;
+		const top = a.offsetTop;
+		const bottom = top + a.offsetHeight;
+		if (top < tocCard.scrollTop || bottom > tocCard.scrollTop + tocCard.clientHeight)
+			tocCard.scrollTop = top - tocCard.clientHeight / 2;
+	});
 	let marker = $state<HTMLSpanElement>();
 	let placed = $state(false);
 	let untrack: (() => void) | undefined;
@@ -264,7 +276,7 @@
 	<!-- The faces nearly every page uses; the rest load as needed. -->
 	<link
 		rel="preload"
-		href={asset('fonts/inter/inter-latin-opsz-normal.woff2')}
+		href={asset('fonts/mona-sans/mona-sans-latin-wdth-normal.woff2')}
 		as="font"
 		type="font/woff2"
 		crossorigin="anonymous"
@@ -318,7 +330,7 @@
 {:else if landing}
 	<header class="bar">
 		<a class="brand" href={resolve('/')} aria-label="Sina UI home">
-			<img src={favicon} alt="" width="22" height="22" />
+			<Logo size={22} />
 			<span>Sina UI</span>
 		</a>
 		<nav class="menu" aria-label="Main">
@@ -344,6 +356,7 @@
 				<Icon icon={Search01Icon} size={16} />
 			</Button>
 			<ThemeToggle size="sm" />
+			<AccentPicker side="bottom" />
 			<Button size="sm" href={resolve('/docs')} class="bar-cta">Get started</Button>
 			<Button
 				variant="ghost"
@@ -375,13 +388,14 @@
 			<Icon icon={Search01Icon} />
 		</Button>
 		<ThemeToggle />
+		<AccentPicker size="md" side="bottom" />
 	</header>
 
 	<div class={['shell', tocOpen && 'toc-open']}>
 		<div class="side">
 			<header>
 				<a class="side-brand" href={resolve('/')} aria-label="Sina UI home">
-					<img src={favicon} alt="" width="20" height="20" />
+					<Logo />
 					<span class="side-label">Sina UI</span>
 				</a>
 			</header>
@@ -404,9 +418,10 @@
 				<span class="nav-hover" aria-hidden="true" bind:this={navHover}></span>
 				{@render links()}
 			</nav>
-			<!-- One row at the bottom: theme, search (⌘K) and the collapse toggle. -->
+			<!-- One row at the bottom: theme, accent, search (⌘K) and the collapse toggle. -->
 			<div class="side-foot">
 				<ThemeToggle size="sm" />
+				<AccentPicker />
 				<button
 					type="button"
 					class="side-search"
@@ -440,8 +455,8 @@
 			</main>
 		</div>
 
-		<!-- "On this page": a round button in the corner whose ring fills as you read.
-		     Pointing at it, focusing it or pressing it opens the contents, which grow out of the button. -->
+		<!-- "On this page": a column on wide screens; narrower, a button in the corner whose ring fills
+		     as you read, and pointing at it, focusing it or pressing it opens the contents out of it. -->
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<aside
 			class="toc"
@@ -736,8 +751,8 @@
 		inset-block: 0.5rem;
 		inset-inline-start: calc(-1 * var(--edge));
 		inline-size: 3px;
-		border-start-end-radius: 4px;
-		border-end-end-radius: 4px;
+		border-start-end-radius: var(--ui-radius-control);
+		border-end-end-radius: var(--ui-radius-control);
 		background: var(--ui-accent);
 	}
 	/* Distance from the link to its container's edge: the sidebar's and the sheet's inline padding. */
@@ -769,7 +784,7 @@
 		block-size: 2.25rem;
 		padding: 0 0.75rem 0 0.625rem;
 		border: 1px solid transparent;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface-overlay);
 		box-shadow: var(--ui-shadow-overlay);
 		color: var(--ui-fg);
@@ -832,7 +847,7 @@
 		overscroll-behavior: contain;
 		padding: 1rem 0.75rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		box-shadow: var(--ui-shadow-overlay);
 		opacity: 0;
@@ -979,13 +994,13 @@
 			min-block-size: 0;
 			margin-block: 0.25rem;
 			margin-inline-end: 0.25rem;
-			border-radius: 1rem;
+			border-radius: var(--ui-radius);
 			overflow: auto;
 			overscroll-behavior: contain;
 			scroll-padding-block-start: 1.5rem;
 			box-shadow:
-				0 1px 3px rgb(15 23 42 / 0.04),
-				0 12px 32px -16px rgb(15 23 42 / 0.12);
+				0 1px 3px rgb(0 0 0 / 0.04),
+				0 12px 32px -16px rgb(0 0 0 / 0.12);
 		}
 		/* Links scroll; the theme switch stays pinned at the bottom. */
 		.side {
@@ -1062,7 +1077,7 @@
 		}
 		.side-search kbd {
 			padding: 0.2rem 0.3rem;
-			border-radius: calc(var(--ui-radius) * 0.6);
+			border-radius: var(--ui-radius);
 			background: var(--ui-surface);
 			font: 500 0.6875rem/1 var(--ui-font);
 		}
@@ -1088,6 +1103,45 @@
 			z-index: 15;
 			display: block;
 			padding-block-start: 0.625rem;
+		}
+	}
+	/* Wide screens: "On this page" is always shown, a column on the gray page right of the content,
+	   mirroring the sidebar on the left. Narrower, it stays the corner button above. */
+	@media (min-width: 1280px) {
+		.shell {
+			grid-template-columns: 15rem minmax(0, 1fr) 14rem;
+		}
+		:global(html[data-sidebar='collapsed']) .shell {
+			grid-template-columns: 3.25rem minmax(0, 1fr) 14rem;
+		}
+		.toc {
+			position: static;
+			min-block-size: 0;
+			padding: 0;
+		}
+		.rail {
+			display: none;
+		}
+		.card,
+		.toc-open .card {
+			position: static;
+			inline-size: auto;
+			max-block-size: 100%;
+			padding: 1.5rem 1rem 2rem 0.75rem;
+			border: 0;
+			background: none;
+			box-shadow: none;
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			pointer-events: auto;
+			transition: none;
+		}
+		.card li,
+		.toc-open .card li {
+			opacity: 1;
+			translate: 0 0;
+			transition: none;
 		}
 	}
 </style>

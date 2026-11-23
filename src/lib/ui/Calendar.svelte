@@ -497,7 +497,7 @@
 		inset-block-end: 0.3rem;
 		inline-size: 0.25rem;
 		block-size: 0.25rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: currentColor;
 	}
 	.selected {

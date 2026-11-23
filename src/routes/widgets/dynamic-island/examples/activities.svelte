@@ -302,7 +302,7 @@
 	.wave span {
 		inline-size: 3px;
 		block-size: 100%;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-accent);
 		animation: talk ease-in-out infinite alternate;
 	}

@@ -32,7 +32,7 @@
 		place-items: center;
 		inline-size: 1.5rem;
 		block-size: 1.5rem;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-size: 0.8125rem;

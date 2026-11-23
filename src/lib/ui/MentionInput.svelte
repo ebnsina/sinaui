@@ -335,14 +335,18 @@
 	/* Field, backdrop and measuring copy share one box model, so their lines break identically. */
 	.box {
 		position: relative;
-		border-radius: var(--ui-radius);
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
 	}
 	.text {
+		/* One line is exactly a control's height, so a one-row box lines up with buttons and inputs;
+		   taller boxes keep the same inset, so text starts where it does in an Input. */
+		--h: var(--ui-control-h);
+		--pad-y: calc((var(--h) - 2px - 1.5em) / 2);
 		box-sizing: border-box;
 		inline-size: 100%;
 		margin: 0;
-		padding: 0.5rem 0.75rem;
+		padding: var(--pad-y) 0.75rem;
 		border: 1px solid transparent;
 		font: inherit;
 		font-size: var(--ui-control-font);
@@ -356,13 +360,18 @@
 		position: relative;
 		display: block;
 		border-color: var(--ui-field-line);
-		border-radius: var(--ui-radius);
+		border-radius: var(--ui-radius-control);
 		background: transparent;
 		color: inherit;
 		resize: vertical;
 		field-sizing: content;
-		min-block-size: calc(var(--rows, 3) * 1.5em + 1rem + 2px);
+		min-block-size: calc(var(--rows, 3) * 1.5em + 2 * var(--pad-y) + 2px);
 		max-block-size: 20rem;
+	}
+	@media (pointer: coarse) {
+		.text {
+			--h: var(--ui-control-h-touch);
+		}
 	}
 	textarea::placeholder {
 		color: var(--ui-muted);
@@ -397,7 +406,7 @@
 	mark {
 		margin-inline: -0.125em;
 		padding-inline: 0.125em;
-		border-radius: 0.25rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--ui-accent) 16%, transparent);
 		color: transparent;
 	}
@@ -441,7 +450,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		opacity: 0;
 		pointer-events: none;
@@ -454,7 +463,7 @@
 		gap: 0.625rem;
 		min-block-size: calc(var(--ui-item-h) + 0.25rem);
 		padding: 0.25rem 0.5rem;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		cursor: pointer;
 	}
 	.who {

@@ -23,4 +23,5 @@ Svelte 5 and SvelteKit 2 or later. Works with or without Tailwind.
 
 Components take your page's font. To use Sina UI's font tokens everywhere, add
 `html { font-family: var(--ui-font); }` to your CSS. Colors and corners live in
-`src/lib/sinaui/ui/tokens.css`; see [Theming](https://ebnsina.github.io/sinaui/theming).
+`src/lib/sinaui/ui/tokens.css`; see [Theming](https://ebnsina.github.io/sinaui/theming). For
+color, set `data-accent="blue"` (or `orange`, `lime`, `emerald`, `pink`, `sky`) on `<html>`.

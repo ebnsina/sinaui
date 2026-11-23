@@ -501,7 +501,6 @@
 		user-select: none;
 		-webkit-user-select: none;
 	}
-	/* Concentric: 1.25rem list = 0.5rem padding + the cards' 0.75rem. */
 	.column {
 		display: flex;
 		flex-direction: column;
@@ -511,7 +510,7 @@
 		scroll-snap-align: start;
 		padding: 0.5rem;
 		box-sizing: border-box;
-		border-radius: 1.25rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 	}
 	header {
@@ -564,7 +563,7 @@
 		inline-size: 100%;
 		padding: 0.625rem 0.75rem;
 		border: 0;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -616,7 +615,7 @@
 	}
 	.tag {
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--c) 16%, transparent);
 		color: var(--ui-fg);
 		font: 600 0.6875rem/1.4 var(--ui-font);
@@ -631,7 +630,7 @@
 		margin-block-start: 0.5rem;
 		padding: 0.5rem 0.625rem;
 		border: 0;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		font: 500 0.875rem/1 var(--ui-font);
@@ -658,7 +657,7 @@
 		inline-size: 100%;
 		padding: 0.625rem 0.75rem;
 		border: 1px solid var(--ui-field-line);
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		color: inherit;
 		font: 0.875rem/1.4 var(--ui-font);

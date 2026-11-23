@@ -28,6 +28,10 @@ export const releases: Release[] = [
 						text: 'Theme with a few CSS variables: accent, corners, type and motion',
 						href: '/theming'
 					},
+					{
+						text: 'Monochrome and square by default, with six accent colors to switch on',
+						href: '/theming'
+					},
 					{ text: 'Light and dark, following the reader’s system or their choice' },
 					{ text: 'Right-to-left languages mirror throughout' },
 					{ text: 'Full keyboard use and screen reader support in every component' },

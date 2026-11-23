@@ -549,7 +549,7 @@
 	}
 	.value {
 		padding: 0.0625rem 0.1875rem;
-		border-radius: calc(var(--ui-radius-control) * 0.5);
+		border-radius: var(--ui-radius-control);
 	}
 	/* An unpadded hour ("8") sits against the colon, not centered in a two-digit slot. */
 	.hour {
@@ -564,7 +564,7 @@
 		margin-inline: auto -0.25rem;
 		padding: 0;
 		border: 0;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;
@@ -608,7 +608,7 @@
 		align-items: center;
 		min-block-size: 2rem;
 		padding: 0 0.625rem;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		outline: none;
 		white-space: nowrap;
 		cursor: pointer;

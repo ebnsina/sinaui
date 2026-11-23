@@ -228,7 +228,7 @@
 		margin-block-start: 1rem;
 		padding: 1.5rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

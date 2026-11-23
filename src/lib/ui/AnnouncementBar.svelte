@@ -318,7 +318,7 @@
 	.tag {
 		padding: 0.0625rem 0.4375rem;
 		border: 1px solid var(--edge);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		font-size: 0.6875rem;
 		font-weight: 600;
 		letter-spacing: 0.01em;
@@ -359,7 +359,7 @@
 		gap: 0.25rem;
 		padding: 0.1875rem 0.5rem 0.1875rem 0.625rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--fg);
 		color: var(--on-fg);
 		font: inherit;
@@ -429,7 +429,7 @@
 		block-size: 2rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: none;
 		color: var(--muted);
 		cursor: pointer;

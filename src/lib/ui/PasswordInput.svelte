@@ -154,7 +154,7 @@
 		place-items: center;
 		inline-size: 1.125rem;
 		block-size: 1.125rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		transition: background-color var(--ui-dur) ease;
 	}
@@ -203,7 +203,7 @@
 		position: relative;
 		block-size: 4px;
 		overflow: hidden;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-hover);
 	}
 	.bar::after {

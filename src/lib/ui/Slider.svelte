@@ -183,7 +183,7 @@
 		inset-block-start: calc(50% - var(--track) / 2);
 		inset-inline: calc(var(--thumb) / 2);
 		block-size: var(--track);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-hover);
 	}
 	.fill {
@@ -191,7 +191,7 @@
 		inset-block: 0;
 		inset-inline-start: calc(var(--a) - var(--track) / 2);
 		inline-size: calc(var(--b) - var(--a) + var(--track));
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 	}
 	.tick {
@@ -200,7 +200,7 @@
 		inset-inline-start: var(--p);
 		inline-size: 0.25rem;
 		block-size: 0.25rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-muted);
 		opacity: 0.5;
 		translate: -50% -50%;
@@ -244,7 +244,7 @@
 		block-size: var(--thumb);
 		margin-block-start: calc((1.75rem - var(--thumb)) / 2);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
 		pointer-events: auto;
@@ -259,7 +259,7 @@
 		inline-size: var(--thumb);
 		block-size: var(--thumb);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
 		pointer-events: auto;
@@ -342,7 +342,7 @@
 		margin: 0;
 		padding: 0 0.25rem;
 		border: 0;
-		border-radius: 4px;
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-muted);
 		font: 0.75rem/1.25rem var(--ui-font);

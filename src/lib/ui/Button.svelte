@@ -129,6 +129,20 @@
 	.loading .label {
 		opacity: 0;
 	}
+	/* A trailing icon (an arrow after "Continue") leans a step forward on hover: it points the way. */
+	:is(.btn, .label) > :global(svg:last-child:not(:first-child)) {
+		transition: translate var(--ui-dur) var(--ui-ease-out);
+	}
+	@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+		.btn:hover > :global(svg:last-child:not(:first-child)),
+		.btn:hover .label > :global(svg:last-child:not(:first-child)) {
+			translate: 3px 0;
+		}
+		.btn:hover:dir(rtl) > :global(svg:last-child:not(:first-child)),
+		.btn:hover:dir(rtl) .label > :global(svg:last-child:not(:first-child)) {
+			translate: -3px 0;
+		}
+	}
 
 	.primary {
 		background: var(--ui-accent);
@@ -172,7 +186,7 @@
 	.link {
 		min-block-size: auto;
 		padding: 0;
-		border-radius: 4px;
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-accent);
 		text-decoration: underline;
@@ -204,7 +218,7 @@
 	/* scale() carries the label with it, which is what reads as a physical press. A raised button
 	   (--ui-button-depth) also sinks onto its edge. */
 	.btn:active {
-		transform: translateY(var(--ui-button-depth)) scale(0.97);
+		transform: translateY(var(--ui-button-depth)) scale(var(--ui-press-scale));
 		box-shadow: none;
 	}
 

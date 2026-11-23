@@ -233,7 +233,7 @@
 		line-clamp: 2;
 	}
 	mark {
-		border-radius: 0.1875rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--ui-accent) 18%, transparent);
 		color: var(--ui-fg);
 	}

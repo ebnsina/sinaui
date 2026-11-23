@@ -243,7 +243,7 @@
 	.ruler:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: -2px;
-		border-radius: 0.75rem;
+		border-radius: var(--ui-radius);
 	}
 	/* The track slides so the chosen minute sits over the pointer, dead center. */
 	.track {
@@ -261,7 +261,7 @@
 		inline-size: 3px;
 		block-size: 2.25rem;
 		margin-inline-start: -1.5px;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--tone) 32%, transparent);
 		transition: background-color 120ms ease;
 	}
@@ -291,7 +291,7 @@
 		block-size: 0;
 		border-inline: 7px solid transparent;
 		border-block-end: 10px solid var(--tone);
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 	}
 	.bottom {
 		display: flex;

@@ -181,7 +181,7 @@
 		padding-block: 0;
 		padding-inline: 0.625rem 0.375rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: transparent;
 		color: inherit;
 		font: inherit;
@@ -216,7 +216,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		opacity: 0;
 		pointer-events: none;

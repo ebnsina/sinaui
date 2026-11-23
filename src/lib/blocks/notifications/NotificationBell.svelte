@@ -64,7 +64,7 @@
 		block-size: 1rem;
 		padding-inline: 0.25rem;
 		box-sizing: border-box;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 0 0 2px var(--ui-bg);
 		color: var(--ui-on-accent);

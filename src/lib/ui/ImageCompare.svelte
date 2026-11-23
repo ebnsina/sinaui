@@ -118,7 +118,7 @@
 		border-radius: var(--ui-radius-control);
 		background: #fff;
 		box-shadow: var(--ui-shadow-xs);
-		color: #0f172a;
+		color: #0f0f10;
 		translate: -50% -50%;
 		transition: scale var(--ui-dur-press) var(--ui-ease-out);
 	}
@@ -129,7 +129,7 @@
 		position: absolute;
 		inset-block-end: 0.75rem;
 		padding: 0.25rem 0.5rem;
-		border-radius: calc(var(--ui-radius-control) - 0.125rem);
+		border-radius: var(--ui-radius-control);
 		background: rgb(0 0 0 / 0.55);
 		color: #fff;
 		font: 500 0.75rem/1.2 var(--ui-font);

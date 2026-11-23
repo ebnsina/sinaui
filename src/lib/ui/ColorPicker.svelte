@@ -262,8 +262,10 @@
 		box-sizing: border-box;
 		min-block-size: var(--ui-control-h);
 		margin: 0;
+		/* The chip sits in an even frame: its side inset matches the space above and below it. */
+		--chip: 1.5rem;
 		padding-block: 0;
-		padding-inline: 0.5rem 0.875rem;
+		padding-inline: calc((var(--ui-control-h) - 2px - var(--chip)) / 2) 0.875rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		background: var(--ui-surface);
@@ -276,9 +278,9 @@
 		outline-offset: var(--ui-ring-offset);
 	}
 	.chip {
-		inline-size: 1.5rem;
-		block-size: 1.5rem;
-		border-radius: calc(var(--ui-radius-control) * 0.6);
+		inline-size: var(--chip);
+		block-size: var(--chip);
+		border-radius: var(--ui-radius-control);
 		box-shadow: inset 0 0 0 1px var(--ui-field-line);
 		transition: background-color var(--ui-dur) ease;
 	}
@@ -314,7 +316,7 @@
 	.hue {
 		position: relative;
 		block-size: 0.75rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: linear-gradient(
 			to right,
 			#f00,
@@ -347,7 +349,7 @@
 		top: 50%;
 		inline-size: 1.125rem;
 		block-size: 1.125rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		box-shadow:
 			0 0 0 2px #fff,
 			0 1px 4px rgb(0 0 0 / 0.35);
@@ -443,7 +445,7 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-		border-radius: calc(var(--ui-radius) * 0.6);
+		border-radius: var(--ui-radius);
 		box-shadow: inset 0 0 0 1px var(--ui-field-line);
 		cursor: pointer;
 		transition: transform var(--ui-dur-press) var(--ui-ease-out);

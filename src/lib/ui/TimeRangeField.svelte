@@ -204,7 +204,7 @@
 		margin-inline: auto -0.25rem;
 		padding: 0;
 		border: 0;
-		border-radius: calc(var(--ui-radius) * 0.75);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

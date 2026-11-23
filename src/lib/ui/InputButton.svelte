@@ -28,7 +28,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius-control) - 0.125rem);
+		border-radius: var(--ui-radius-control);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

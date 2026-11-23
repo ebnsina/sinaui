@@ -230,7 +230,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.1875rem 0.625rem 0.1875rem 0.1875rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface);
 		box-shadow:
 			0 0 0 1px var(--ui-line),
@@ -243,7 +243,7 @@
 	}
 	.new {
 		padding: 0.125rem 0.5rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		font-size: 0.75rem;
@@ -316,7 +316,7 @@
 		place-items: center;
 		overflow: hidden;
 		padding: clamp(1.5rem, 4vw, 3rem);
-		border-radius: calc(var(--ui-radius) * 2);
+		border-radius: var(--ui-radius);
 		background:
 			radial-gradient(110% 85% at 100% 100%, #ececec 0%, #6b6b6b 26%, transparent 58%),
 			radial-gradient(70% 60% at 0% 0%, #161a1d 0%, transparent 70%),
@@ -363,7 +363,7 @@
 		flex-direction: column;
 		min-inline-size: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 2);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 	}
 	@media (width >= 48rem) {
@@ -446,7 +446,7 @@
 		block-size: 100%;
 		box-sizing: border-box;
 		padding: 1.25rem;
-		border-radius: calc(var(--ui-radius) * 2);
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-accent) 7%, transparent);
 		color: var(--ui-fg);
 		text-decoration: none;

@@ -45,7 +45,7 @@
 		padding: 0.25rem 0.625rem;
 		/* Invisible normally; outlines the tab in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius-control) + 0.125rem);
+		border-radius: var(--ui-radius-control);
 		background: transparent;
 		color: var(--ui-muted);
 		font: inherit;
@@ -56,7 +56,12 @@
 		white-space: nowrap;
 		cursor: pointer;
 		-webkit-tap-highlight-color: transparent;
-		transition: color var(--ui-dur-press) ease;
+		transition:
+			color var(--ui-dur-press) ease,
+			scale var(--ui-dur-press) var(--ui-ease-out);
+	}
+	.tab:active:not(:disabled) {
+		scale: var(--ui-press-scale);
 	}
 	/* Line tabs: 30px with a mouse; the chosen one is outlined above the underline. */
 	@media (pointer: fine) {

@@ -280,7 +280,7 @@
 		align-items: flex-end;
 		gap: 0.5rem;
 		padding: 1rem 1.25rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: #0a0d0c;
 		box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.6);
 	}

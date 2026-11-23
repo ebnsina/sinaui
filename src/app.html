@@ -4,11 +4,13 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
-		<!-- Apply a saved theme and sidebar before first paint, so neither flashes. No saved theme: CSS follows the system. -->
+		<!-- Apply a saved theme, accent and sidebar before first paint, so none flashes. No saved theme: CSS follows the system. -->
 		<script>
 			try {
 				const t = localStorage.getItem('theme');
 				if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+				const a = localStorage.getItem('accent');
+				if (a && a !== 'mono') document.documentElement.dataset.accent = a;
 				if (localStorage.getItem('sidebar') === 'collapsed')
 					document.documentElement.dataset.sidebar = 'collapsed';
 			} catch {}

@@ -417,7 +417,7 @@
 		inline-size: 0.5rem;
 		block-size: 0.5rem;
 		margin-block-start: 0.375rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		opacity: 0;
 		scale: 0.4;

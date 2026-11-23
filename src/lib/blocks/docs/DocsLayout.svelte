@@ -309,7 +309,7 @@
 		min-block-size: var(--ui-control-h-touch);
 		padding: 0 0.75rem;
 		box-sizing: border-box;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		color: var(--ui-muted);
 		font-size: 0.875rem;
 		text-decoration: none;

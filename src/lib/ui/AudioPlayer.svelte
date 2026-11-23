@@ -295,7 +295,7 @@
 		max-inline-size: 28rem;
 		padding: 1rem;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.4 var(--ui-font);
@@ -373,12 +373,12 @@
 	}
 	input::-webkit-slider-runnable-track {
 		block-size: var(--track);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--fill);
 	}
 	input::-moz-range-track {
 		block-size: var(--track);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--fill);
 	}
 	input::-webkit-slider-thumb {
@@ -387,7 +387,7 @@
 		block-size: var(--thumb);
 		margin-block-start: calc((var(--track) - var(--thumb)) / 2);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
 		scale: 0.85;
@@ -397,7 +397,7 @@
 		inline-size: var(--thumb);
 		block-size: var(--thumb);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
 		scale: 0.85;
@@ -466,7 +466,7 @@
 		position: relative;
 		inline-size: 2.75rem;
 		block-size: 2.75rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 	}
 	/* Play, pause and the spinner share one spot and trade places with a quick scale and fade. */
 	.glyph {

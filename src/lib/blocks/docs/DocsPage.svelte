@@ -213,7 +213,7 @@
 	}
 	.prose :global(:not(pre) > code) {
 		padding: 0.125em 0.375em;
-		border-radius: 0.375rem;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		font-family: var(--ui-font-mono);
 		font-size: 0.875em;

@@ -444,9 +444,7 @@
 		block-size: 34rem;
 		max-block-size: 80dvh;
 		overflow: hidden;
-		/* Concentric corners: card 1.75rem = the input's 1rem + its 0.75rem margin; the input's
-		   1rem = our buttons' 0.5rem + its 0.5rem padding. */
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);
@@ -509,7 +507,7 @@
 	.suggestions button {
 		padding: 0.5rem 0.875rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: inherit;
@@ -557,8 +555,8 @@
 	.user .bubble {
 		padding: 0.625rem 0.875rem;
 		/* The tail corner points toward the reading end, where your messages sit. */
-		border-radius: 1.125rem;
-		border-end-end-radius: 0.375rem;
+		border-radius: var(--ui-radius);
+		border-end-end-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--ui-accent) 14%, var(--ui-surface));
 	}
 	.assistant .bubble {
@@ -571,7 +569,7 @@
 		block-size: 1em;
 		margin-inline-start: 0.125rem;
 		vertical-align: -0.12em;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-accent);
 		animation: blink 1s steps(2) infinite;
 	}
@@ -601,7 +599,7 @@
 	.thinking span {
 		inline-size: 0.45rem;
 		block-size: 0.45rem;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-muted);
 		animation: dot 1.2s ease-in-out infinite;
 	}
@@ -653,7 +651,7 @@
 		margin-inline: auto;
 		padding: 0.375rem 0.875rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-fg);
 		color: var(--ui-surface);
 		font: 500 0.8125rem/1 var(--ui-font);
@@ -674,7 +672,7 @@
 		padding-block: 0.5rem;
 		padding-inline: 1rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 	}
 	/* With the attach button first, it sits as far in as Send does at the other end. */
@@ -723,7 +721,7 @@
 		max-inline-size: 12rem;
 		block-size: 3.5rem;
 		padding-inline: 0.25rem 0.75rem;
-		border-radius: 0.625rem;
+		border-radius: var(--ui-radius-control);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 		font-size: 0.8125rem;
@@ -732,7 +730,7 @@
 	.pending :is(img, video) {
 		inline-size: 3rem;
 		block-size: 3rem;
-		border-radius: 0.375rem;
+		border-radius: var(--ui-radius-control);
 		object-fit: cover;
 	}
 	.pending li > :global(svg) {
@@ -754,7 +752,7 @@
 		block-size: 1.25rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-fg);
 		color: var(--ui-surface);
 		cursor: pointer;
@@ -783,7 +781,7 @@
 		display: block;
 		max-inline-size: min(16rem, 100%);
 		max-block-size: 14rem;
-		border-radius: 0.875rem;
+		border-radius: var(--ui-radius);
 		object-fit: cover;
 	}
 	.media audio {
@@ -794,7 +792,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.625rem 0.875rem;
-		border-radius: 0.875rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		font-size: 0.875rem;
 	}
@@ -809,7 +807,7 @@
 		z-index: 2;
 		display: grid;
 		place-items: center;
-		border-radius: 1.25rem;
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-accent) 12%, var(--ui-surface));
 		color: var(--ui-accent);
 		font-weight: 600;

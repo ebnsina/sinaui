@@ -264,7 +264,7 @@
 		inset-block-end: 0.75rem;
 		inset-inline-start: 0.75rem;
 		padding: 0.3125rem 0.625rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: rgb(0 0 0 / 0.45);
 		color: #fff;
 		font: 500 0.75rem/1 var(--ui-font);

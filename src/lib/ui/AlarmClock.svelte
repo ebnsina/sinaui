@@ -382,7 +382,7 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-danger);
 		color: var(--ui-on-danger);
 		cursor: pointer;

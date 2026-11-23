@@ -68,7 +68,8 @@
 <style>
 	.avatar-group {
 		--size: 2.5rem;
-		--overlap: calc(var(--size) * -0.28);
+		/* Faces sit side by side, a hairline apart: overlapped, square tiles cut each other's initials. */
+		--gap: 2px;
 		/* Faces fan out a little while the group is hovered: transform only, nothing reflows. */
 		--spread: 0px;
 		display: inline-flex;
@@ -83,12 +84,6 @@
 	.lg {
 		--size: 3.5rem;
 	}
-	/* Touch: less overlap, so every face keeps a 24px target (WCAG 2.5.8). */
-	@media (pointer: coarse) {
-		.avatar-group {
-			--overlap: calc(var(--size) * -0.18);
-		}
-	}
 	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
 		.avatar-group:hover,
 		.avatar-group:focus-within {
@@ -102,10 +97,8 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: none;
-		/* A ring in the surface color keeps each face apart from the one behind it. */
-		box-shadow: 0 0 0 2px var(--ring, var(--ui-surface));
 		color: inherit;
 		cursor: default;
 		translate: calc(var(--i) * var(--spread) * var(--dir, 1)) 0;
@@ -114,7 +107,7 @@
 			scale var(--ui-dur) var(--ui-ease-out);
 	}
 	.member:not(:first-child) {
-		margin-inline-start: var(--overlap);
+		margin-inline-start: var(--gap);
 	}
 	/* The one pointed at comes forward and lifts a touch. */
 	.member:hover,
@@ -137,7 +130,7 @@
 		place-items: center;
 		inline-size: var(--size);
 		block-size: var(--size);
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		font: 600 calc(var(--size) * 0.34) / 1 var(--ui-font);

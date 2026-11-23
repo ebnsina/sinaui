@@ -43,7 +43,7 @@
 		gap: 0.5rem;
 		padding-block: 0.5rem;
 		padding-inline: 0.375rem 0.875rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

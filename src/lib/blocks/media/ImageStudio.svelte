@@ -134,14 +134,13 @@
 </section>
 
 <style>
-	/* Concentric: 1.75rem card = 1.25rem padding + the tiles' 0.5rem. */
 	.studio {
 		display: grid;
 		gap: 1.25rem;
 		inline-size: 100%;
 		box-sizing: border-box;
 		padding: 1.25rem;
-		border-radius: 1.75rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);

@@ -75,7 +75,7 @@
 	.circle {
 		/* Softer than --ui-control-line by request: 2.05:1 light / 2.5:1 dark, under WCAG's 3:1 for
 		   control outlines. The 2px weight keeps it visible; hover restores full contrast. */
-		--radio-line: light-dark(rgb(15 23 42 / 0.32), rgb(255 255 255 / 0.28));
+		--radio-line: light-dark(rgb(0 0 0 / 0.32), rgb(255 255 255 / 0.28));
 		position: relative;
 		display: grid;
 		inline-size: 1.25rem;

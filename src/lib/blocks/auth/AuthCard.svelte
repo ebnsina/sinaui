@@ -66,7 +66,7 @@
 		padding: 2rem 1.75rem;
 		/* Invisible normally; outlines it in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 		color: var(--ui-fg);

@@ -790,7 +790,7 @@
 		margin: -0.125rem -0.25rem;
 		padding: 0.125rem 0.25rem;
 		border: 0;
-		border-radius: 0.375rem;
+		border-radius: var(--ui-radius-control);
 		outline: none;
 		background: var(--ui-surface);
 		color: var(--ui-fg);
@@ -809,7 +809,7 @@
 		margin: 0;
 		padding: 0 0.3125rem;
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-xs);
 		color: var(--branch);

@@ -51,7 +51,7 @@
 		inline-size: min(40rem, 100%);
 		block-size: 9.5rem;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}
@@ -64,7 +64,7 @@
 	.line {
 		block-size: 0.5rem;
 		inline-size: 42%;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 	}
 	.short {

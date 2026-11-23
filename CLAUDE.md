@@ -37,11 +37,23 @@ deployed to GitHub Pages.
 
 ## Design rules
 
-- Tokens only (`--ui-*`), monochrome accent (the text ink); Inter for UI and headings. Radii: `--ui-radius` (surfaces), `--ui-radius-control`.
+- Editorial and monochrome: the accent is the text ink. Color is opt-in through the
+  `data-accent` presets in `tokens.css` (`blue|orange|lime|emerald|pink|sky`, `mono` to opt a part
+  back out); each pair passes 4.5:1 in both themes. Demo content stays gray so presets show.
+- Type: Mona Sans (weight and width axes) for UI, Geist Mono for code, numbers and small labels.
+  Headings follow `--ui-heading-*` (bold, narrowed); eyebrows and group titles `--ui-label-*`.
+- Square by default. Every corner is one of `var(--ui-radius)` (surfaces), `--ui-radius-control`
+  (buttons, fields), `--ui-radius-pill` (tags, tracks, thumbs), `0`, `inherit`, or `50%` for a
+  true circle (spinner, radio mark, orb). Never a raw value, a multiple, or a radius set from JS.
 - No borders except on fields, checkbox/radio outlines, the tab hairline and accordion dividers.
-  Everything else separates by tint or shadow; no colored edge stripes on cards or events.
-- Motion: `--ui-ease-enter|out|exit|spring`, `--ui-dur-*`, and `ease`/`ms`/`reflow`/`pop` from
-  `motion.ts`. Transform and opacity only; every animation has a reduced-motion fallback.
+  Cards and panels separate by the surface tint alone; only overlays (menus, popovers, dialogs)
+  get a shadow. Never mark one edge twice (an edge plus a tint or shadow).
+- Even insets: a box inside a control (swatch, chip, avatar) sits the same distance from every
+  edge; derive the side padding from `--ui-control-h`. A one-line field is one control height.
+- Motion: `--ui-ease-enter|out|exit|spring`, `--ui-dur-*`, and `ease`/`ms`/`reflow`/`pop`/`stagger`
+  from `motion.ts`. Transform and opacity only; every animation has a reduced-motion fallback.
+  Lists that appear together cascade through `stagger()` (expo-out, 30ms apart, capped at 210ms);
+  presses shrink by `--ui-press-scale`.
 - One motion system per element (label swaps go through `Morph.svelte`; never two overlapping fades).
 - Whatever animates in animates out: dialogs, panels, popovers and list items play their exit before
   `close()` / `hidePopover()` / removal, and keep any layout space until the exit ends.

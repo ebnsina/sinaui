@@ -154,7 +154,7 @@
 		position: relative;
 		block-size: 0.5rem;
 		overflow: hidden;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-hover);
 	}
 	/* scaleX, not width: it fills on the compositor, grows in from empty the first time and settles
@@ -195,7 +195,7 @@
 	.dot {
 		inline-size: 0.5rem;
 		block-size: 0.5rem;
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--tone) calc(100% - var(--i) * 28%), var(--ui-hover));
 	}
 	.name {

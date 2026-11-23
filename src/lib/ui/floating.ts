@@ -1,4 +1,4 @@
-import { ease, reduced } from './motion';
+import { ease, reduced, stagger } from './motion';
 
 export type Side = 'top' | 'bottom' | 'left' | 'right';
 
@@ -91,9 +91,17 @@ type PlaceOptions = {
 	gap?: number;
 };
 
-/** The rows inside a panel that stagger in: visible children, not aria-hidden decoration. */
+/** The rows inside a panel that stagger in: visible children, not aria-hidden decoration. A list
+ * wrapped inside the panel (a select's listbox) gives its own options, so those cascade too. */
 const rows = (e: HTMLElement) =>
-	[...e.children].filter((c): c is HTMLElement => !c.hasAttribute('aria-hidden')).slice(0, 12);
+	[...e.children]
+		.flatMap((c) => (c.matches('[role="listbox"], [role="group"], ul, ol') ? [...c.children] : [c]))
+		// Dividers and decoration (a hover highlight) arrive with the panel, not as rows of their own.
+		.filter(
+			(c): c is HTMLElement =>
+				c instanceof HTMLElement && !c.hasAttribute('aria-hidden') && c.role !== 'separator'
+		)
+		.slice(0, 12);
 
 /**
  * Shows and hides a top-layer element beside its anchor: grows out of it (transform + opacity only, so it
@@ -134,25 +142,18 @@ export function anchored(
 				if (reduce) {
 					anim = e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150, fill: 'both' });
 				} else {
-					// Rises 6px toward its anchor and settles from 94% on a spring; its rows follow a beat apart.
+					// Grows out of its anchor from 97%, travelling 6px; the same expo-out curve as its rows.
 					const [x, y] = { top: [0, 6], bottom: [0, -6], left: [6, 0], right: [-6, 0] }[side];
 					anim = e.animate(
 						[
-							{ opacity: 0, translate: `${x}px ${y}px`, scale: 0.94 },
-							{ opacity: 1, offset: 0.3 },
+							{ opacity: 0, translate: `${x}px ${y}px`, scale: 0.97 },
+							{ opacity: 1, offset: 0.4 },
 							{ opacity: 1, translate: '0 0', scale: 1 }
 						],
-						{ duration: 220, easing: ease.standard, fill: 'both' }
+						{ duration: 280, easing: ease.enter, fill: 'both' }
 					);
-					// Decorative layers (a hover highlight) keep their own opacity.
-					contentAnims = rows(e).map((c, i) =>
-						c.animate([{ opacity: 0, translate: `${x / 2}px ${y / 2}px` }, {}], {
-							duration: 240,
-							delay: 40 + Math.min(i, 8) * 20,
-							easing: ease.enter,
-							fill: 'backwards'
-						})
-					);
+					// Rows cascade in behind the panel, travelling the way it opens, so the eye reads down the list.
+					contentAnims = stagger(rows(e), { x: x * 1.33, y: y * 1.33, delay: 40 });
 				}
 			}
 

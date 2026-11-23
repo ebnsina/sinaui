@@ -996,7 +996,7 @@
 		block-size: 42rem;
 		max-block-size: 90dvh;
 		overflow: hidden;
-		border-radius: 1.25rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 		box-shadow: var(--ui-shadow-card);
 	}
@@ -1047,7 +1047,7 @@
 		inset: 0.75rem;
 		display: grid;
 		place-items: center;
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: color-mix(in srgb, var(--ui-accent) 10%, transparent);
 		box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ui-accent) 50%, transparent);
 		color: var(--ui-accent);
@@ -1174,7 +1174,7 @@
 		block-size: 1.25rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface);
 		box-shadow: inset 0 0 0 1.5px var(--ui-control-line);
 		color: transparent;
@@ -1221,7 +1221,7 @@
 		display: grid;
 		gap: 0.125rem;
 		padding: 0.5rem 0.5rem 0.75rem;
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}
@@ -1230,14 +1230,13 @@
 			0 0 0 2px var(--ui-accent),
 			var(--ui-shadow-card);
 	}
-	/* Concentric with the card: its radius less the padding. */
 	.preview {
 		display: grid;
 		place-items: center;
 		aspect-ratio: 4 / 3;
 		margin-block-end: 0.5rem;
 		overflow: hidden;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--k) 12%, transparent);
 		color: var(--k);
 	}
@@ -1294,7 +1293,7 @@
 	.col:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
 		outline-offset: var(--ui-ring-offset);
-		border-radius: 0.25rem;
+		border-radius: var(--ui-radius-control);
 	}
 	.col-date,
 	.col-size {
@@ -1308,7 +1307,7 @@
 		inline-size: 2rem;
 		block-size: 2rem;
 		overflow: hidden;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--k) 12%, transparent);
 		color: var(--k);
 	}
@@ -1340,7 +1339,7 @@
 		inline-size: 15rem;
 		padding: 1rem;
 		box-sizing: border-box;
-		border-radius: 1rem;
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		font-size: 0.875rem;
 	}
@@ -1358,7 +1357,7 @@
 		place-items: center;
 		aspect-ratio: 4 / 3;
 		overflow: hidden;
-		border-radius: 0.5rem;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--k) 12%, transparent);
 		color: var(--k);
 	}
@@ -1388,7 +1387,7 @@
 		gap: 0.25rem;
 		justify-self: center;
 		padding: 0.25rem 0.25rem 0.25rem 1rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-overlay);
 	}
@@ -1399,7 +1398,7 @@
 		white-space: nowrap;
 	}
 	.bar :global(.btn) {
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 	}
 	/* Too narrow for the list's columns and the details side by side: the details slide over the files. */
 	@container (max-width: 56rem) {

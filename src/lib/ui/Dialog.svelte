@@ -108,7 +108,7 @@
 		overflow: hidden;
 		/* Invisible normally; outlines the dialog in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.75);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
 		font: var(--ui-font-size)/1.5 var(--ui-font);
@@ -164,7 +164,8 @@
 		margin: 0.25rem 0 0;
 		font-family: var(--ui-font-heading);
 		font-size: 1.125rem;
-		font-weight: 600;
+		font-weight: var(--ui-heading-weight);
+		font-stretch: var(--ui-heading-stretch);
 		letter-spacing: -0.01em;
 		line-height: 1.3;
 		text-wrap: balance;

@@ -102,7 +102,7 @@
 		padding: 1rem;
 		overflow: hidden;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
 		font: 0.875rem/1.5 var(--ui-font);

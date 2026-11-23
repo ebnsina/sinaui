@@ -60,7 +60,7 @@
 		margin: 0;
 		padding: 0 0.75rem;
 		border: 0;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-fg);
 		font: 500 0.875rem/1 var(--ui-font);

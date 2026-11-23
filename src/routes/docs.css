@@ -40,7 +40,8 @@ main .eyebrow:not(.preview *) {
 main h1:not(.preview *) {
 	margin: 0;
 	font-size: clamp(1.625rem, 3vw, 2rem);
-	font-weight: 600;
+	font-weight: var(--ui-heading-weight);
+	font-stretch: var(--ui-heading-stretch);
 	line-height: 1.2;
 	letter-spacing: -0.025em;
 	text-wrap: balance;
@@ -56,7 +57,8 @@ main .lede:not(.preview *) {
 main h2:not(.preview *) {
 	margin: 3rem 0 0.875rem;
 	font-size: 1.25rem;
-	font-weight: 600;
+	font-weight: var(--ui-heading-weight);
+	font-stretch: var(--ui-heading-stretch);
 	line-height: 1.25;
 	letter-spacing: -0.02em;
 }
@@ -88,8 +90,8 @@ main a:not([class], .preview *) {
 	gap: 0.75rem;
 	/* Side padding scales down on a phone, so a full app block keeps the width it needs. */
 	padding: 2rem clamp(0.5rem, 4vw, 1.5rem);
-	background: light-dark(rgb(15 23 42 / 0.025), rgb(255 255 255 / 0.03));
-	border-radius: calc(var(--ui-radius) * 1.5);
+	background: light-dark(rgb(0 0 0 / 0.025), rgb(255 255 255 / 0.03));
+	border-radius: var(--ui-radius);
 }
 /* A caption or status line after the component goes under it, centered, never beside it. */
 :where(.preview:not(.stack)) > p {
@@ -118,51 +120,38 @@ main a:not([class], .preview *) {
 	inline-size: 100%;
 }
 
-/* Syntax colors for @tanstack/highlight's class names. Every color is 4.5:1+ on the code background
-   in both themes (comments included). */
-.th-token.th-tag,
-.th-token.th-command,
-.th-token.th-selector {
-	color: light-dark(#047857, #34d399);
+/* Syntax for @tanstack/highlight's class names, in monochrome like the rest of the site: structure
+   reads through weight and ink, never hue. Every shade keeps 4.5:1+ on the code background. */
+.th-token:is(.th-keyword, .th-operator, .th-tag, .th-command, .th-selector) {
+	color: var(--ui-fg);
+	font-weight: 600;
 }
-.th-token.th-attr,
-.th-token.th-property {
-	color: light-dark(#9a3412, #fdba74);
+.th-token:is(.th-function, .th-type, .th-meta) {
+	color: var(--ui-fg);
 }
-.th-token.th-string,
-.th-token.th-link {
-	color: light-dark(#0e7490, #67e8f9);
+.th-token:is(.th-attr, .th-property, .th-number, .th-literal) {
+	color: color-mix(in oklab, var(--ui-fg) 78%, var(--ui-muted));
 }
-.th-token.th-keyword,
-.th-token.th-operator {
-	color: light-dark(#9d174d, #f9a8d4);
-}
-.th-token.th-function {
-	color: light-dark(#1d4ed8, #93c5fd);
-}
-.th-token.th-number,
-.th-token.th-literal {
-	color: light-dark(#854d0e, #fde68a);
-}
-.th-token.th-type,
-.th-token.th-meta {
-	color: light-dark(#6d28d9, #c4b5fd);
+.th-token:is(.th-string, .th-link) {
+	color: var(--ui-muted);
 }
 .th-token.th-comment {
-	color: light-dark(#57606a, #a3a3a3);
+	color: var(--ui-muted);
 	font-style: italic;
 }
 .th-token.th-inserted {
-	color: light-dark(#047857, #34d399);
+	color: var(--ui-fg);
+	font-weight: 600;
 }
 .th-token.th-deleted {
-	color: light-dark(#b42318, #ff8a7a);
+	color: var(--ui-muted);
+	text-decoration: line-through;
 }
 
 main :not(pre) > code:not(.preview *) {
 	overflow-wrap: anywhere;
 	padding: 0.1em 0.35em;
-	border-radius: 4px;
+	border-radius: var(--ui-radius-control);
 	background: var(--ui-subtle);
 }
 
@@ -212,7 +201,7 @@ main kbd:not(.preview *) {
 	display: inline-block;
 	min-inline-size: 1.5em;
 	padding: 0.05em 0.4em;
-	border-radius: 4px;
+	border-radius: var(--ui-radius-control);
 	background: var(--ui-hover);
 	font-size: 0.8125rem;
 	text-align: center;

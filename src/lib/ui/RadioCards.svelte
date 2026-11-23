@@ -137,7 +137,6 @@
 		cursor: pointer;
 		transition:
 			background-color 150ms ease,
-			border-color 150ms ease,
 			box-shadow 150ms ease;
 	}
 	.card:has(.icon) {
@@ -159,7 +158,6 @@
 		}
 	}
 	.card:has(input:checked) {
-		border-color: color-mix(in srgb, var(--ui-accent) 28%, var(--ui-field-line));
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-xs);
 	}
@@ -220,7 +218,7 @@
 		inline-size: 1.125rem;
 		block-size: 1.125rem;
 		margin-block-start: 0.125rem;
-		border: 2px solid light-dark(rgb(15 23 42 / 0.32), rgb(255 255 255 / 0.28));
+		border: 2px solid light-dark(rgb(0 0 0 / 0.32), rgb(255 255 255 / 0.28));
 		border-radius: 50%;
 		transition: border-color var(--ui-dur) ease;
 	}

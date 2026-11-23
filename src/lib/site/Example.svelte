@@ -96,7 +96,7 @@
 		content: '';
 		position: absolute;
 		inset: 35% 0 0;
-		border-radius: 0 0 calc(var(--ui-radius) * 1.5) calc(var(--ui-radius) * 1.5);
+		border-radius: 0 0 var(--ui-radius) var(--ui-radius);
 		background: linear-gradient(transparent, var(--code-bg) 85%);
 		pointer-events: none;
 		transition: opacity var(--fold, 400ms) var(--ui-ease-out);

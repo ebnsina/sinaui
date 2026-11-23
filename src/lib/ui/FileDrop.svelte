@@ -21,6 +21,22 @@
 		locale?: string;
 		/** Hand accepted files straight on (to an upload queue) instead of listing them here. */
 		onfiles?: (files: File[]) => void;
+		/** Translate these for non-English UIs. */
+		labels?: Partial<Labels>;
+	}
+	interface Labels {
+		drag: string;
+		choose: string;
+		oneAtATime: string;
+		wrongTypeHeld: string;
+		roomFor: (n: number) => string;
+		dropToAdd: (n: number) => string;
+		wrongType: (name: string) => string;
+		tooBig: (name: string, size: string, limit: string) => string;
+		tooMany: (name: string, max: number) => string;
+		added: (n: number) => string;
+		chosen: string;
+		remove: (name: string) => string;
 	}
 
 	let {
@@ -34,8 +50,25 @@
 		name,
 		disabled = false,
 		locale = 'en',
-		onfiles
+		onfiles,
+		labels
 	}: Props = $props();
+
+	const t = $derived<Labels>({
+		drag: `Drag ${multiple ? 'files' : 'a file'} here, or `,
+		choose: `choose ${multiple ? 'files' : 'a file'}`,
+		oneAtATime: 'One file at a time',
+		wrongTypeHeld: 'Not a file type this takes',
+		roomFor: (n) => `Room for ${n} more`,
+		dropToAdd: (n) => `Drop to add ${n > 1 ? `${n} files` : 'it'}`,
+		wrongType: (name) => `${name} isn't a file type this takes.`,
+		tooBig: (name, size, limit) => `${name} is ${size}; the limit is ${limit}.`,
+		tooMany: (name, max) => `${name} wasn't added: ${max} files at most.`,
+		added: (n) => `${n} ${n === 1 ? 'file' : 'files'} added.`,
+		chosen: 'Chosen files',
+		remove: (name) => `Remove ${name}`,
+		...labels
+	});
 
 	const id = $props.id();
 	let input: HTMLInputElement;
@@ -80,11 +113,11 @@
 	const dropText = $derived(
 		incoming.refused
 			? !multiple && incoming.count > 1
-				? 'One file at a time'
+				? t.oneAtATime
 				: maxFiles && incoming.count > maxFiles - value.length
-					? `Room for ${Math.max(0, maxFiles - value.length)} more`
-					: 'Not a file type this takes'
-			: `Drop to add ${incoming.count > 1 ? `${incoming.count} files` : 'it'}`
+					? t.roomFor(Math.max(0, maxFiles - value.length))
+					: t.wrongTypeHeld
+			: t.dropToAdd(incoming.count)
 	);
 
 	// Previews for images, freed when the file leaves the list.
@@ -116,11 +149,10 @@
 		const next = multiple ? [...value] : [];
 		const turnedAway: string[] = [];
 		for (const f of files) {
-			if (!accepted(f)) turnedAway.push(`${f.name} isn't a file type this takes.`);
+			if (!accepted(f)) turnedAway.push(t.wrongType(f.name));
 			else if (maxSize && f.size > maxSize)
-				turnedAway.push(`${f.name} is ${size(f.size)}; the limit is ${size(maxSize)}.`);
-			else if (maxFiles && next.length >= maxFiles)
-				turnedAway.push(`${f.name} wasn't added: ${maxFiles} files at most.`);
+				turnedAway.push(t.tooBig(f.name, size(f.size), size(maxSize)));
+			else if (maxFiles && next.length >= maxFiles) turnedAway.push(t.tooMany(f.name, maxFiles));
 			else if (!next.some((g) => g.name === f.name && g.size === f.size)) next.push(f);
 			if (!multiple && next.length) break;
 		}
@@ -136,11 +168,7 @@
 		value = next;
 		problems = turnedAway;
 		sync();
-		announce(
-			[added > 0 && `${added} ${added === 1 ? 'file' : 'files'} added.`, ...turnedAway]
-				.filter(Boolean)
-				.join(' ')
-		);
+		announce([added > 0 && t.added(added), ...turnedAway].filter(Boolean).join(' '));
 	}
 
 	function remove(f: File) {
@@ -193,11 +221,7 @@
 		<span class="icon"><Icon icon={CloudUploadIcon} size={24} /></span>
 		{#snippet prompt()}
 			<!-- Touch screens can't drag files in: there it reads just "Choose files". -->
-			<!-- eslint-disable-next-line svelte/no-useless-mustaches -- keeps the space the markup layout would drop -->
-			<span class="drag">Drag {multiple ? 'files' : 'a file'} here, or{' '}</span><label
-				class="choose"
-				for="{id}-input">choose {multiple ? 'files' : 'a file'}</label
-			>
+			<span class="drag">{t.drag}</span><label class="choose" for="{id}-input">{t.choose}</label>
 		{/snippet}
 		<!-- While files are held over it, the prompt says whether they'll be taken. -->
 		<p class="lead">
@@ -234,7 +258,7 @@
 	{/if}
 
 	<!-- Always in the page, so the last file's exit plays too; hidden once it has no rows. -->
-	<ul class="files" aria-label="Chosen files">
+	<ul class="files" aria-label={t.chosen}>
 		{#each value as f (f)}
 			{@const url = preview(f)}
 			<li out:pop={{ start: 0.96, duration: 200 }} animate:reflow={{ duration: 250 }}>
@@ -247,7 +271,12 @@
 					<span class="name">{f.name}</span>
 					<span class="size">{size(f.size)}</span>
 				</span>
-				<button type="button" class="remove" aria-label="Remove {f.name}" onclick={() => remove(f)}>
+				<button
+					type="button"
+					class="remove"
+					aria-label={t.remove(f.name)}
+					onclick={() => remove(f)}
+				>
 					<Icon icon={Cancel01Icon} size={16} />
 				</button>
 			</li>
@@ -275,7 +304,7 @@
 		justify-items: center;
 		gap: 0.25rem;
 		padding: 1.75rem 1rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		text-align: center;
 		transition: background-color var(--ui-dur) ease;
@@ -334,7 +363,7 @@
 		font-size: 0.8125rem;
 	}
 	.choose {
-		border-radius: 2px;
+		border-radius: var(--ui-radius-control);
 		color: color-mix(in srgb, var(--ui-accent) 80%, var(--ui-fg));
 		font-weight: 500;
 		text-decoration: underline;
@@ -393,7 +422,7 @@
 		flex: none;
 		inline-size: 2.5rem;
 		block-size: 2.5rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		object-fit: cover;
 	}
 	.doc {
@@ -426,7 +455,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;

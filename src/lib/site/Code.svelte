@@ -60,7 +60,7 @@
 	.code {
 		position: relative;
 		margin-block-start: 0.75rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--code-bg);
 	}
 	.scroll {

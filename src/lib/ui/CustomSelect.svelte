@@ -496,7 +496,7 @@
 		gap: 0.5rem;
 		margin: 0.375rem 0.375rem 0;
 		padding: 0 0.625rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		color: var(--ui-muted);
 	}
@@ -532,7 +532,7 @@
 		gap: 0.75rem;
 		min-block-size: var(--ui-item-h);
 		padding: 0.375rem 0.625rem;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		cursor: pointer;
 	}
 	@media (pointer: coarse) {
@@ -546,7 +546,7 @@
 		top: 0;
 		left: 0;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) - 0.25rem);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		opacity: 0;
 		pointer-events: none;

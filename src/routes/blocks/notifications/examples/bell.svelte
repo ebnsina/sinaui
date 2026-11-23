@@ -29,7 +29,7 @@
 		justify-content: space-between;
 		inline-size: min(32rem, 100%);
 		padding: 0.5rem 0.5rem 0.5rem 1rem;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
 		box-shadow: var(--ui-shadow-card);
 	}

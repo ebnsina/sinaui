@@ -4,7 +4,8 @@
 
 	/* Neutral grays (light) and onyx, a cool charcoal (dark), never warm or black; the accent is the text ink. */
 	--ui-bg: light-dark(#ffffff, #1b1d1e);
-	--ui-surface: light-dark(#ffffff, #222526);
+	/* Cards and panels: a tint off the page, never a border and a tint at the same edge. */
+	--ui-surface: light-dark(#f7f7f8, #222526);
 	/* Menus, popovers, dialogs, toasts: a step lighter in dark mode, where shadows don't show. */
 	--ui-surface-overlay: light-dark(#ffffff, #2a2d2e);
 	--ui-fg: light-dark(#0f0f10, #eceeee);
@@ -47,17 +48,30 @@
 		0 16px 40px -12px rgb(0 0 0 / 0.22);
 	/* Small floating things that sit on the page (the island): barely lifted. */
 	--ui-shadow-xs: 0 1px 2px rgb(0 0 0 / 0.06), 0 2px 6px -2px rgb(0 0 0 / 0.08);
-	/* Resting cards (widgets, blocks) are flat: a 1px edge drawn as a ring, no drop shadow. */
-	--ui-shadow-card: 0 0 0 1px var(--ui-field-line);
+	/* Resting cards (widgets, blocks) are flat: the surface tint is their edge. */
+	--ui-shadow-card: none;
+	/* --ui-card-icon: the color of a card's title icon. Unset, it is muted like secondary text. */
+	/* --ui-stat-icon-bg, --ui-stat-icon-fg: a Stat's icon tile. Unset, it is a quiet gray tile. */
+	/* Card's edge and lift. Unset: the surface tint alone. Set --ui-card-line: var(--ui-field-line)
+	   for a hairline edge, or --ui-card-shadow: var(--ui-shadow-xs) to lift cards off a tinted page. */
 
 	--ui-font:
-		'Inter', 'IBM Plex Sans Arabic', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+		'Mona Sans', 'IBM Plex Sans Arabic', 'Mona Sans Fallback', ui-sans-serif, system-ui, sans-serif;
 	--ui-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 	/* --ui-font-heading: titles' font (dialogs, cards, alerts...). Unset, they follow the text around them. */
-	/* Surfaces (cards, menus, dialogs) round with --ui-radius. Controls (buttons, fields, tags) have
-	   their own, so they can go fully pill while surfaces stay sensible. */
-	--ui-radius: 0.75rem;
-	--ui-radius-control: 0.5rem;
+	/* Headings: bold and narrowed on Mona Sans's width axis (75-125), hierarchy from weight and width. */
+	--ui-heading-weight: 700;
+	--ui-heading-stretch: 88%;
+	--ui-heading-tracking: -0.026em;
+	/* Small labels and metadata (eyebrows, column heads): mono, uppercase, tracked out. */
+	--ui-label-font: var(--ui-font-mono);
+	--ui-label-case: uppercase;
+	--ui-label-tracking: 0.14em;
+	/* Square by default, an editorial look. Surfaces (cards, menus, dialogs) use --ui-radius, controls
+	   (buttons, fields) --ui-radius-control, tags and tracks --ui-radius-pill. Circles stay round. */
+	--ui-radius: 0;
+	--ui-radius-control: 0;
+	--ui-radius-pill: 0;
 	/* Fields, selects, medium buttons and tabs share this height and text size. These are the
 	   pen and touch sizes (text under 16px makes iOS Safari zoom into a field); see the mouse sizes below. */
 	--ui-control-h: 2.5rem;
@@ -88,10 +102,11 @@
 	--ui-sidebar-w: 16rem;
 	--ui-sidebar-item-h: 2.25rem;
 	--ui-sidebar-font: 0.875rem;
-	--ui-sidebar-title-font: 0.875rem;
-	/* group titles: set uppercase with a little tracking for small-caps style labels */
-	--ui-sidebar-title-case: none;
-	--ui-sidebar-title-tracking: normal;
+	--ui-sidebar-title-font: 0.6875rem;
+	/* group titles: small mono labels by default; set none / normal and --ui-font for plain titles */
+	--ui-sidebar-title-family: var(--ui-label-font);
+	--ui-sidebar-title-case: var(--ui-label-case);
+	--ui-sidebar-title-tracking: var(--ui-label-tracking);
 	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
 	--ui-sheet-width: 20rem;
 	/* Room a sheet leaves beside it on narrow screens, to see and tap the page behind; 0 fills the screen. */
@@ -143,11 +158,20 @@
 		1.0013,
 		1
 	);
+	/* How far a pressed control shrinks: a small physical give under the finger or pointer. */
+	--ui-press-scale: 0.97;
 	--ui-dur-exit: 130ms;
 	--ui-dur-press: 160ms;
 	--ui-dur: 200ms;
 	--ui-dur-overlay: 200ms;
 	--ui-dur-spring: 320ms;
+}
+
+/* Asked for less motion: controls don't shrink under a press. */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--ui-press-scale: 1;
+	}
 }
 
 /* With a mouse, controls are compact: 32px, 13px button text. Touch keeps the sizes above. */
@@ -165,6 +189,40 @@
 	}
 }
 
+/* Accent themes. Monochrome is the base (the accent is the text ink); set data-accent on <html>, or on
+   any container, to color every component through the same tokens. Each pair passes 4.5:1 as text on
+   the page and under text on a filled button, in both themes. */
+[data-accent] {
+	--ui-on-accent: light-dark(#ffffff, #0f0f10);
+	/* Redefined here so they follow an accent set on a container, not just on <html>. */
+	--ui-ring: var(--ui-accent);
+	--ui-chart-1: var(--ui-accent);
+}
+/* Back to the base: a part of a colored page that stays in ink. */
+[data-accent='mono'] {
+	--ui-accent: light-dark(#0f0f10, #eceeee);
+	--ui-on-accent: light-dark(#ffffff, #1b1d1e);
+}
+[data-accent='blue'] {
+	--ui-accent: light-dark(#2563eb, #6ea8fe);
+}
+/* Svelte's orange; #ff3e00 is 3.5:1 on white, so light mode takes a deeper step of it. */
+[data-accent='orange'] {
+	--ui-accent: light-dark(#d43300, #ff6a3d);
+}
+[data-accent='lime'] {
+	--ui-accent: light-dark(#4d7c0f, #a3e635);
+}
+[data-accent='emerald'] {
+	--ui-accent: light-dark(#047857, #34d399);
+}
+[data-accent='pink'] {
+	--ui-accent: light-dark(#c0256b, #f472b6);
+}
+[data-accent='sky'] {
+	--ui-accent: light-dark(#0369a1, #38bdf8);
+}
+
 :root[data-theme='light'] {
 	color-scheme: light;
 }
@@ -179,6 +237,11 @@
 		color: var(--ui-fg);
 		font-family: var(--ui-font);
 		line-height: 1.5;
+	}
+	:where(h1, h2) {
+		font-weight: var(--ui-heading-weight);
+		font-stretch: var(--ui-heading-stretch);
+		letter-spacing: var(--ui-heading-tracking);
 	}
 	:where(code, kbd, samp, pre) {
 		font-family: var(--ui-font-mono);

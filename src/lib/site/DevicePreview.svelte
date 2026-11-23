@@ -72,7 +72,7 @@
 	.screen {
 		position: relative;
 		overflow: hidden;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 		box-shadow: var(--ui-shadow-card);
 	}

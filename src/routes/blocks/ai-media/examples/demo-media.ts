@@ -39,17 +39,17 @@ function star(cx: number, cy: number, r: number) {
 }
 
 function pattern(prompt: string, w: number, h: number, seed: number) {
-	// Each image in a set gets its own palette.
+	// Monochrome, like the rest of the library: the pattern alone tells images apart.
 	const [a, b, c] = hues(prompt).map((x) => (x + seed * 67) % 360);
 	const cell = 120;
 	let tiles = '';
 	for (let y = 0; y <= h + cell; y += cell)
 		for (let x = 0; x <= w + cell; x += cell) {
-			tiles += `<polygon points="${star(x, y, 52)}" fill="hsl(${b} 55% 42%)"/>`;
-			tiles += `<polygon points="${star(x, y, 26)}" fill="hsl(${c} 60% 86%)"/>`;
-			tiles += `<circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="12" fill="hsl(${c} 45% 70%)"/>`;
+			tiles += `<polygon points="${star(x, y, 52)}" fill="hsl(${b} 0% 42%)"/>`;
+			tiles += `<polygon points="${star(x, y, 26)}" fill="hsl(${c} 0% 86%)"/>`;
+			tiles += `<circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="12" fill="hsl(${c} 0% 70%)"/>`;
 		}
-	const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="hsl(${a} 45% 22%)"/>${tiles}</svg>`;
+	const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="hsl(${a} 0% 22%)"/>${tiles}</svg>`;
 	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
@@ -153,7 +153,7 @@ export async function demoVideo(
 	let raf: number;
 	const draw = (t: number) => {
 		const s = (t - start) / 1000;
-		g.fillStyle = `hsl(${a} 45% 22%)`;
+		g.fillStyle = `hsl(${a} 0% 22%)`;
 		g.fillRect(0, 0, 640, 360);
 		for (let y = 0; y <= 480; y += 120)
 			for (let x = 0; x <= 760; x += 120) {
@@ -161,8 +161,8 @@ export async function demoVideo(
 				g.translate(x - ((s * 30) % 120), y);
 				g.rotate(s * 0.4);
 				for (const [r, fill] of [
-					[52, `hsl(${b} 55% 42%)`],
-					[26, `hsl(${c} 60% 86%)`]
+					[52, `hsl(${b} 0% 42%)`],
+					[26, `hsl(${c} 0% 86%)`]
 				] as const) {
 					g.beginPath();
 					for (let i = 0; i < 16; i++) {

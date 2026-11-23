@@ -53,8 +53,6 @@
 	});
 	const EASE = spring(0.03);
 	const CLOSE = spring(0.04);
-	// A pill when folded; open, the card's corners are concentric with the list's rows inside.
-	const radius = (h: number) => (open ? 16 : h / 2);
 
 	function measure(node: HTMLElement) {
 		const fit = () => (size = { w: node.offsetWidth, h: node.offsetHeight });
@@ -102,11 +100,10 @@
 {#if total}
 	<section
 		bind:this={shell}
-		class={['tray', ready && 'ready']}
+		class={['tray', ready && 'ready', open && 'open']}
 		aria-labelledby="{id}-heading"
 		style:width={size ? `${size.w}px` : undefined}
 		style:height={size ? `${size.h}px` : undefined}
-		style:border-radius={size ? `${radius(size.h)}px` : undefined}
 		style:--ease={closing ? CLOSE : EASE}
 		style:--dur={closing ? '380ms' : '600ms'}
 		transition:arrive
@@ -168,6 +165,9 @@
 {/if}
 
 <style>
+	.tray.open {
+		border-radius: var(--ui-radius);
+	}
 	.tray {
 		position: fixed;
 		inset-block-end: max(1rem, env(safe-area-inset-bottom));
@@ -175,7 +175,8 @@
 		z-index: 40;
 		overflow: hidden;
 		border: 1px solid transparent;
-		border-radius: 1rem;
+		/* A pill when folded, a surface when open. */
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-surface-overlay);
 		color: var(--ui-fg);
 		font: 0.875rem/1.4 var(--ui-font);
@@ -266,7 +267,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: none;
 		color: var(--ui-muted);
 		cursor: pointer;
@@ -275,7 +276,7 @@
 			color var(--ui-dur) ease;
 	}
 	.card header button {
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 	}
 	@media (pointer: coarse) {
 		header button {

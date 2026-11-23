@@ -378,7 +378,7 @@
 		box-sizing: border-box;
 		block-size: var(--row);
 		padding-inline: calc(0.375rem + var(--depth) * 1.125rem) 0.5rem;
-		border-radius: calc(var(--ui-radius) - 0.125rem);
+		border-radius: var(--ui-radius);
 		cursor: pointer;
 		user-select: none;
 		transition:
@@ -435,7 +435,7 @@
 		white-space: nowrap;
 	}
 	mark {
-		border-radius: 3px;
+		border-radius: var(--ui-radius-control);
 		background: color-mix(in srgb, var(--ui-accent) 22%, transparent);
 		color: inherit;
 	}

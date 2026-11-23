@@ -96,7 +96,7 @@
 		min-inline-size: 1.375rem;
 		block-size: 1.375rem;
 		padding: 0 0.3rem;
-		border-radius: calc(var(--ui-radius) * 0.6);
+		border-radius: var(--ui-radius);
 		background: var(--ui-subtle);
 		/* A hint of a key's lower edge, drawn inside so it takes no space. */
 		box-shadow: inset 0 -1px 0 var(--ui-line);

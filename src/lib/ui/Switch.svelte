@@ -68,7 +68,7 @@
 		block-size: var(--h);
 		/* Invisible normally; outlines the track in Windows High Contrast. */
 		border: 1px solid transparent;
-		border-radius: var(--h);
+		border-radius: var(--ui-radius-pill);
 		/* Off: a light track with a hairline, so it reads on white, gray or tinted pages alike. */
 		background: var(--ui-hover);
 		box-shadow: inset 0 0 0 1px var(--ui-field-line);
@@ -84,7 +84,7 @@
 		inset-inline-start: calc(var(--pad) - 1px);
 		inline-size: var(--thumb);
 		block-size: var(--thumb);
-		border-radius: var(--thumb);
+		border-radius: var(--ui-radius-pill);
 		background: #fff;
 		box-shadow:
 			0 1px 2px rgb(0 0 0 / 0.2),

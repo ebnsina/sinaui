@@ -54,7 +54,7 @@
 	}
 	.soon {
 		padding: 0.125rem 0.625rem;
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: color-mix(in srgb, var(--ui-accent) 12%, transparent);
 		color: color-mix(in srgb, var(--ui-accent) 80%, var(--ui-fg));
 		font-size: 0.8125rem;

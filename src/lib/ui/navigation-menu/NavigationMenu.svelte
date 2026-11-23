@@ -125,7 +125,7 @@
 		left: 0;
 		z-index: -1;
 		transform-origin: 0 0;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 		background: var(--ui-surface-overlay);
 		box-shadow: var(--ui-shadow-overlay);
 		opacity: 0;

@@ -195,7 +195,7 @@
 		overscroll-behavior-inline: contain;
 		scroll-snap-type: x mandatory;
 		scrollbar-width: none;
-		border-radius: calc(var(--ui-radius) * 1.5);
+		border-radius: var(--ui-radius);
 	}
 	.track::-webkit-scrollbar {
 		display: none;
@@ -227,7 +227,7 @@
 		margin: 0;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: radial-gradient(circle, var(--ui-control-line) 3px, transparent 3.5px);
 		cursor: pointer;
 	}
@@ -274,7 +274,7 @@
 		margin: 0;
 		padding: 0;
 		border: 1px solid transparent;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-subtle);
 		color: var(--ui-fg);
 		cursor: pointer;

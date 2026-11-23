@@ -420,7 +420,7 @@
 		block-size: 4rem;
 		padding: 0;
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
 		box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
@@ -539,7 +539,7 @@
 	}
 	input::-webkit-slider-runnable-track {
 		block-size: var(--track);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: linear-gradient(
 			to right,
 			var(--ui-accent) var(--p),
@@ -550,7 +550,7 @@
 	}
 	input::-moz-range-track {
 		block-size: var(--track);
-		border-radius: 999px;
+		border-radius: var(--ui-radius-pill);
 		background: linear-gradient(
 			to right,
 			var(--ui-accent) var(--p),
@@ -564,7 +564,7 @@
 		block-size: var(--thumb);
 		margin-block-start: calc((var(--track) - var(--thumb)) / 2);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: #fff;
 		scale: 0;
 		transition: scale var(--ui-dur-press) var(--ui-ease-out);
@@ -573,7 +573,7 @@
 		inline-size: var(--thumb);
 		block-size: var(--thumb);
 		border: 0;
-		border-radius: 50%;
+		border-radius: var(--ui-radius-pill);
 		background: #fff;
 		scale: 0;
 		transition: scale var(--ui-dur-press) var(--ui-ease-out);
