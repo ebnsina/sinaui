@@ -33,7 +33,7 @@ export default defineConfig({
 				// These demos' sidebars link to a pretend app's pages; any other missing anchor fails the build.
 				handleMissingId: ({ path, message }) => {
 					if (
-						!/\/(blocks\/dashboard|blocks\/file-explorer|components\/sidebar|pro\/saas-app)$/.test(
+						!/\/(blocks\/dashboard|blocks\/file-explorer|blocks\/studio|components\/sidebar|pro\/saas-app)$/.test(
 							path
 						)
 					)
