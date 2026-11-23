@@ -8,6 +8,8 @@
 	--ui-surface: light-dark(#f7f7f8, #222526);
 	/* Menus, popovers, dialogs, toasts: a step lighter in dark mode, where shadows don't show. */
 	--ui-surface-overlay: light-dark(#ffffff, #2a2d2e);
+	/* Fields (inputs, selects, checkboxes, drop zones): white, so they stand out on a tinted card. */
+	--ui-field-bg: light-dark(#ffffff, #222526);
 	--ui-fg: light-dark(#0f0f10, #eceeee);
 	/* 6.7:1 on white and 4.7:1 on a tinted alert (light); 7.3:1 on the dark surface, 4.9:1 on a hovered overlay. */
 	--ui-muted: light-dark(#5c5c5c, #aeb3b4);

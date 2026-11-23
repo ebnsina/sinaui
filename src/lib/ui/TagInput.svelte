@@ -200,7 +200,7 @@
 		border: 1px solid var(--ui-field-line);
 		/* Pill while it is one line; rounded, not stretched, once tags wrap. */
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		cursor: text;
 	}
 	.control:has(input:focus-visible) {

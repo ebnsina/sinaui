@@ -658,7 +658,7 @@
 		padding: 0.625rem 0.75rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		color: inherit;
 		font: 0.875rem/1.4 var(--ui-font);
 		font-size: max(0.875rem, 16px);

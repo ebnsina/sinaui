@@ -268,7 +268,7 @@
 		padding-inline: calc((var(--ui-control-h) - 2px - var(--chip)) / 2) 0.875rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		color: inherit;
 		font: inherit;
 		cursor: pointer;

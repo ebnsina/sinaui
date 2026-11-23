@@ -38,9 +38,9 @@ function voice(seconds = 3) {
 	return `data:audio/wav;base64,${btoa(raw)}`;
 }
 
-// An eight-pointed star, standing in for a photo of the engraved plate.
-const plate = `data:image/svg+xml,${encodeURIComponent(
-	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#c8c8cc"/><g fill="none" stroke="#4a4a4f" stroke-width="2.5"><circle cx="50" cy="50" r="38"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z"/><path d="M50 14 61 39 86 50 61 61 50 86 39 61 14 50 39 39Z" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="6"/></g></svg>'
+// A soft gray landscape, standing in for a photo.
+const courtyard = `data:image/svg+xml,${encodeURIComponent(
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><rect width="160" height="120" fill="#e4e4e7"/><circle cx="112" cy="40" r="11" fill="#fafafa"/><path d="M0 76 C24 66 44 64 70 72 S118 84 160 70 V120 H0Z" fill="#b8b8be"/><path d="M0 96 C30 86 60 88 88 96 S136 104 160 92 V120 H0Z" fill="#8c8c93"/></svg>'
 )}`;
 
 export const people: ChatUser[] = [
@@ -174,15 +174,15 @@ function seed(): Store {
 			status: 'read',
 			readBy: ['maryam', 'biruni']
 		}),
-		msg('maryam', 'The new plate, engraved this morning.', 3 * HOUR, {
+		msg('maryam', 'The courtyard this morning, before the readers came in.', 3 * HOUR, {
 			attachments: [
 				{
-					name: 'baghdad-plate.svg',
+					name: 'courtyard.svg',
 					size: 1_204,
 					type: 'image/svg+xml',
-					url: plate,
-					width: 1,
-					height: 1
+					url: courtyard,
+					width: 4,
+					height: 3
 				}
 			]
 		}),

@@ -1,4 +1,4 @@
-import { page } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import axe from 'axe-core';
@@ -26,19 +26,23 @@ describe('studio', () => {
 		await expect.element(crumbs).toHaveTextContent('Catalog');
 	});
 
-	it('desktop: the search narrows the menu and says when nothing matches', async () => {
+	it('desktop: search opens a palette of every page and goes to the one chosen', async () => {
 		await page.viewport(1280, 900);
 		render(Library);
 		const nav = page.getByRole('navigation', { name: 'Bayt al-Ḥikma', exact: true });
-		const search = page.getByRole('searchbox', { name: 'Search the menu' });
-		await search.fill('cat');
-		await expect.element(nav.getByRole('link', { name: 'Catalog' })).toBeVisible();
-		await expect.element(nav.getByRole('link', { name: 'Members' })).not.toBeInTheDocument();
+		await page.getByRole('button', { name: 'Search' }).click();
+		const field = page.getByRole('combobox');
+		await field.fill('cat');
+		await expect.element(page.getByRole('option', { name: 'Catalog' })).toBeVisible();
+		await expect.element(page.getByRole('option', { name: 'Members' })).not.toBeInTheDocument();
 
-		await search.fill('zzz');
-		await expect.element(page.getByRole('status')).toHaveTextContent('No page matches.');
-		await search.fill('');
-		await expect.element(nav.getByRole('link', { name: 'Members' })).toBeVisible();
+		await field.fill('zzz');
+		await expect.element(page.getByText('Nothing matches.')).toBeVisible();
+		await field.fill('cat');
+		await userEvent.keyboard('{Enter}');
+		await expect
+			.element(nav.getByRole('link', { name: 'Catalog' }))
+			.toHaveAttribute('aria-current', 'page');
 	});
 
 	it('phone: a bottom tab bar replaces the menu button, and More opens the full menu', async () => {

@@ -1049,10 +1049,10 @@ describe('sinaui', () => {
 
 		// Pointer: click opens, clicking an option chooses it.
 		await page.getByRole('combobox', { name: 'Ink' }).click();
-		await page.getByRole('option', { name: 'Vermilion' }).click();
+		await page.getByRole('option', { name: 'Iron gray' }).click();
 		await expect
 			.element(page.getByRole('combobox', { name: 'Ink' }))
-			.toHaveTextContent('Vermilion');
+			.toHaveTextContent('Iron gray');
 	});
 
 	it('combobox: opened above, the list stays against the field as it shrinks', async () => {

@@ -83,7 +83,7 @@
 		box-sizing: border-box;
 		border: 2px solid var(--radio-line);
 		border-radius: 50%;
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		transition: border-color var(--ui-dur) ease;
 	}
 	.well {

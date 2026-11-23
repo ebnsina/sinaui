@@ -336,7 +336,7 @@
 	.box {
 		position: relative;
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 	}
 	.text {
 		/* One line is exactly a control's height, so a one-row box lines up with buttons and inputs;

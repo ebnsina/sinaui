@@ -169,7 +169,7 @@
 		block-size: calc(var(--ui-control-h) + 0.75rem);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		font-size: 1.25rem;
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;

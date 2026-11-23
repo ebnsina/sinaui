@@ -1,5 +1,5 @@
 <script lang="ts">
-	import starTile from './star-tile.svg';
+	import courtyard from './courtyard.svg';
 	import Chat from '#lib/ui/Chat.svelte';
 	import { conversation, me, users, wait } from './data';
 
@@ -11,10 +11,10 @@
 				{
 					attachments: [
 						{
-							name: 'star-tile.svg',
+							name: 'courtyard.svg',
 							size: 4_812,
 							type: 'image/svg+xml',
-							url: starTile,
+							url: courtyard,
 							width: 1,
 							height: 1
 						}

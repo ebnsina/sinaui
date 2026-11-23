@@ -17,12 +17,36 @@
 	function load(range: string): DashboardData {
 		const { labels, scale } = periods[range];
 		const per = (scale * 420) / labels.length;
+		// Each number's path across the period, for the small line under it.
+		const path = (total: number, seed: number) =>
+			labels.map((_, i) => Math.round((total / labels.length) * wave(i, seed)));
 		return {
 			stats: [
-				{ label: 'Loans', value: Math.round(scale * 420), change: 0.124 },
-				{ label: 'New members', value: Math.round(scale * 36), change: 0.061 },
-				{ label: 'Visits', value: Math.round(scale * 1880), change: -0.032 },
-				{ label: 'Overdue', value: Math.round(scale * 14), change: 0.08, goodWhen: 'down' }
+				{
+					label: 'Loans',
+					value: Math.round(scale * 420),
+					change: 0.124,
+					trend: path(scale * 420, 0.4)
+				},
+				{
+					label: 'New members',
+					value: Math.round(scale * 36),
+					change: 0.061,
+					trend: path(scale * 36, 1.1)
+				},
+				{
+					label: 'Visits',
+					value: Math.round(scale * 1880),
+					change: -0.032,
+					trend: path(scale * 1880, 2.3)
+				},
+				{
+					label: 'Overdue',
+					value: Math.round(scale * 14),
+					change: 0.08,
+					goodWhen: 'down',
+					trend: path(scale * 14, 3.1)
+				}
 			],
 			trend: labels.map((label, i) => ({
 				label,
@@ -85,6 +109,20 @@
 					status: 'On time'
 				},
 				{ id: '7', title: 'Kitāb al-Taṣrīf', reader: 'Al-Kindī', due: '26 Sep', status: 'Overdue' }
+			],
+			readers: [
+				{ name: 'Al-Bīrūnī', loans: Math.round(scale * 9) },
+				{ name: 'Fāṭima al-Fihrī', loans: Math.round(scale * 7) },
+				{ name: 'Ibn Sīnā', loans: Math.round(scale * 6) },
+				{ name: 'Maryam al-Ijliya', loans: Math.round(scale * 4) },
+				{ name: 'Thābit ibn Qurra', loans: Math.round(scale * 3) }
+			],
+			activity: [
+				{ who: 'Maryam al-Ijliya', what: 'asked for a reading card', when: '12 min ago' },
+				{ who: 'Al-Bīrūnī', what: 'borrowed Tabula Rogeriana', when: '40 min ago' },
+				{ who: 'Thābit ibn Qurra', what: 'is 3 days late with Book of Optics', when: '1 h ago' },
+				{ who: 'Ibn Sīnā', what: 'returned The Canon of Medicine', when: '2 h ago' },
+				{ who: 'Fāṭima al-Fihrī', what: 'booked the Manuscripts room', when: 'Yesterday' }
 			]
 		};
 	}

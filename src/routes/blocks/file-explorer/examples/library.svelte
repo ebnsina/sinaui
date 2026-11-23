@@ -1,5 +1,5 @@
 <script lang="ts">
-	import starTile from './star-tile.svg';
+	import courtyard from './courtyard.svg';
 	import FileExplorer, { type ExplorerItem } from '#lib/blocks/file-explorer/FileExplorer.svelte';
 	import type { Send } from '#lib/ui/uploads.svelte.js';
 
@@ -56,7 +56,7 @@
 			parent: 'ms',
 			kind: 'image',
 			size: 4_800_000,
-			thumbnail: starTile,
+			thumbnail: courtyard,
 			modified: day(2)
 		},
 		{

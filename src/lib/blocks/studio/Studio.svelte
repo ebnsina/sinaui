@@ -1,9 +1,14 @@
 <script lang="ts">
-	// The frame of a signed-in app (an admin, a portal, a dashboard): a searchable grouped sidebar,
-	// breadcrumbs, a top bar with the account menu, and on phones a bottom tab bar like a mobile app's.
+	// The frame of a signed-in app (an admin, a portal, a dashboard): a grouped sidebar, breadcrumbs,
+	// a top bar with search (a command palette of every page) and the account menu, and on phones a
+	// bottom tab bar like a mobile app's.
+	import { Search01Icon } from '@hugeicons/core-free-icons';
 	import type { Snippet } from 'svelte';
 	import AccountMenu from '#lib/ui/AccountMenu.svelte';
-	import SearchField from '#lib/ui/SearchField.svelte';
+	import Button from '#lib/ui/Button.svelte';
+	import CommandPalette, { type Command } from '#lib/ui/CommandPalette.svelte';
+	import Icon from '#lib/ui/Icon.svelte';
+	import Kbd from '#lib/ui/Kbd.svelte';
 	import SidebarLayout, { type SidebarGroup, type SidebarItem } from '#lib/ui/SidebarLayout.svelte';
 
 	interface Props {
@@ -31,8 +36,12 @@
 		 * false keeps the menu button instead.
 		 */
 		tabs?: SidebarItem[] | false;
-		/** A field above the navigation that narrows it as you type. */
+		/** A search button in the top bar that opens a command palette of every page (and `commands`). */
 		search?: boolean;
+		/** Actions to offer in the search beside the pages ("Add member", "Export"). */
+		commands?: Command[];
+		/** Open the search with ⌘K (Ctrl+K elsewhere). Turn off when the page already binds it. */
+		shortcut?: boolean;
 		/** Show the sidebar as the icon rail on this page (a lesson, an editor); the person's choice returns after. */
 		rail?: boolean;
 		/** The page sits in a rounded panel; the sidebar shares the window's tint. */
@@ -42,8 +51,12 @@
 		/** Translate these for non-English UIs. */
 		labels?: {
 			search?: string;
-			/** Shown when the search matches no page. */
+			/** The search field's placeholder. */
+			placeholder?: string;
+			/** Shown when the search matches nothing. */
 			noMatch?: string;
+			/** The heading of pages from a group without a title. */
+			pages?: string;
 			more?: string;
 			account?: string;
 			signOut?: string;
@@ -65,6 +78,8 @@
 		menu,
 		tabs,
 		search = true,
+		commands = [],
+		shortcut = true,
 		inset = true,
 		rail = false,
 		height = '100dvh',
@@ -73,28 +88,42 @@
 	}: Props = $props();
 
 	const t = $derived({
-		search: 'Search the menu',
-		noMatch: 'No page matches.',
+		search: 'Search',
+		placeholder: 'Search pages and actions…',
+		noMatch: 'Nothing matches.',
+		pages: 'Pages',
 		more: 'More',
 		...labels
 	});
 
-	let query = $state('');
 	// Every page, children included: the search and the current page look through all of them.
 	const flat = (items: SidebarItem[]): SidebarItem[] =>
 		items.flatMap((i) => [i, ...flat(i.children ?? [])]);
 	const all = $derived(flat(groups.flatMap((g) => g.items)));
-	const shown = $derived.by(() => {
-		const q = query.trim().toLocaleLowerCase();
-		if (!q) return groups;
-		const matches = (i: SidebarItem) => i.label.toLocaleLowerCase().includes(q);
-		return groups
-			.map((g) => ({
-				...g,
-				items: g.items.filter((i) => matches(i) || (i.children ?? []).some(matches))
+
+	// The search lists every page under its sidebar group, then your own actions.
+	let searching = $state(false);
+	let frame: HTMLDivElement;
+	// Through a real link click, so the app's router (SvelteKit's, say) navigates as for any link.
+	const go = (item: SidebarItem) => {
+		onselect?.(item);
+		const a = Object.assign(document.createElement('a'), { href: item.href, hidden: true });
+		frame.append(a);
+		a.click();
+		a.remove();
+	};
+	const palette = $derived<Command[]>([
+		...groups.flatMap((g) =>
+			flat(g.items).map((item) => ({
+				id: `page:${item.href}`,
+				label: item.label,
+				group: g.title ?? t.pages,
+				icon: item.icon,
+				onselect: () => go(item)
 			}))
-			.filter((g) => g.items.length);
-	});
+		),
+		...commands
+	]);
 	// The current page is the deepest item whose address starts the path.
 	const current = $derived(
 		[...all]
@@ -108,10 +137,10 @@
 	const phoneTabs = $derived(tabs === false ? undefined : (tabs ?? groups[0]?.items));
 </script>
 
-<div class="studio" style:block-size={height}>
+<div class="studio" style:block-size={height} bind:this={frame}>
 	<SidebarLayout
 		label={name}
-		groups={shown}
+		{groups}
 		current={current?.href}
 		{crumbs}
 		{inset}
@@ -131,16 +160,21 @@
 						{#if !collapsed}<strong>{name}</strong>{/if}
 					{/if}
 				</a>
-				{#if search && !collapsed}
-					<div class="search">
-						<SearchField label={t.search} hideLabel placeholder={t.search} bind:value={query} />
-						{#if !shown.length}<p class="none" role="status">{t.noMatch}</p>{/if}
-					</div>
-				{/if}
 			</div>
 		{/snippet}
 		{#snippet topbar()}
 			<div class="bar">
+				{#if search}
+					<Button
+						variant="outline"
+						aria-label={t.search}
+						aria-haspopup="dialog"
+						onclick={() => (searching = true)}
+					>
+						<Icon icon={Search01Icon} size={16} /><span class="find">{t.search}</span>
+						{#if shortcut}<Kbd keys={['mod', 'K']} />{/if}
+					</Button>
+				{/if}
 				{@render tools?.()}
 				<AccountMenu {user} theme {onsignout} {labels}>
 					{@render menu?.()}
@@ -151,10 +185,20 @@
 	</SidebarLayout>
 </div>
 
+{#if search}
+	<CommandPalette
+		commands={palette}
+		bind:open={searching}
+		{shortcut}
+		label={t.search}
+		placeholder={t.placeholder}
+		empty={t.noMatch}
+	/>
+{/if}
+
 <style>
 	.head {
 		display: grid;
-		gap: 0.75rem;
 	}
 	.brand {
 		display: flex;
@@ -174,20 +218,11 @@
 		color: var(--ui-on-accent);
 		font-weight: 600;
 	}
-	.search {
-		display: grid;
-		gap: 0.5rem;
-	}
-	/* On a phone the brand also sits in the top bar; the menu search stays with the sidebar. */
+	/* On a phone the search button is its icon alone; the shortcut means nothing without a keyboard. */
 	@container (max-width: 40rem) {
-		.search {
+		.bar :global(:is(.find, kbd)) {
 			display: none;
 		}
-	}
-	.none {
-		margin: 0;
-		color: var(--ui-muted);
-		font-size: 0.8125rem;
 	}
 	.bar {
 		display: flex;

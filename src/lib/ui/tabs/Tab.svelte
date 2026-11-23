@@ -63,7 +63,7 @@
 	.tab:active:not(:disabled) {
 		scale: var(--ui-press-scale);
 	}
-	/* Line tabs: 30px with a mouse; the chosen one is outlined above the underline. */
+	/* Line tabs: 30px with a mouse; the underline alone marks the chosen one. */
 	@media (pointer: fine) {
 		:global(.tabs:not(.folder, .pill)) .tab {
 			min-block-size: 1.875rem;
@@ -86,9 +86,6 @@
 	}
 	.tab[aria-selected='true'] {
 		color: var(--ui-accent);
-	}
-	:global(.tabs:not(.folder, .pill)) .tab[aria-selected='true'] {
-		border-color: var(--ui-field-line);
 	}
 	:global(.tabs.folder) .tab[aria-selected='true'] {
 		color: var(--ui-fg);
