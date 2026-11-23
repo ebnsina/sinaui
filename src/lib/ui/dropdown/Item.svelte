@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { Tick02Icon } from '@hugeicons/core-free-icons';
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
+	import Icon from '../Icon.svelte';
 	import { getDropdown } from './context';
 
 	interface Props extends Omit<HTMLButtonAttributes, 'disabled' | 'onselect'> {
@@ -11,6 +13,8 @@
 		href?: string;
 		/** Runs when chosen by click, Enter or Space. Call preventDefault() to keep the menu open. */
 		onselect?: (e: MouseEvent) => void;
+		/** One choice of several (a theme, a sort order): a check marks the chosen one. */
+		checked?: boolean;
 		children: Snippet;
 	}
 
@@ -19,6 +23,7 @@
 		disabled = false,
 		href,
 		onselect,
+		checked,
 		children,
 		class: className,
 		...rest
@@ -30,7 +35,8 @@
 	this={href ? 'a' : 'button'}
 	type={href ? undefined : 'button'}
 	href={disabled ? undefined : href}
-	role="menuitem"
+	role={checked === undefined ? 'menuitem' : 'menuitemradio'}
+	aria-checked={checked}
 	tabindex="-1"
 	aria-disabled={disabled || undefined}
 	class={['item', variant, className]}
@@ -54,6 +60,11 @@
 	}}
 >
 	{@render children()}
+	{#if checked !== undefined}
+		<span class="check" aria-hidden="true"
+			>{#if checked}<Icon icon={Tick02Icon} size={16} />{/if}</span
+		>
+	{/if}
 </svelte:element>
 
 <style>
@@ -82,28 +93,28 @@
 			min-block-size: 2.75rem;
 		}
 	}
-	/* The highlighted item's icon inks in and leans a step toward its label. */
-	.item :global(svg) {
+	/* The highlighted item's leading icon inks in and leans a step toward its label. */
+	.item > :global(svg) {
 		flex: none;
 		color: var(--ui-muted);
 		transition:
 			color var(--ui-dur-press) ease,
 			translate var(--ui-dur) var(--ui-ease-out);
 	}
-	.item:focus :global(svg) {
+	.item:focus > :global(svg) {
 		translate: 2px 0;
 	}
-	.item:focus:dir(rtl) :global(svg) {
+	.item:focus:dir(rtl) > :global(svg) {
 		translate: -2px 0;
 	}
-	.item:focus:not(.danger) :global(svg) {
+	.item:focus:not(.danger) > :global(svg) {
 		color: var(--ui-fg);
 	}
-	.item:active :global(svg) {
+	.item:active > :global(svg) {
 		scale: 0.9;
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.item:is(:focus, :active, :focus:dir(rtl)) :global(svg) {
+		.item:is(:focus, :active, :focus:dir(rtl)) > :global(svg) {
 			translate: none;
 			scale: none;
 		}
@@ -115,8 +126,16 @@
 	.item:focus {
 		outline: none;
 	}
+	/* The check keeps its place on every choice, so labels line up whichever is chosen. */
+	.check {
+		display: inline-flex;
+		flex: none;
+		inline-size: 16px;
+		margin-inline-start: auto;
+		color: var(--ui-fg);
+	}
 	.danger,
-	.danger :global(svg) {
+	.danger > :global(svg) {
 		color: var(--ui-danger);
 	}
 	.item[aria-disabled='true'] {

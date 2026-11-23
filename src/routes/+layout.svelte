@@ -361,7 +361,7 @@
 				<Icon icon={Search01Icon} size={16} />
 			</Button>
 			<ThemeToggle size="sm" />
-			<AccentPicker side="bottom" />
+			<AccentPicker />
 			<Button size="sm" href={resolve('/docs')} class="bar-cta">Get started</Button>
 			<Button
 				variant="ghost"
@@ -393,7 +393,7 @@
 			<Icon icon={Search01Icon} />
 		</Button>
 		<ThemeToggle />
-		<AccentPicker size="md" side="bottom" />
+		<AccentPicker size="md" />
 	</header>
 
 	<div class={['shell', tocOpen && 'toc-open']}>

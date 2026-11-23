@@ -117,7 +117,7 @@
 	that part of a page.
 </p>
 <div class="try">
-	<AccentPicker side="bottom" size="md" />
+	<AccentPicker size="md" />
 	<span>Try one: the whole site follows.</span>
 </div>
 <pre><code>&lt;html data-accent="blue"&gt;</code></pre>

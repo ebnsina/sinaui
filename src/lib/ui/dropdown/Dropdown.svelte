@@ -30,7 +30,7 @@
 
 	// This menu's own items: a submenu's live inside it in the DOM but are navigated separately.
 	const items = () =>
-		[...menu.querySelectorAll<HTMLElement>('[role="menuitem"]')].filter(
+		[...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
 			(el) => el.parentElement?.closest('[role="menu"]') === menu
 		);
 
@@ -134,7 +134,7 @@
 	// Capture phase: record the pointer before an item's own handler moves focus (and the highlight).
 	onpointermovecapture={() => (viaPointer = true)}
 	onfocusin={(e) => {
-		const item = (e.target as HTMLElement).closest<HTMLElement>('[role="menuitem"]');
+		const item = (e.target as HTMLElement).closest<HTMLElement>('[role^="menuitem"]');
 		// Focus inside a submenu leaves this highlight on the item that opened it.
 		if (item && item.parentElement?.closest('[role="menu"]') !== menu) return;
 		glide(highlight, item, viaPointer);
