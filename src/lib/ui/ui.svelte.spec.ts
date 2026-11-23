@@ -1579,6 +1579,16 @@ describe('sinaui', () => {
 		await expect.poll(() => document.activeElement).toBe(trigger.element());
 	});
 
+	it('command palette: a bound query searches elsewhere and lists answers that arrive later', async () => {
+		render(CommandPalettePage);
+		await page.getByRole('button', { name: 'Search the library' }).click();
+		const box = page.getByRole('combobox', { name: 'Search the library' });
+		await userEvent.type(box, 'canon');
+		await expect.element(page.getByRole('option', { name: 'Canon of Medicine' })).toBeVisible();
+		await userEvent.keyboard('{Enter}');
+		await expect.element(page.getByText('Opened: Canon of Medicine')).toBeVisible();
+	});
+
 	it('toggle group: one tab stop, arrows wrap and skip disabled, pressed state', async () => {
 		render(ToggleGroupPage);
 		const bold = page.getByRole('button', { name: 'Bold' });

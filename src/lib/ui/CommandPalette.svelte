@@ -38,6 +38,8 @@
 		 * list, best first. Without it, commands are matched by label and keywords.
 		 */
 		search?: (query: string) => Command[];
+		/** What's typed. Bind it to search elsewhere (a server) as people type; search then lists the answers. */
+		query?: string;
 	}
 
 	let {
@@ -47,14 +49,14 @@
 		placeholder = 'Type a command or search…',
 		empty = 'Nothing matches',
 		shortcut = true,
-		search
+		search,
+		query = $bindable('')
 	}: Props = $props();
 
 	const id = $props.id();
 	let dialog: HTMLDialogElement;
 	let results: HTMLDivElement;
 	let highlight: HTMLSpanElement;
-	let query = $state('');
 	let active = $state(0);
 	let viaPointer = false;
 
