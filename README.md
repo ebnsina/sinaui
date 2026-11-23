@@ -24,8 +24,9 @@ the code: no package to update, nothing hidden.
 - **Light and dark.** It follows the reader's system setting, or their own choice.
 - **Calm motion.** Animations are short, and they turn down for readers who ask their system for
   less motion.
-- **Your brand.** Change colors, corners, type and motion with a few CSS variables. See
-  [Theming](https://ebnsina.github.io/sinaui/theming).
+- **Your brand.** Monochrome and square by default, set in Mona Sans. Switch on an accent
+  (blue, orange, lime, emerald, pink or sky) with one attribute, or change colors, corners, type
+  and motion with a few CSS variables. See [Theming](https://ebnsina.github.io/sinaui/theming).
 
 There are 68 components, 7 widgets and 6 full blocks: an AI chat, a calendar, a dashboard, a file
 explorer, a kanban board and a media generator.

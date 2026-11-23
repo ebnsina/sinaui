@@ -128,6 +128,16 @@
 		const a = tocList?.querySelector<HTMLElement>('[aria-current]');
 		if (tocCard && a) tocCard.scrollTop = a.offsetTop - tocCard.clientHeight / 2;
 	};
+	// In the always-shown column (wide screens), the section being read stays in view as you scroll.
+	$effect(() => {
+		void current;
+		const a = tocList?.querySelector<HTMLElement>('[aria-current]');
+		if (!tocCard || !a || getComputedStyle(tocCard).position !== 'static') return;
+		const top = a.offsetTop;
+		const bottom = top + a.offsetHeight;
+		if (top < tocCard.scrollTop || bottom > tocCard.scrollTop + tocCard.clientHeight)
+			tocCard.scrollTop = top - tocCard.clientHeight / 2;
+	});
 	let marker = $state<HTMLSpanElement>();
 	let placed = $state(false);
 	let untrack: (() => void) | undefined;
@@ -445,8 +455,8 @@
 			</main>
 		</div>
 
-		<!-- "On this page": a round button in the corner whose ring fills as you read.
-		     Pointing at it, focusing it or pressing it opens the contents, which grow out of the button. -->
+		<!-- "On this page": a column on wide screens; narrower, a button in the corner whose ring fills
+		     as you read, and pointing at it, focusing it or pressing it opens the contents out of it. -->
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<aside
 			class="toc"
@@ -1093,6 +1103,45 @@
 			z-index: 15;
 			display: block;
 			padding-block-start: 0.625rem;
+		}
+	}
+	/* Wide screens: "On this page" is always shown, a column on the gray page right of the content,
+	   mirroring the sidebar on the left. Narrower, it stays the corner button above. */
+	@media (min-width: 1280px) {
+		.shell {
+			grid-template-columns: 15rem minmax(0, 1fr) 14rem;
+		}
+		:global(html[data-sidebar='collapsed']) .shell {
+			grid-template-columns: 3.25rem minmax(0, 1fr) 14rem;
+		}
+		.toc {
+			position: static;
+			min-block-size: 0;
+			padding: 0;
+		}
+		.rail {
+			display: none;
+		}
+		.card,
+		.toc-open .card {
+			position: static;
+			inline-size: auto;
+			max-block-size: 100%;
+			padding: 1.5rem 1rem 2rem 0.75rem;
+			border: 0;
+			background: none;
+			box-shadow: none;
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			pointer-events: auto;
+			transition: none;
+		}
+		.card li,
+		.toc-open .card li {
+			opacity: 1;
+			translate: 0 0;
+			transition: none;
 		}
 	}
 </style>

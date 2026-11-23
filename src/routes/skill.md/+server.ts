@@ -38,7 +38,11 @@ Sina UI components are copied into the project and owned there, not imported fro
 
 - Use the components rather than raw HTML controls: Button, Input, Select, Dialog and so on.
 - Style with the tokens (\`var(--ui-accent)\`, \`var(--ui-fg)\`, \`var(--ui-muted)\`, \`var(--ui-surface)\`,
-  \`var(--ui-radius)\`, \`var(--ui-radius-control)\`), never hard-coded colors.
+  \`var(--ui-radius)\`, \`var(--ui-radius-control)\`, \`var(--ui-radius-pill)\`), never hard-coded colors
+  or corners.
+- It's monochrome and square by default. For color, set \`data-accent\` on \`<html>\` (or a container)
+  to \`blue\`, \`orange\`, \`lime\`, \`emerald\`, \`pink\` or \`sky\`; never restyle components to add one.
+  For rounded corners, set the three radius tokens (e.g. \`0.75rem\`, \`0.5rem\`, \`999px\`).
 - Every form control needs a \`label\`; icon-only buttons need \`aria-label\`.
 - Values bind: \`bind:value\`, \`bind:open\`, \`bind:checked\`.
 - Dates use \`@internationalized/date\` (\`CalendarDate\`, \`CalendarDateTime\`); format numbers and dates with \`Intl\`.
