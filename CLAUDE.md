@@ -46,8 +46,8 @@ deployed to GitHub Pages.
   (buttons, fields), `--ui-radius-pill` (tags, tracks, thumbs), `0`, `inherit`, or `50%` for a
   true circle (spinner, radio mark, orb). Never a raw value, a multiple, or a radius set from JS.
 - No borders except on fields, checkbox/radio outlines, the tab hairline and accordion dividers.
-  Cards and panels separate by the surface tint alone; only overlays (menus, popovers, dialogs)
-  get a shadow. Never mark one edge twice (an edge plus a tint or shadow).
+  A Card is a tinted frame with a hairline outline holding an inset sheet (the page color, its own
+  hairline); its footer sits on the frame. Only overlays (menus, popovers, dialogs) get a shadow.
 - Even insets: a box inside a control (swatch, chip, avatar) sits the same distance from every
   edge; derive the side padding from `--ui-control-h`. A one-line field is one control height.
 - Motion: `--ui-ease-enter|out|exit|spring`, `--ui-dur-*`, and `ease`/`ms`/`reflow`/`pop`/`stagger`
