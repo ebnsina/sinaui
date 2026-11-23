@@ -45,6 +45,12 @@
 	description="Matches the start of a label first, then the start of a word, then anywhere, then keywords; accents don't matter."
 	{...ex('basic')}
 />
+<Example
+	id="server"
+	title="Search a server"
+	description="Bind query to fetch matches as people type; search lists what came back, and the palette updates when it lands."
+	{...ex('server')}
+/>
 
 <h2 id="props">Props</h2>
 <table>
@@ -76,6 +82,11 @@
 			><td><code>search</code></td><td
 				><code>(query: string) =&gt; Command[]</code>: find matches yourself, best first</td
 			><td></td></tr
+		>
+		<tr
+			><td><code>query</code></td><td
+				><code>string</code>: what's typed; bindable, to search a server as people type</td
+			><td><code>''</code></td></tr
 		>
 	</tbody>
 </table>
