@@ -27,29 +27,21 @@ function hues(text: string) {
 	return [h, (h + 40) % 360, (h + 180) % 360];
 }
 
-// An eight-pointed star: two squares, one turned 45°.
-function star(cx: number, cy: number, r: number) {
+// A soft gray landscape: sky, sun and two ridges of hills. Each prompt and seed moves the sun and
+// reshapes the hills, so every picture in a set differs while staying calm and monochrome.
+function ridge(w: number, h: number, base: number, swing: number, waves: number, phase: number) {
 	const pts: string[] = [];
-	for (let i = 0; i < 16; i++) {
-		const a = (Math.PI / 8) * i;
-		const d = i % 2 ? r * 0.72 : r;
-		pts.push(`${(cx + d * Math.cos(a)).toFixed(1)},${(cy + d * Math.sin(a)).toFixed(1)}`);
-	}
-	return pts.join(' ');
+	for (let x = 0; x <= w; x += w / 48)
+		pts.push(
+			`${x.toFixed(1)},${(h * base + h * swing * Math.sin((x / w) * Math.PI * 2 * waves + phase)).toFixed(1)}`
+		);
+	return `M0,${h} L${pts.join(' L')} L${w},${h} Z`;
 }
 
 function pattern(prompt: string, w: number, h: number, seed: number) {
-	// Monochrome, like the rest of the library: the pattern alone tells images apart.
-	const [a, b, c] = hues(prompt).map((x) => (x + seed * 67) % 360);
-	const cell = 120;
-	let tiles = '';
-	for (let y = 0; y <= h + cell; y += cell)
-		for (let x = 0; x <= w + cell; x += cell) {
-			tiles += `<polygon points="${star(x, y, 52)}" fill="hsl(${b} 0% 42%)"/>`;
-			tiles += `<polygon points="${star(x, y, 26)}" fill="hsl(${c} 0% 86%)"/>`;
-			tiles += `<circle cx="${x + cell / 2}" cy="${y + cell / 2}" r="12" fill="hsl(${c} 0% 70%)"/>`;
-		}
-	const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="100%" height="100%" fill="hsl(${a} 0% 22%)"/>${tiles}</svg>`;
+	const [a] = hues(prompt).map((x) => (x + seed * 67) % 360);
+	const t = a / 360;
+	const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4d4d8"/><stop offset="1" stop-color="#f1f1f3"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#sky)"/><circle cx="${(w * (0.2 + 0.6 * t)).toFixed(1)}" cy="${(h * 0.34).toFixed(1)}" r="${(h * 0.09).toFixed(1)}" fill="#fafafa"/><path d="${ridge(w, h, 0.62, 0.06, 1.2, t * 9)}" fill="#b8b8be"/><path d="${ridge(w, h, 0.78, 0.07, 0.8, t * 5 + 2)}" fill="#8c8c93"/></svg>`;
 	return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
@@ -142,7 +134,7 @@ export async function demoVideo(
 ): Promise<VideoGenerateResult> {
 	const canvas = Object.assign(document.createElement('canvas'), { width: 640, height: 360 });
 	const g = canvas.getContext('2d')!;
-	const [a, b, c] = hues(String(input.prompt));
+	const [a, b] = hues(String(input.prompt));
 	const type = ['video/webm;codecs=vp9', 'video/webm', 'video/mp4'].find((t) =>
 		MediaRecorder.isTypeSupported(t)
 	);
@@ -153,28 +145,23 @@ export async function demoVideo(
 	let raf: number;
 	const draw = (t: number) => {
 		const s = (t - start) / 1000;
-		g.fillStyle = `hsl(${a} 0% 22%)`;
+		// The same landscape as the pictures, with the hills drifting and the sun rising.
+		const sky = g.createLinearGradient(0, 0, 0, 360);
+		sky.addColorStop(0, '#d4d4d8');
+		sky.addColorStop(1, '#f1f1f3');
+		g.fillStyle = sky;
 		g.fillRect(0, 0, 640, 360);
-		for (let y = 0; y <= 480; y += 120)
-			for (let x = 0; x <= 760; x += 120) {
-				g.save();
-				g.translate(x - ((s * 30) % 120), y);
-				g.rotate(s * 0.4);
-				for (const [r, fill] of [
-					[52, `hsl(${b} 0% 42%)`],
-					[26, `hsl(${c} 0% 86%)`]
-				] as const) {
-					g.beginPath();
-					for (let i = 0; i < 16; i++) {
-						const ang = (Math.PI / 8) * i;
-						const d = i % 2 ? r * 0.72 : r;
-						g.lineTo(d * Math.cos(ang), d * Math.sin(ang));
-					}
-					g.fillStyle = fill;
-					g.fill();
-				}
-				g.restore();
-			}
+		g.fillStyle = '#fafafa';
+		g.beginPath();
+		g.arc(128 + (a / 360) * 384, 130 - s * 6, 32, 0, Math.PI * 2);
+		g.fill();
+		for (const [base, swing, waves, fill, speed] of [
+			[0.62, 0.06, 1.2, '#b8b8be', 0.25],
+			[0.78, 0.07, 0.8, '#8c8c93', 0.5]
+		] as const) {
+			g.fillStyle = fill;
+			g.fill(new Path2D(ridge(640, 360, base, swing, waves, b / 60 + s * speed)));
+		}
 		raf = requestAnimationFrame(draw);
 	};
 	raf = requestAnimationFrame(draw);

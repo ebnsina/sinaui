@@ -456,7 +456,7 @@
 		min-inline-size: 0;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 	}
 	.box:has(:global(.ProseMirror-focused)) {
 		outline: var(--ui-ring-width) solid var(--ui-ring);
@@ -610,7 +610,7 @@
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
 		outline: none;
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		color: inherit;
 		font: inherit;
 		font-size: var(--ui-control-font);

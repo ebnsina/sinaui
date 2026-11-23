@@ -408,7 +408,7 @@
 		padding: 0.3125rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		cursor: pointer;
 	}
 	/* With chips, the first one sits as far from the side as from the top and bottom. */

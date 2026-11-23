@@ -289,7 +289,7 @@
 		block-size: 11rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		overflow: hidden;
 	}
 	canvas {

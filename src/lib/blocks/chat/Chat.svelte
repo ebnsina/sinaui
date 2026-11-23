@@ -673,7 +673,7 @@
 		padding-inline: 1rem 0.5rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 	}
 	/* With the attach button first, it sits as far in as Send does at the other end. */
 	.composer:has(> :global(.btn.ghost)) {

@@ -258,7 +258,7 @@
 	.edit {
 		padding: 0 0.25rem 0 0.625rem;
 		border-color: var(--ui-field-line);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		transition:
 			border-color var(--ui-dur) var(--ui-ease-out),
 			background-color var(--ui-dur) var(--ui-ease-out);

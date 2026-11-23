@@ -92,7 +92,7 @@
 		padding-inline: 0.75rem 2.25rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		color: inherit;
 		/* 16px minimum: iOS Safari zooms the page into any smaller field on focus. */
 		font: inherit;

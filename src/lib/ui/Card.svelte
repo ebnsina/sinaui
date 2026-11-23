@@ -86,7 +86,7 @@
 		flex-direction: column;
 		min-inline-size: 0;
 		/* A tinted frame with a hairline outline. The sheet inside lies on the frame's edge, so their
-		   lines merge; the footer stays on the frame's tint below it; a faint ring sits 5px outside. */
+		   lines merge; the footer stays on the frame's tint below it; a faint ring sits 3px outside. */
 		border: 1px solid var(--ui-card-line, var(--ui-line));
 		border-radius: var(--ui-radius);
 		background: var(--ui-surface);
@@ -110,7 +110,7 @@
 	.card::after {
 		content: '';
 		position: absolute;
-		inset: -5px;
+		inset: -3px;
 		z-index: -1;
 		border: 1px solid color-mix(in oklab, var(--ui-card-line, var(--ui-line)) 64%, transparent);
 		border-radius: var(--ui-radius);

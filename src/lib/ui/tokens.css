@@ -8,6 +8,8 @@
 	--ui-surface: light-dark(#f7f7f8, #222526);
 	/* Menus, popovers, dialogs, toasts: a step lighter in dark mode, where shadows don't show. */
 	--ui-surface-overlay: light-dark(#ffffff, #2a2d2e);
+	/* Fields (inputs, selects, checkboxes, drop zones): white, so they stand out on a tinted card. */
+	--ui-field-bg: light-dark(#ffffff, #222526);
 	--ui-fg: light-dark(#0f0f10, #eceeee);
 	/* 6.7:1 on white and 4.7:1 on a tinted alert (light); 7.3:1 on the dark surface, 4.9:1 on a hovered overlay. */
 	--ui-muted: light-dark(#5c5c5c, #aeb3b4);
@@ -27,8 +29,8 @@
 	--ui-accent: light-dark(#0f0f10, #eceeee);
 	--ui-on-accent: light-dark(#ffffff, #1b1d1e);
 	--ui-danger: light-dark(#b42318, #ff8a7a);
-	/* Amber: 4.55:1 as text on its own 10% tint (light), 8.29:1 (dark). */
-	--ui-warning: light-dark(#a15c07, #fbbf24);
+	/* Amber: 4.73:1 or better as text on the tinted surfaces under a hover (light), 8.29:1 (dark). */
+	--ui-warning: light-dark(#94550a, #fbbf24);
 	--ui-on-danger: light-dark(#ffffff, #2a0703);
 	--ui-backdrop: light-dark(rgb(0 0 0 / 0.4), rgb(0 0 0 / 0.6));
 	/* Focus: 2px ring in the brand color, 2px gap. */

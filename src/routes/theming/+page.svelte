@@ -4,6 +4,7 @@
 	const tokens: [string, string, boolean][] = [
 		['--ui-bg', 'The page', true],
 		['--ui-surface', 'Cards, menus, dialogs', true],
+		['--ui-field-bg', 'Fields: inputs, selects, checkboxes, drop zones (white)', true],
 		['--ui-fg', 'Text', true],
 		['--ui-muted', 'Secondary text', true],
 		['--ui-faint', 'The faintest fill: toolbar groups, idle stat tabs', true],
@@ -117,7 +118,7 @@
 	that part of a page.
 </p>
 <div class="try">
-	<AccentPicker side="bottom" size="md" />
+	<AccentPicker size="md" />
 	<span>Try one: the whole site follows.</span>
 </div>
 <pre><code>&lt;html data-accent="blue"&gt;</code></pre>

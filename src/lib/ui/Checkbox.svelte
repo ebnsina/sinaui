@@ -93,7 +93,7 @@
 		box-sizing: border-box;
 		border: 1px solid var(--ui-control-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		color: var(--ui-on-accent);
 		transition:
 			background-color var(--ui-dur-press) ease,

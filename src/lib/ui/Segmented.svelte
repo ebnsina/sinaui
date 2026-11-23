@@ -115,8 +115,8 @@
 		left: 0;
 		transform-origin: 0 0;
 		border-radius: var(--ui-radius-control);
-		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
-		box-shadow: 0 0 0 1px var(--ui-field-line);
+		background: light-dark(var(--ui-field-bg), rgb(255 255 255 / 0.12));
+		box-shadow: var(--ui-shadow-xs);
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 150ms ease;
@@ -139,7 +139,9 @@
 		transition: color var(--ui-dur-press) ease;
 	}
 	/* The label gives under a press; the thumb behind it stays put and glides on release. */
+	/* Never takes the pointer: scaled under a press it would paint over the input and catch the click. */
 	.segment > span {
+		pointer-events: none;
 		transition: scale var(--ui-dur-press) var(--ui-ease-out);
 	}
 	.segment:active > span {
@@ -160,8 +162,8 @@
 	}
 	/* Before hydration the thumb isn't placed yet, so the chosen segment raises itself. */
 	.track:not([data-ready]) .segment:has(input:checked) {
-		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
-		box-shadow: 0 0 0 1px var(--ui-field-line);
+		background: light-dark(var(--ui-field-bg), rgb(255 255 255 / 0.12));
+		box-shadow: var(--ui-shadow-xs);
 	}
 	/* The input covers its segment: clicks, touch and screen-reader focus land on the real control. */
 	input {

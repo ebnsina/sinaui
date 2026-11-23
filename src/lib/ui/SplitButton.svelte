@@ -35,7 +35,7 @@
 	let dropdown = $state<ReturnType<typeof Dropdown.Root>>();
 </script>
 
-<div class={['split', open && 'open', className]} role="group" bind:this={group}>
+<div class={['split', variant, open && 'open', className]} role="group" bind:this={group}>
 	<Button
 		{variant}
 		{size}
@@ -91,7 +91,14 @@
 		border-start-start-radius: 0;
 		border-end-start-radius: 0;
 	}
-	/* The divider: a 1px line in the text color, faint, inset from top and bottom. */
+	/* Bordered halves share one edge in the middle, and that edge is the divider. */
+	.secondary :global(.chevron) {
+		margin-inline-start: -1px;
+	}
+	.secondary :global(.chevron)::before {
+		display: none;
+	}
+	/* Filled: the divider is a 1px line in the text color, faint, inset from top and bottom. */
 	.split :global(.chevron)::before {
 		content: '';
 		position: absolute;

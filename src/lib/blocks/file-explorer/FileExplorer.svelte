@@ -1166,19 +1166,27 @@
 			opacity: 1;
 		}
 	}
+	/* A quiet tile over the item, not a hard box: a faint check hints at what a press does. */
 	.check {
 		inset-inline-start: 0.5rem;
 		display: grid;
 		place-items: center;
-		inline-size: 1.25rem;
-		block-size: 1.25rem;
+		inline-size: 1.375rem;
+		block-size: 1.375rem;
 		padding: 0;
 		border: 0;
-		border-radius: var(--ui-radius-pill);
-		background: var(--ui-surface);
-		box-shadow: inset 0 0 0 1.5px var(--ui-control-line);
-		color: transparent;
+		border-radius: var(--ui-radius-control);
+		background: var(--ui-surface-overlay);
+		box-shadow: var(--ui-shadow-xs);
+		color: var(--ui-muted);
 		cursor: pointer;
+		transition:
+			opacity var(--ui-dur) ease,
+			background-color var(--ui-dur-press) ease,
+			color var(--ui-dur-press) ease;
+	}
+	.check:hover {
+		color: var(--ui-fg);
 	}
 	/* A bigger target than it looks, for fingers. */
 	.check::before {

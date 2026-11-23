@@ -42,7 +42,7 @@
 		place
 	);
 	const items = () =>
-		[...menu.querySelectorAll<HTMLElement>('[role="menuitem"]')].filter(
+		[...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
 			(el) => el.parentElement?.closest('[role="menu"]') === menu
 		);
 
@@ -161,7 +161,7 @@
 	onpointerleave={(e) => e.pointerType !== 'touch' && later(() => (open = false), 300)}
 	onpointermovecapture={() => (viaPointer = true)}
 	onfocusin={(e) => {
-		const el = (e.target as HTMLElement).closest<HTMLElement>('[role="menuitem"]');
+		const el = (e.target as HTMLElement).closest<HTMLElement>('[role^="menuitem"]');
 		if (el && el.parentElement?.closest('[role="menu"]') === menu) glide(highlight, el, viaPointer);
 	}}
 >

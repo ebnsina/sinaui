@@ -23,7 +23,8 @@
 			format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
 		/>
 	</span>
-	<span class="save">
+	<!-- Only yearly saves anything: monthly keeps the line's space but hides it, so nothing jumps. -->
+	<span class="save" class:none={!plans[plan].saved} aria-hidden={!plans[plan].saved}>
 		Save <RollingNumber value={plans[plan].saved} format={{ style: 'percent' }} />
 	</span>
 </div>
@@ -40,5 +41,11 @@
 	.save {
 		color: var(--ui-muted);
 		font-size: 0.875rem;
+	}
+	.save {
+		transition: opacity var(--ui-dur) ease;
+	}
+	.none {
+		opacity: 0;
 	}
 </style>

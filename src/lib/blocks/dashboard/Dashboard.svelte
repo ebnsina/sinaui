@@ -7,6 +7,8 @@
 		/** Which way is good news; overdue loans going up isn't. */
 		goodWhen?: 'up' | 'down';
 		format?: Intl.NumberFormatOptions;
+		/** Its values across the period, oldest first: drawn as a small line under the number. */
+		trend?: number[];
 	}
 	export interface DashboardData {
 		stats: DashboardStat[];
@@ -21,6 +23,10 @@
 			due: string;
 			status: 'On time' | 'Due soon' | 'Overdue';
 		}[];
+		/** The people borrowing most this period. */
+		readers?: { name: string; loans: number }[];
+		/** What just happened, newest first ("asked for a card", "returned Book of Optics"). */
+		activity?: { who: string; what: string; when: string }[];
 	}
 </script>
 
@@ -40,6 +46,7 @@
 	import { scaleLinear } from '@tanstack/charts/scales/linear';
 	import { scalePoint } from '@tanstack/charts/scales/point';
 	import { tooltip } from '@tanstack/charts/tooltip';
+	import Avatar from '#lib/ui/Avatar.svelte';
 	import Badge from '#lib/ui/Badge.svelte';
 	import Button from '#lib/ui/Button.svelte';
 	import Chart from '#lib/ui/Chart.svelte';
@@ -49,6 +56,7 @@
 	import RollingNumber from '#lib/ui/RollingNumber.svelte';
 	import Segmented from '#lib/ui/Segmented.svelte';
 	import SidebarLayout, { type SidebarGroup } from '#lib/ui/SidebarLayout.svelte';
+	import Sparkline from '#lib/ui/Sparkline.svelte';
 
 	interface Props {
 		data: DashboardData;
@@ -200,6 +208,13 @@
 							>
 							<span class="vs">on the {rangeLabel} before</span>
 						</span>
+						{#if s.trend}
+							<Sparkline
+								values={s.trend}
+								label="{s.label} over the last {rangeLabel}"
+								height={28}
+							/>
+						{/if}
 					</li>
 				{/each}
 			</ul>
@@ -255,6 +270,40 @@
 					/>
 				</section>
 			</div>
+
+			{#if data.readers?.length || data.activity?.length}
+				<div class="extra">
+					{#if data.readers?.length}
+						{@const most = Math.max(...data.readers.map((r) => r.loans))}
+						<section class="panel" aria-labelledby="{uid}-readers">
+							<h3 id="{uid}-readers">Top readers</h3>
+							<ol class="readers">
+								{#each data.readers as r (r.name)}
+									<li>
+										<Avatar name={r.name} size="sm" decorative />
+										<span class="name">{r.name}</span>
+										<span class="bar" style:--share={r.loans / most} aria-hidden="true"></span>
+										<span class="loans">{count.format(r.loans)}</span>
+									</li>
+								{/each}
+							</ol>
+						</section>
+					{/if}
+					{#if data.activity?.length}
+						<section class="panel" aria-labelledby="{uid}-activity">
+							<h3 id="{uid}-activity">Recent activity</h3>
+							<ol class="feed">
+								{#each data.activity as a, i (i)}
+									<li>
+										<Avatar name={a.who} size="sm" decorative />
+										<p><strong>{a.who}</strong> {a.what}<span class="when">{a.when}</span></p>
+									</li>
+								{/each}
+							</ol>
+						</section>
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</SidebarLayout>
 </div>
@@ -351,13 +400,17 @@
 		color: var(--ui-muted);
 	}
 	.charts,
-	.lower {
+	.lower,
+	.extra {
 		display: grid;
 		grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
 		gap: 0.75rem;
 	}
 	.lower {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+	}
+	.extra {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 	}
 	@container page (width < 44rem) {
 		.charts,
@@ -432,5 +485,62 @@
 	.unit {
 		color: var(--ui-muted);
 		font-size: 0.75rem;
+	}
+	.readers,
+	.feed {
+		display: grid;
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	/* Name, a bar for their share of the busiest reader's loans, then the count. */
+	.readers li {
+		display: grid;
+		grid-template-columns: auto minmax(0, 8rem) minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 0.625rem;
+		font-size: 0.875rem;
+	}
+	.name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.bar {
+		block-size: 0.375rem;
+		background: linear-gradient(
+			to right,
+			var(--ui-accent) calc(var(--share) * 100%),
+			var(--ui-subtle) 0
+		);
+	}
+	.bar:dir(rtl) {
+		background: linear-gradient(
+			to left,
+			var(--ui-accent) calc(var(--share) * 100%),
+			var(--ui-subtle) 0
+		);
+	}
+	.loans {
+		font-family: var(--ui-font-mono);
+		font-size: 0.8125rem;
+		font-variant-numeric: tabular-nums;
+	}
+	.feed li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.625rem;
+		font-size: 0.875rem;
+	}
+	.feed p {
+		margin: 0;
+		line-height: 1.45;
+	}
+	.when {
+		display: block;
+		margin-block-start: 0.125rem;
+		color: var(--ui-muted);
+		font-size: 0.8125rem;
 	}
 </style>

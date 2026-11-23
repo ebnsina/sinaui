@@ -150,11 +150,9 @@
 	}
 	/* Lifts in dark mode too, like Segmented's thumb (the surface there is darker than the tray). */
 	.toggle[aria-pressed='true'] {
-		background: light-dark(var(--ui-surface), rgb(255 255 255 / 0.12));
+		background: light-dark(var(--ui-field-bg), rgb(255 255 255 / 0.12));
 		color: var(--ui-fg);
-		box-shadow:
-			0 1px 2px rgb(0 0 0 / 0.08),
-			0 1px 1px rgb(0 0 0 / 0.04);
+		box-shadow: var(--ui-shadow-xs);
 	}
 	.toggle:focus-visible {
 		outline: var(--ui-ring-width) solid var(--ui-ring);

@@ -89,7 +89,7 @@
 		min-block-size: var(--ui-control-h);
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		cursor: text;
 		transition: border-color var(--ui-dur-press) ease;
 	}

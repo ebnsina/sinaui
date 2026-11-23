@@ -296,7 +296,7 @@
 	.label {
 		font-weight: 500;
 	}
-	/* A tinted well, no dashed border; dragging over deepens the tint and lifts the icon. */
+	/* A field like the others: white with the field edge; dragging over tints it and lifts the icon. */
 	.zone {
 		position: relative;
 		cursor: pointer;
@@ -304,22 +304,23 @@
 		justify-items: center;
 		gap: 0.25rem;
 		padding: 1.75rem 1rem;
+		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius);
-		background: var(--ui-subtle);
+		background: var(--ui-field-bg);
 		text-align: center;
 		transition: background-color var(--ui-dur) ease;
 	}
 	.zone.over {
-		background: color-mix(in srgb, var(--ui-accent) 14%, transparent);
+		background: color-mix(in srgb, var(--ui-accent) 10%, var(--ui-field-bg));
 	}
 	@media (hover: hover) {
 		.zone:not(.disabled):not(.over):hover {
-			background: var(--ui-hover);
+			background: color-mix(in oklab, var(--ui-fg) 4%, var(--ui-field-bg));
 		}
 	}
 	/* Held over but won't be taken: the same well, in the danger color, before anything is dropped. */
 	.zone.refused {
-		background: color-mix(in srgb, var(--ui-danger) 10%, transparent);
+		background: color-mix(in srgb, var(--ui-danger) 8%, var(--ui-field-bg));
 		color: var(--ui-danger);
 	}
 	.zone.disabled {

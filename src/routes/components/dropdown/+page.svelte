@@ -96,6 +96,11 @@
 	<tbody>
 		<tr><td><code>onselect</code></td><td><code>(e: MouseEvent) =&gt; void</code></td><td></td></tr>
 		<tr
+			><td><code>checked</code></td><td
+				><code>boolean</code>: one choice of several; a check marks the chosen one</td
+			><td></td></tr
+		>
+		<tr
 			><td><code>variant</code></td><td><code>'default' | 'danger'</code></td><td
 				><code>'default'</code></td
 			></tr

@@ -502,7 +502,7 @@
 		padding: 0.25rem 0.625rem;
 		border: 1px solid var(--ui-field-line);
 		border-radius: var(--ui-radius-control);
-		background: var(--ui-surface);
+		background: var(--ui-field-bg);
 		font-size: var(--ui-control-font);
 		font-variant-numeric: tabular-nums;
 		cursor: text;
