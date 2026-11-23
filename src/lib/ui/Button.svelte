@@ -87,6 +87,7 @@
 		-webkit-tap-highlight-color: transparent;
 		transition:
 			transform var(--ui-dur-press) var(--ui-ease-out),
+			box-shadow var(--ui-dur-press) var(--ui-ease-out),
 			background-color var(--ui-dur-press) ease,
 			color var(--ui-dur-press) ease;
 	}
@@ -146,20 +147,24 @@
 	.primary {
 		background: var(--ui-accent);
 		color: var(--ui-on-accent);
+		box-shadow: 0 var(--ui-button-depth) 0 color-mix(in oklab, var(--ui-accent) 72%, black);
 	}
 	.danger {
 		background: var(--ui-danger);
 		color: var(--ui-on-danger);
+		box-shadow: 0 var(--ui-button-depth) 0 color-mix(in oklab, var(--ui-danger) 72%, black);
 	}
 	.secondary {
 		border-color: var(--ui-field-line);
 		background: var(--ui-surface);
 		color: var(--ui-fg);
+		box-shadow: 0 var(--ui-button-depth) 0 var(--ui-field-line);
 	}
 	.outline {
 		background: transparent;
 		color: var(--ui-fg);
 		border-color: var(--ui-field-line);
+		box-shadow: 0 var(--ui-button-depth) 0 var(--ui-field-line);
 	}
 	.ghost {
 		background: transparent;
@@ -210,9 +215,11 @@
 	.ghost[aria-pressed='true'] {
 		background: var(--ui-hover);
 	}
-	/* scale() carries the label with it, which is what reads as a physical press. */
+	/* scale() carries the label with it, which is what reads as a physical press. A raised button
+	   (--ui-button-depth) also sinks onto its edge. */
 	.btn:active {
-		transform: scale(var(--ui-press-scale));
+		transform: translateY(var(--ui-button-depth)) scale(var(--ui-press-scale));
+		box-shadow: none;
 	}
 
 	.btn:disabled,
