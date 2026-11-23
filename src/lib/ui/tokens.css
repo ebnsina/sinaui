@@ -52,8 +52,8 @@
 	--ui-shadow-card: none;
 	/* --ui-card-icon: the color of a card's title icon. Unset, it is muted like secondary text. */
 	/* --ui-stat-icon-bg, --ui-stat-icon-fg: a Stat's icon tile. Unset, it is a quiet gray tile. */
-	/* Card: a tinted frame with a hairline outline, holding an inset sheet with its own hairline.
-	   --ui-card-line sets both lines (unset: --ui-line); --ui-card-shadow: var(--ui-shadow-xs) lifts it. */
+	/* Card: a tinted frame with a hairline outline and a faint ring outside, its sheet lying on the frame's
+	   edge. --ui-card-line sets the lines (unset: --ui-line); --ui-card-shadow replaces its faint lift. */
 
 	--ui-font:
 		'Mona Sans', 'IBM Plex Sans Arabic', 'Mona Sans Fallback', ui-sans-serif, system-ui, sans-serif;
