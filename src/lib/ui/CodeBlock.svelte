@@ -268,19 +268,27 @@
 		margin: 0;
 		font: inherit;
 	}
-	/* Syntax in monochrome: structure reads through weight and ink, never hue; each shade 4.5:1+. */
-	.codeblock :global(:is(.th-keyword, .th-operator, .th-tag, .th-command, .th-selector)) {
-		color: var(--ui-fg);
+	/* Syntax from the --ui-code-* tokens: monochrome by default (structure through weight and ink; each shade 4.5:1+),
+	   coloured when an app sets them. */
+	.codeblock :global(:is(.th-keyword, .th-operator, .th-command, .th-selector)) {
+		color: var(--ui-code-keyword);
+		font-weight: 600;
+	}
+	.codeblock :global(.th-tag) {
+		color: var(--ui-code-tag);
 		font-weight: 600;
 	}
 	.codeblock :global(:is(.th-function, .th-type, .th-meta)) {
-		color: var(--ui-fg);
+		color: var(--ui-code-function);
 	}
 	.codeblock :global(:is(.th-attr, .th-property, .th-number, .th-literal)) {
-		color: color-mix(in oklab, var(--ui-fg) 78%, var(--ui-muted));
+		color: var(--ui-code-number);
 	}
-	.codeblock :global(:is(.th-string, .th-link, .th-comment)) {
-		color: var(--ui-muted);
+	.codeblock :global(:is(.th-string, .th-link)) {
+		color: var(--ui-code-string);
+	}
+	.codeblock :global(.th-comment) {
+		color: var(--ui-code-comment);
 	}
 	.codeblock :global(.th-comment) {
 		font-style: italic;

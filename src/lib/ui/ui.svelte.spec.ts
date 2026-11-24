@@ -2854,6 +2854,19 @@ describe('sinaui', () => {
 		expect(items[1].name).toBe('Botany.pdf');
 	});
 
+	it('code block: syntax takes the --ui-code-* tokens, monochrome until they are set', async () => {
+		render(CodeBlockPage);
+		const keyword = document.querySelector('.codeblock .th-keyword') as HTMLElement;
+		const fg = getComputedStyle(document.querySelector('.codeblock') as HTMLElement).color;
+		expect(getComputedStyle(keyword).color).toBe(fg);
+		document.documentElement.style.setProperty('--ui-code-keyword', 'rgb(200, 0, 100)');
+		try {
+			await expect.poll(() => getComputedStyle(keyword).color).toBe('rgb(200, 0, 100)');
+		} finally {
+			document.documentElement.style.removeProperty('--ui-code-keyword');
+		}
+	});
+
 	it('code block: copies the code without its line numbers', async () => {
 		// A stand-in clipboard: the test browser doesn't grant the real one.
 		let copied = '';

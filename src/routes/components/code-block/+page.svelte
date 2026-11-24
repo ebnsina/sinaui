@@ -90,6 +90,15 @@
 	</tbody>
 </table>
 
+<h2 id="colours">Colours</h2>
+<p>
+	Code is monochrome by default. For coloured syntax, set the <code>--ui-code-*</code> tokens:
+	<code>--ui-code-keyword</code>, <code>--ui-code-tag</code>, <code>--ui-code-function</code>,
+	<code>--ui-code-number</code>, <code>--ui-code-string</code> and <code>--ui-code-comment</code>.
+	Use
+	<code>light-dark()</code> values so each reads at 4.5:1 in both themes.
+</p>
+
 <h2 id="accessibility">Accessibility</h2>
 <ul>
 	<li>
