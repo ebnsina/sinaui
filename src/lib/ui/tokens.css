@@ -107,6 +107,13 @@
 	--ui-sidebar-title-font: 0.6875rem;
 	/* group titles: small mono labels by default; set none / normal and --ui-font for plain titles */
 	--ui-sidebar-title-family: var(--ui-label-font);
+	/* CodeBlock syntax: monochrome by default (structure through weight and ink); set these for coloured code. */
+	--ui-code-keyword: var(--ui-fg);
+	--ui-code-tag: var(--ui-fg);
+	--ui-code-function: var(--ui-fg);
+	--ui-code-number: color-mix(in oklab, var(--ui-fg) 78%, var(--ui-muted));
+	--ui-code-string: var(--ui-muted);
+	--ui-code-comment: var(--ui-muted);
 	--ui-sidebar-title-case: var(--ui-label-case);
 	--ui-sidebar-title-tracking: var(--ui-label-tracking);
 	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
