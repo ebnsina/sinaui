@@ -1994,6 +1994,16 @@ describe('sinaui', () => {
 		await page.viewport(414, 896);
 	});
 
+	it('sidebar layout: a rule sets the trail in the top bar apart from the buttons before it', async () => {
+		render(SidebarPage);
+		const bar = document.querySelector('.crumbs')!.parentElement!;
+		const divider = bar.querySelector('.divider') as HTMLElement;
+		expect(divider.getAttribute('aria-hidden')).toBe('true');
+		expect(divider.nextElementSibling?.classList.contains('crumbs')).toBe(true);
+		const box = divider.getBoundingClientRect();
+		expect([box.width, box.height]).toEqual([1, 20]);
+	});
+
 	it('sidebar layout: nested pages open and close, mark their parent current, and fly out of the rail', async () => {
 		await page.viewport(1280, 900);
 		render(SidebarNested);

@@ -324,6 +324,8 @@
 					</Tooltip>
 				{/if}
 				{#if header}<div class="bar-head">{@render header(false)}</div>{/if}
+				<!-- A short rule sets the trail apart from the buttons before it. -->
+				{#if crumbs?.length}<span class="divider" aria-hidden="true"></span>{/if}
 				{#if crumbs?.length}<div class="crumbs">
 						<Breadcrumb items={crumbs} label="{label}: where you are" />
 					</div>{/if}
@@ -624,6 +626,13 @@
 		margin-inline-start: -0.4375rem;
 		padding: 0;
 		justify-content: center;
+	}
+	.divider {
+		flex: none;
+		inline-size: 1px;
+		block-size: 1.25rem;
+		margin-inline: 0.25rem;
+		background: var(--ui-field-line);
 	}
 	.crumbs {
 		flex: 1;
