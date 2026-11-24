@@ -132,6 +132,13 @@
 	{...ex('link-button')}
 />
 
+<Example
+	id="start-aligned"
+	title="Start-aligned"
+	description="align=&quot;start&quot; for a full-width trigger that shows a choice: the text reads from the left and the chevron sits at the far edge."
+	{...ex('start-aligned')}
+/>
+
 <h2 id="props">Props</h2>
 <table>
 	<thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
@@ -147,6 +154,11 @@
 		>
 		<tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
 		<tr><td><code>square</code></td><td><code>boolean</code></td><td><code>false</code></td></tr>
+		<tr
+			><td><code>align</code></td><td><code>'center' | 'start'</code></td><td
+				><code>'center'</code></td
+			></tr
+		>
 		<tr
 			><td><code>href</code></td><td><code>string</code></td><td>renders <code>&lt;a&gt;</code></td
 			></tr

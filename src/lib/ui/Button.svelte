@@ -11,6 +11,9 @@
 		loading?: boolean;
 		/** Square button for a lone icon. Give it an aria-label. */
 		square?: boolean;
+		/** start: content reads from the left and a trailing icon sits at the far edge, for a full-width
+		 * trigger that shows a choice (a project or workspace picker). */
+		align?: 'center' | 'start';
 	} & ((HTMLButtonAttributes & { href?: undefined }) | (HTMLAnchorAttributes & { href: string }));
 
 	let {
@@ -18,6 +21,7 @@
 		size = 'md',
 		loading = false,
 		square = false,
+		align = 'center',
 		class: className,
 		children,
 		...rest
@@ -34,7 +38,7 @@
 
 {#if rest.href !== undefined}
 	<a
-		class={['btn', variant, size, square && 'square', className]}
+		class={['btn', variant, size, square && 'square', align === 'start' && 'start', className]}
 		{...rest as HTMLAnchorAttributes}
 		ontouchstart={noop}
 	>
@@ -46,7 +50,15 @@
 	<button
 		bind:this={el}
 		type="button"
-		class={['btn', variant, size, square && 'square', loading && 'loading', className]}
+		class={[
+			'btn',
+			variant,
+			size,
+			square && 'square',
+			align === 'start' && 'start',
+			loading && 'loading',
+			className
+		]}
 		aria-disabled={loading || undefined}
 		{...attrs}
 		ontouchstart={noop}
@@ -125,6 +137,19 @@
 		align-items: center;
 		gap: 0.5em;
 		transition: opacity var(--ui-dur-press) ease;
+	}
+	/* Start-aligned: the label takes the free width (so long text can truncate) and a trailing icon
+	   (a chevron) is pushed to the far edge. */
+	.start {
+		justify-content: flex-start;
+		text-align: start;
+	}
+	.start .label {
+		flex: 1;
+		min-inline-size: 0;
+	}
+	:is(.start, .start > .label) > :global(svg:last-child:not(:first-child)) {
+		margin-inline-start: auto;
 	}
 	.loading .label {
 		opacity: 0;

@@ -566,6 +566,16 @@ describe('sinaui', () => {
 		await expect.element(page.getByRole('button', { name: 'Share manuscript' })).toBeVisible();
 	});
 
+	it('button align=start: content starts at the left, a trailing icon sits at the far edge', async () => {
+		render(ButtonPage);
+		const el = page.getByRole('button', { name: 'Manuscripts' }).element() as HTMLElement;
+		const box = el.getBoundingClientRect();
+		const icons = [...el.querySelectorAll('svg')].map((i) => i.getBoundingClientRect());
+		const pad = parseFloat(getComputedStyle(el).paddingInlineStart);
+		expect(Math.abs(icons[0].left - (box.left + pad + 1))).toBeLessThan(2);
+		expect(Math.abs(box.right - pad - 1 - icons[1].right)).toBeLessThan(2);
+	});
+
 	it('button depth: flat by default; --ui-button-depth raises filled and outlined buttons', async () => {
 		render(ButtonPage);
 		const el = page.getByRole('button', { name: 'Transcribe' }).element() as HTMLElement;
